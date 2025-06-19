@@ -12,5 +12,7 @@
         <li><a href="transferencias.jsp" class="<%= "transferencias".equals(activePage) ? "active" : "" %>">Transferencias</a></li>
         <li><a href="pedirPrestamo.jsp" class="<%= "prestamo".equals(activePage) ? "active" : "" %>">Pedir Préstamo</a></li>
         <li><a href="pagarCuotas.jsp" class="<%= "cuotas".equals(activePage) ? "active" : "" %>">Pagar Cuotas</a></li>
+        <li><a href="cuentas.jsp" class="<%= "cuentas".equals(activePage) ? "active" : "" %>">Ver Cuentas</a></li>
+        <li><a href="transferencias.jsp" class="<%= "transferencias".equals(activePage) ? "active" : "" %>">Transferencias</a></li>
     </ul>
 </div>
