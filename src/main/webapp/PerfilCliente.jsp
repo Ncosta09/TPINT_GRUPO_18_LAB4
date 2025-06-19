@@ -11,11 +11,10 @@
     <link rel="stylesheet" href="CSS/perfil.css" />
 </head>
 <body>
-
-    <%-- Inclusion de los JSP principales --%>
-    <jsp:include page="Header.jsp" />
+	<jsp:include page="/header.jsp" />
+    
     <div class="container">
-        <jsp:include page="MenuCliente.jsp" />
+        <jsp:include page="/sidebarCliente.jsp" />
 
         <div class="content">
             <div class="profile-container">

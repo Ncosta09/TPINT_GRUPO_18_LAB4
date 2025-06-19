@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="CSS/altaCli.css" />
 </head>
 <body>
-    <jsp:include page="Header.jsp" />
-
+    <jsp:include page="/header.jsp" />
+    
     <div class="container">
-        <div class="sidebar" id="sidebar">
+        <jsp:include page="/sidebarCliente.jsp" />
             <ul class="sidebar-menu">
                 <li><a href="#">Alta de Usuario/Cliente</a></li>
                 <li><a href="#">Lista de Clientes</a></li>
