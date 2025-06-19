@@ -4,6 +4,6 @@
         <h1>Sistema de Gestión Bancaria</h1>
         <div class="user-info">
             <span class="user-name">Admin: Juan Pérez</span>
-            <a href="login.jsp" style="color: white; text-decoration: none;">Salir</a>
+            <a href="Login.jsp" style="color: white; text-decoration: none;">Salir</a>
         </div>
     </div>
