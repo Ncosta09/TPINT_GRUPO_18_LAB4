@@ -1,4 +1,6 @@
-package dominio;
+package dao;
+
+
 
 public class UsuarioDao {
 
