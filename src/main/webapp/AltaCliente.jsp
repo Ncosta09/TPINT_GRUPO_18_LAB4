@@ -143,7 +143,7 @@
     <div class="notification" id="notification"></div>
 
     <script src="js/common.js"></script>
-    <script src="js/altaCliente.js"></script>
+    <script src="js/AltaCli.js"></script>
 </body>
 </html>
 
