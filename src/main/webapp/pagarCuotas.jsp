@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Bancaria - Pagar Cuotas</title>
-    <link rel="stylesheet" href="css/common.css" type="text/css" />
-    <link rel="stylesheet" href="css/pagarCuotas.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/common.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/pagarCuotas.css" type="text/css" />
 </head>
 <body>
     <jsp:include page="/header.jsp" />
