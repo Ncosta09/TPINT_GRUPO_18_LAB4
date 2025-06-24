@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Bancaria - Lista de Cuentas</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/listaCuentas.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/listaCuentas.css" type="text/css" />
    
 </head>
 <body>
