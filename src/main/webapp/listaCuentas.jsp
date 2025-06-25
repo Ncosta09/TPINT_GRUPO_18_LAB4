@@ -53,12 +53,47 @@
                             <th>Número de Cuenta</th>
                             <th>CBU</th>
                             <th>Tipo de Cuenta</th>
-                            <th>Fecha Creación</th>
+                       <!--      <th>Fecha Creación</th> -->
                             <th>Saldo</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
                     <tbody id="cuentasTableBody">
+                    
+                    
+   <%@ page import="java.util.List, dominio.Cuenta,java.util.ArrayList" %>
+<%
+List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
+if (cuentas == null) cuentas = new ArrayList<>();
+for (Cuenta c : cuentas) {
+%>
+      <tr>
+        <form action="ServletCuenta" method="post">
+          <input type="hidden" name="accion" value="actualizar" />
+          <input type="hidden" name="id" value="<%= c.getId() %>" />
+
+          <td><%= c.getCliente().getNombre() +", "+ c.getCliente().getApellido() %></td>
+          <td><input type="text" name="numeroCuenta" value="<%= c.getNumeroCuenta() %>" readonly /></td>
+          <td><input type="text" name="cbu" value="<%= c.getCbu() %>" readonly /></td>
+          <td class="account-type-cell">
+            <select name="tipoCuenta" class="account-type-select">
+              <option value="CA" <%= c.getTipoCuenta().equals("CA") ? "selected" : "" %>>Caja de Ahorro</option>
+              <option value="CC" <%= c.getTipoCuenta().equals("CC") ? "selected" : "" %>>Cuenta Corriente</option>
+            </select>
+          </td>
+   <%-- <td><input type="date" name="fechaCreacion" value="<%= c.getFechaCreacion() %>" readonly /></td> --%>
+<td>
+                                <input type="text" class="saldo-input" value="<%= c.getSaldo() %>" data-original="156780.90">
+                                <button class="save-btn" title="Guardar cambio">💾</button>
+                            </td>
+          
+        </form>
+      </tr>
+    <%
+      }
+    %>
+                    
+                    <!-- 
                         <tr data-cliente="Juan Gómez" data-tipo="Caja de Ahorro" data-estado="Activa">
                             <td>Juan Gómez</td>
                             <td>CA-10001234</td>
@@ -250,7 +285,7 @@
                                 </select>
                                 <button class="save-btn" title="Guardar cambio">💾</button>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
                 
