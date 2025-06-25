@@ -7,33 +7,44 @@ import java.sql.SQLException;
 
 
 public class Conexion {
+    
+	private String host = "jdbc:mysql://localhost:3306/";
+	private String user = "root";
+	private String pass = "root";
+	private String dbName = "bdGestionBanco";
 
-    private static final String URL = "jdbc:mysql://localhost:3306/bdGestionBanco";
-    private static final String USER = "root";
-    private static final String PASS = "root";
+    public static Conexion instancia;
+	private Connection connection;
+	
+	 private Conexion() {
+	        try {
+	            Class.forName("com.mysql.jdbc.Driver");
+	            this.connection = DriverManager.getConnection(host + dbName, user, pass);
+	            this.connection.setAutoCommit(false);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
 
-    private static Connection connection = null;
+	    public static Conexion getConexion() {
+	        if (instancia == null) {
+	            instancia = new Conexion();
+	        }
+	        return instancia;
+	    }
 
-    public static Connection getConexion() {
-        if (connection == null) {
-            try {
-            	Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USER, PASS);
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return connection;
-    }
+	    public Connection getSQLConexion() {
+	        return this.connection;
+	    }
 
-    public static void cerrarConexion() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                connection = null;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+	    public void cerrarConexion() {
+	        try {
+	            if (this.connection != null && !this.connection.isClosed()) {
+	                this.connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        instancia = null;
+	    }
 }

@@ -2,6 +2,7 @@ package negocioImpl;
 
 import dao.UsuarioDao;
 import daoImpl.UsuarioDaoImpl;
+import dominio.Usuario;
 import negocio.UsuarioNegocio;
 
 public class UsuarioNegocioImpl implements UsuarioNegocio{
@@ -12,4 +13,9 @@ public class UsuarioNegocioImpl implements UsuarioNegocio{
 	public boolean validar(String nombreUsuario, String clave) {
 		return UsuarioDao.validarCredenciales(nombreUsuario, clave);
 	}
+	
+	@Override
+    public Usuario obtenerUsuario(String nombreUsuario, String clave) {
+        return UsuarioDao.obtenerUsuario(nombreUsuario, clave);
+    }
 }

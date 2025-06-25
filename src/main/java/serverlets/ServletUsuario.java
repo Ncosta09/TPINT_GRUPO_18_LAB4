@@ -41,10 +41,35 @@ public class ServletUsuario extends HttpServlet {
         boolean valido = usuarioNegocio.validar(nombreUsuario, clave);
         
         if (valido) {
-            // 3a. Login Exitoso
-            HttpSession session = request.getSession(true);
-            session.setAttribute("usuarioLogueado", valido);
-            response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");
+        	
+        	Usuario u = usuarioNegocio.obtenerUsuario(nombreUsuario, clave);
+        	
+        	if (u == null) {
+                request.setAttribute("error", "Error interno: no se pudo cargar el usuario.");
+                request.getRequestDispatcher("/Login.jsp").forward(request, response);
+                
+                return;
+        	}
+        	
+        	if(u.getEstado() == 1) {
+        		// 3a. Login Exitoso
+                HttpSession session = request.getSession(true);
+                session.setAttribute("usuarioLogueado", u);
+                
+        		if(u.getTipoUsuario() == 1) {
+        			response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");        			
+        		}
+        		else if(u.getTipoUsuario() == 2) {
+        			response.sendRedirect(request.getContextPath() + "/homeCliente.jsp");
+        		}
+        	}
+        	else {
+        		// Login Fallido por usuario inactivo, devuelve mensaje
+        		request.setAttribute("error", "Usuario inactivo. Contacte al administrador.");
+        		request.getRequestDispatcher("/Login.jsp").forward(request, response);
+                return;
+        	}
+            
             
         } else {
             // Login Fallido, devuelve mensaje
