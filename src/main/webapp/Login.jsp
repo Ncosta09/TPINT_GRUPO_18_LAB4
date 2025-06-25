@@ -9,15 +9,15 @@
 </head>
 <body class="login-body">
 	<div class="login-container">
-        <form class="login-form">
+        <form class="login-form" action="ServletUsuario" method="post">
             <h2>Login</h2>
 
             <div class="input-group">
-                <input type="email" placeholder="Email" required />
+                <input type="text" placeholder="Usuario" name="nombreUsuario" required />
             </div>
 
             <div class="input-group">
-                <input type="password" placeholder="Contraseña" required />
+                <input type="password" placeholder="Contraseña" name="clave" required />
             </div>
 
             <div class="options">
