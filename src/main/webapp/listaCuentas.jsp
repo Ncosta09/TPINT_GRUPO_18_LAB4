@@ -83,9 +83,9 @@ for (Cuenta c : cuentas) {
           </td>
    <%-- <td><input type="date" name="fechaCreacion" value="<%= c.getFechaCreacion() %>" readonly /></td> --%>
 <td>
-                                <input type="text" class="saldo-input" value="<%= c.getSaldo() %>" data-original="156780.90">
-                                <button class="save-btn" title="Guardar cambio">💾</button>
-                            </td>
+  <input type="number" step="0.01" name="saldo" class="saldo-input" value="<%= c.getSaldo() %>" />
+  <button type="submit" class="save-btn" title="Guardar cambio">💾</button>
+</td>
           
         </form>
       </tr>
