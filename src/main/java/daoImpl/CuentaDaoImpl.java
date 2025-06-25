@@ -12,9 +12,12 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	@Override
 	public boolean modificarCuenta(Cuenta cuenta) {
-	    String sql = "UPDATE cuentas SET saldo = ? WHERE id = ?";
-	    try (Connection conn = Conexion.getConexion();
-				PreparedStatement ps = conn.prepareStatement(sql)) {
+		Connection conn;
+	    
+	    try {
+	    	
+	    	conn = Conexion.getConexion().getSQLConexion();
+        	PreparedStatement ps = conn.prepareStatement("UPDATE cuentas SET saldo = ? WHERE id = ?");
 		
 	    	ps.setDouble(0, cuenta.getSaldo());
 	    	ps.setInt(1, cuenta.getId());
