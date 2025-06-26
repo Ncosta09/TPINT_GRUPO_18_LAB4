@@ -9,12 +9,11 @@ public class Cliente {
     private String cuil;
     private String nombre;
     private String apellido;
-    private String sexo;
-    private String nacionalidad;
+    private int idSexo;
+    private int idNacionalidad;
     private Date fechaNacimiento;
     private String direccion;
-    private String localidad;
-    private String provincia;
+    private int idLocalidad;
     private String email;
     private String telefono;
     
@@ -68,22 +67,6 @@ public class Cliente {
         this.apellido = apellido;
     }
 
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-
-    public String getNacionalidad() {
-        return nacionalidad;
-    }
-
-    public void setNacionalidad(String nacionalidad) {
-        this.nacionalidad = nacionalidad;
-    }
-
     public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
@@ -98,22 +81,6 @@ public class Cliente {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
-    }
-
-    public String getLocalidad() {
-        return localidad;
-    }
-
-    public void setLocalidad(String localidad) {
-        this.localidad = localidad;
-    }
-
-    public String getProvincia() {
-        return provincia;
-    }
-
-    public void setProvincia(String provincia) {
-        this.provincia = provincia;
     }
 
     public String getEmail() {
@@ -140,16 +107,35 @@ public class Cliente {
         this.usuario = usuario;
     }
     
-    
-    
     public Cliente(int idCliente) {
 	    this.idCliente = idCliente;
 	}
 	
-	
 	 public Cliente() {
 		}
-    
-    
+
+	public int getIdSexo() {
+		return idSexo;
+	}
+
+	public void setIdSexo(int idSexo) {
+		this.idSexo = idSexo;
+	}
+
+	public int getIdNacionalidad() {
+		return idNacionalidad;
+	}
+
+	public void setIdNacionalidad(int idNacionalidad) {
+		this.idNacionalidad = idNacionalidad;
+	}
+
+	public int getIdLocalidad() {
+		return idLocalidad;
+	}
+
+	public void setIdLocalidad(int idLocalidad) {
+		this.idLocalidad = idLocalidad;
+	}
     
 }

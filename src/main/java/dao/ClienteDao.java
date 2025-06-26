@@ -5,6 +5,6 @@ import dominio.Cliente;
 
 public interface ClienteDao {
 
-	List<Cliente> obtenerTodos();
-	
+	boolean altaCliente(Cliente cliente);
+	List<Cliente> obtenerTodos();	
 }
