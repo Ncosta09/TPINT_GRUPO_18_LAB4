@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Cliente" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +11,7 @@
 </head>
 <body>
     <jsp:include page="/header.jsp" />
+   
     
     <div class="container">
         <jsp:include page="/sidebarAdmin.jsp" />
@@ -21,30 +24,47 @@
                     <span class="form-icon">🏦</span>
                     Alta de Cuenta Bancaria
                 </h2>
+                <% String mensaje = (String) request.getAttribute("mensaje"); %>
+<% if (mensaje != null) { %>
+    <div class="alert alert-success">
+        <%= mensaje %>
+    </div>
+<% } %>
                 
-                <form id="accountForm" action="altaCuenta" method="post">
+                <form id="accountForm" action="CuentaServlet?accion=alta" method="post">
                     <div class="form-group">
-                        <label for="cliente">Cliente:</label>
-                        <select id="cliente" name="cliente" required>
-                            <option value="">Seleccione un cliente...</option>
-                            <option value="1">Juan Gómez (DNI: 30123456)</option>
-                            <option value="2">María López (DNI: 28987654)</option>
-                            <option value="3">Carlos Rodríguez (DNI: 33456789)</option>
-                            <option value="4">Laura Martínez (DNI: 25789012)</option>
-                            <option value="5">Pedro Sánchez (DNI: 35678901)</option>
-                            <option value="6">Ana Fernández (DNI: 27345678)</option>
-                            <option value="7">Roberto Díaz (DNI: 32567890)</option>
-                            <option value="8">Lucía García (DNI: 29876543)</option>
-                        </select>
-                        <div class="error-message" id="cliente-error">Debe seleccionar un cliente</div>
+                        <label for="cliente">Cliente:</label> 
+                        
+                        <%@ page import="java.util.List" %>
+<%@ page import="dominio.Cliente" %>
+
+<select id="cliente" name="cliente" required>
+    <option value="">Seleccione un cliente...</option>
+    <%
+        List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
+        if (listaClientes != null) {
+            for (Cliente cli : listaClientes) {
+    %>
+    <option value="<%= cli.getIdCliente() %>">
+        <%= cli.getNombre() %> <%= cli.getApellido() %> (DNI: <%= cli.getDni() %>)
+    </option>
+    <%
+            }
+        }
+    %>
+</select>
+
+
+
+						<div class="error-message" id="cliente-error">Debe seleccionar un cliente</div>
                     </div>
                     
                     <div class="form-group">
                         <label for="tipoCuenta">Tipo de Cuenta:</label>
                         <select id="tipoCuenta" name="tipoCuenta" required>
                             <option value="">Seleccione tipo de cuenta...</option>
-                            <option value="CA">Caja de Ahorro</option>
-                            <option value="CC">Cuenta Corriente</option>
+                            <option value="Caja de ahorro">Caja de Ahorro</option>
+                            <option value="Cuenta corriente">Cuenta Corriente</option>
                         </select>
                         <div class="error-message" id="tipoCuenta-error">Debe seleccionar un tipo de cuenta</div>
                     </div>

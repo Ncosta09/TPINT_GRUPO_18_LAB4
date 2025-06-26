@@ -139,4 +139,17 @@ public class Cliente {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
+    
+    
+    
+    public Cliente(int idCliente) {
+	    this.idCliente = idCliente;
+	}
+	
+	
+	 public Cliente() {
+		}
+    
+    
+    
 }

@@ -1,5 +1,4 @@
-
-        const burgerMenu = document.getElementById('burgerMenu');
+const burgerMenu = document.getElementById('burgerMenu');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const accountForm = document.getElementById('accountForm');
@@ -9,17 +8,9 @@
         const tipoCuentaSelect = document.getElementById('tipoCuenta');
         const accountPreview = document.getElementById('accountPreview');
         
-        // Datos de clientes para validación
-        const clientesData = {
-            '1': { nombre: 'Juan Gómez', cuentas: ['CA'] },
-            '2': { nombre: 'María López', cuentas: [] },
-            '3': { nombre: 'Carlos Rodríguez', cuentas: ['CC'] },
-            '4': { nombre: 'Laura Martínez', cuentas: ['CA', 'CC'] },
-            '5': { nombre: 'Pedro Sánchez', cuentas: [] },
-            '6': { nombre: 'Ana Fernández', cuentas: ['CA'] },
-            '7': { nombre: 'Roberto Díaz', cuentas: [] },
-            '8': { nombre: 'Lucía García', cuentas: ['CC'] }
-        };
+
+		
+		
         
         burgerMenu.addEventListener('click', function() {
             sidebar.classList.toggle('active');
@@ -64,57 +55,27 @@
         clienteSelect.addEventListener('change', updatePreview);
         tipoCuentaSelect.addEventListener('change', updatePreview);
         
-        accountForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validación
-            let isValid = true;
-            
-            // Validar cliente
-            const clienteId = clienteSelect.value;
-            if (!clienteId) {
-                document.getElementById('cliente-error').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('cliente-error').style.display = 'none';
-            }
-            
-            // Validar tipo de cuenta
-            const tipoCuenta = tipoCuentaSelect.value;
-            const tipoCuentaError = document.getElementById('tipoCuenta-error');
-            
-            if (!tipoCuenta) {
-                tipoCuentaError.textContent = 'Debe seleccionar un tipo de cuenta';
-                tipoCuentaError.style.display = 'block';
-                isValid = false;
-            } else if (clienteId && clientesData[clienteId].cuentas.includes(tipoCuenta)) {
-                tipoCuentaError.textContent = 'El cliente ya tiene una cuenta activa de este tipo';
-                tipoCuentaError.style.display = 'block';
-                isValid = false;
-            } else {
-                tipoCuentaError.style.display = 'none';
-            }
-            
-            if (isValid) {
-                // Simular procesamiento
-                document.getElementById('submitBtn').disabled = true;
-                document.getElementById('submitBtn').textContent = 'Creando cuenta...';
-                
-                setTimeout(function() {
-                    // Mostrar notificación de éxito
-                    notification.style.display = 'block';
-                    
-                    // Ocultar notificación después de 3 segundos
-                    setTimeout(function() {
-                        notification.style.display = 'none';
-                        window.location.href = 'listaCuentas.jsp';
-                    }, 3000);
-                }, 2000);
-                
-                console.log('Cuenta creada:', {
-                    cliente: clientesData[clienteId].nombre,
-                    tipoCuenta: tipoCuenta,
-                    saldoInicial: 10000
-                });
-            }
-        });
+		
+		
+		accountForm.addEventListener('submit', function(e) {
+		    // Validación básica opcional (puede quedarse si querés)
+		    const clienteId = clienteSelect.value;
+		    const tipoCuenta = tipoCuentaSelect.value;
+		    const tipoCuentaError = document.getElementById('tipoCuenta-error');
+
+		    let isValid = true;
+
+		    if (!tipoCuenta) {
+		        tipoCuentaError.textContent = 'Debe seleccionar un tipo de cuenta';
+		        tipoCuentaError.style.display = 'block';
+		        isValid = false;
+		    } else {
+		        tipoCuentaError.style.display = 'none';
+		    }
+
+		    // Si no es válido, evitás el envío
+		    if (!isValid) {
+		        e.preventDefault();
+		    }
+
+		});

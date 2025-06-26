@@ -1,8 +1,6 @@
 package serverlets;
-
-
-	import java.io.IOException;
-
+import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,10 +8,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dominio.Cliente;
 import dominio.Cuenta;
 	import negocio.CuentaNegocio;
 	import negocioImpl.CuentaNegocioImpl;
 
+	
 	@WebServlet("/CuentaServlet")
 	public class ServletCuenta extends HttpServlet {
 	    private static final long serialVersionUID = 1L;
@@ -32,33 +32,113 @@ import dominio.Cuenta;
 
 	        String accion = request.getParameter("accion");
 
-	        if ("actualizar".equals(accion)) {
-	         
-	            int id = Integer.parseInt(request.getParameter("id"));
-	            String tipoCuenta = request.getParameter("tipoCuenta");
-	            double saldo = Double.parseDouble(request.getParameter("saldo"));
+	        switch (accion) {
+	            case "alta":
+	                altaCuenta(request, response);
+	                break;
 
-	            Cuenta cuenta = new Cuenta();
-	            cuenta.setId(id);
-	            cuenta.setSaldo(saldo);
+	            case "baja":
+	                bajaCuenta(request, response);
+	                break;
 
-	            boolean actualizado = cuentaNegocio.modificarCuenta(cuenta);
+	            case "actualizar":
+	                modificarCuenta(request, response);
+	                break;
 
-	            if (actualizado) {
-	                request.setAttribute("mensaje", "Cuenta actualizada correctamente");
-	            } else {
-	                request.setAttribute("mensaje", "Ocurrió un error al actualizar la cuenta");
-	            }
-
-	            
-	            request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
-	            return;
+	            default:
+	                response.sendRedirect("listaCuentas.jsp");
+	                break;
 	        }
-
-
-	        response.sendRedirect("listaCuentas.jsp");
 	    }
 
 	    
-	}
+	    
+	    private void altaCuenta(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	        int idCliente = Integer.parseInt(request.getParameter("cliente"));
+	        String tipoCuenta = request.getParameter("tipoCuenta");
 
+	        Cuenta cuenta = new Cuenta();
+	        cuenta.setCliente(new dominio.Cliente(idCliente));
+	        cuenta.setTipoCuenta(tipoCuenta);
+	        cuenta.setSaldo(10000.00);
+
+	        boolean creada = cuentaNegocio.crearCuenta(cuenta);
+
+	        // 🔁 Volvés a cargar la lista de clientes para el JSP
+	        List<Cliente> listaClientes = cuentaNegocio.obtenerTodos();
+	        request.setAttribute("listaClientes", listaClientes);
+
+	        // ✅ Mensaje de feedback
+	        if (creada) {
+	            request.setAttribute("mensaje", "Cuenta creada correctamente.");
+	        } else {
+	            request.setAttribute("mensaje", "El cliente ya tiene 3 cuentas activas o ocurrió un error.");
+	        }
+
+	        request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
+	    }
+	    
+	    
+	    
+	    
+
+	    private void bajaCuenta(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	        int idCuenta = Integer.parseInt(request.getParameter("id"));
+
+	        boolean desactivada = cuentaNegocio.bajaCuenta(idCuenta);
+
+	        if (desactivada) {
+	            request.setAttribute("mensaje", "Cuenta dada de baja correctamente.");
+	        } else {
+	            request.setAttribute("mensaje", "Error al dar de baja la cuenta.");
+	        }
+
+	        request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
+	    }
+
+	    private void modificarCuenta(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+	        int id = Integer.parseInt(request.getParameter("id"));
+	        String tipoCuenta = request.getParameter("tipoCuenta");
+	        double saldo = Double.parseDouble(request.getParameter("saldo"));
+
+	        Cuenta cuenta = new Cuenta();
+	        cuenta.setId(id);
+	        cuenta.setTipoCuenta(tipoCuenta);
+	        cuenta.setSaldo(saldo);
+
+	        boolean actualizado = cuentaNegocio.modificarCuenta(cuenta);
+
+	        if (actualizado) {
+	            request.setAttribute("mensaje", "Cuenta actualizada correctamente");
+	        } else {
+	            request.setAttribute("mensaje", "Ocurrió un error al actualizar la cuenta");
+	        }
+
+	        request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
+	    }
+	    
+	    
+	    
+	    @Override
+	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+	            throws ServletException, IOException {
+
+	        String accion = request.getParameter("accion");
+
+	        if ("formAlta".equals(accion)) {
+	            List<Cliente> listaClientes = cuentaNegocio.obtenerTodos();
+	            request.setAttribute("listaClientes", listaClientes);
+	            request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
+	            return;
+	        }
+
+	        response.sendRedirect("index.jsp");
+	    }
+
+	    
+	    
+	    
+	}

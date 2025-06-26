@@ -2,17 +2,30 @@ package negocioImpl;
 
 import dao.CuentaDao;
 import daoImpl.CuentaDaoImpl;
+import dominio.Cliente;
 import dominio.Cuenta;
+import java.util.List;
 import negocio.CuentaNegocio;
 
 public class CuentaNegocioImpl implements CuentaNegocio {
-	
+   private CuentaDao dao = new CuentaDaoImpl();
 
-	@Override
-	public boolean modificarCuenta(Cuenta cuenta) {
-	    CuentaDao dao = new CuentaDaoImpl();
-	    return dao.modificarCuenta(cuenta);
-	}
+   public CuentaNegocioImpl() {
+   }
 
-	
+   public boolean crearCuenta(Cuenta cuenta) {
+      return this.dao.crearCuenta(cuenta);
+   }
+
+   public boolean bajaCuenta(int idCuenta) {
+      return this.dao.bajaCuenta(idCuenta);
+   }
+
+   public boolean modificarCuenta(Cuenta cuenta) {
+      return this.dao.modificarCuenta(cuenta);
+   }
+
+   public List<Cliente> obtenerTodos() {
+      return this.dao.obtenerTodos();
+   }
 }
