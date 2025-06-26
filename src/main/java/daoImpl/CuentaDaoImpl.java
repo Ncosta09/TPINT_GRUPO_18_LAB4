@@ -15,6 +15,44 @@ import dominio.Cuenta;
 public class CuentaDaoImpl implements CuentaDao {
 
 	@Override
+	public List<Cuenta> obtenerTodasLasCuentas() {
+	    List<Cuenta> cuentas = new ArrayList<>();
+	    Connection cn = null;
+	    try {
+	    	
+	    	 cn = Conexion.getConexion().getSQLConexion();
+		        PreparedStatement st = cn.prepareStatement("SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.descripcion as tipo_cuenta_desc, cl.nombre, cl.apellido, cl.id_cliente FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.estado = 1 ORDER BY cl.apellido, cl.nombre");
+
+		        ResultSet rs = st.executeQuery();
+        	
+        	while (rs.next()) {
+                Cuenta cuenta = new Cuenta();
+                cuenta.setId(rs.getInt("id_cuenta"));
+                cuenta.setNumeroCuenta(rs.getString("numero_cuenta"));
+                cuenta.setCbu(rs.getString("cbu"));
+                cuenta.setSaldo(rs.getDouble("saldo"));
+                cuenta.setEstado(rs.getBoolean("estado"));
+                cuenta.setTipoCuenta(rs.getString("tipo_cuenta_desc"));
+                
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("id_cliente"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setApellido(rs.getString("apellido"));
+                cuenta.setCliente(cliente);
+                
+                cuentas.add(cuenta);
+            }
+            
+            System.out.println("Cuentas obtenidas: " + cuentas.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cuentas;
+    }
+	
+	
+	@Override
 	public boolean modificarCuenta(Cuenta cuenta) {
 		Connection conn;
 	    
@@ -45,7 +83,6 @@ public class CuentaDaoImpl implements CuentaDao {
 	        ResultSet rs = psCheck.executeQuery();
 	        if (rs.next() && rs.getInt(1) >= 3) return false;
 
-	        // Generar numeroCuenta y cbu
 	        String numeroCuentaGenerado = generarNumeroCuenta();
 	        String cbuGenerado = generarCBU();
 
@@ -84,7 +121,6 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	
 	private String generarCBU() {
-	    // 22 digitos numericos aleatorios
 	    StringBuilder cbu = new StringBuilder();
 	    for (int i = 0; i < 22; i++) {
 	        cbu.append((int)(Math.random() * 10));
@@ -128,7 +164,6 @@ public class CuentaDaoImpl implements CuentaDao {
                 lista.add(c);
             }
             
-            System.out.println("Clientes obtenidos: " + lista.size()); // <- esto sirve para confirmar que pasa por el servlet.
         } catch (Exception e) {
             e.printStackTrace();
         }

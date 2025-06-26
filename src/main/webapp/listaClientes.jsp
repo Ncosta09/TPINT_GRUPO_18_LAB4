@@ -90,8 +90,8 @@
             </div>
         </div>
     </div>
-
-    <script src="js/common.js"></script>
     
+    <script src="js/common.js"></script>
+    <script src="js/listaClientes.js"></script>
 </body>
 </html>

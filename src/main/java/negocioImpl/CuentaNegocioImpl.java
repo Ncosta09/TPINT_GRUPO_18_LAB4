@@ -28,4 +28,9 @@ public class CuentaNegocioImpl implements CuentaNegocio {
    public List<Cliente> obtenerTodos() {
       return this.dao.obtenerTodos();
    }
+   
+   @Override
+   public List<Cuenta> obtenerTodasLasCuentas() {
+       return dao.obtenerTodasLasCuentas();
+   }
 }
