@@ -86,7 +86,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	        String numeroCuentaGenerado = generarNumeroCuenta();
 	        String cbuGenerado = generarCBU();
 
-	        String insertCuenta = "INSERT INTO Cuentas (numero_cuenta, cbu, tipo_cuenta, fecha_creacion, saldo, estado, id_cliente) VALUES (?, ?, ?, ?, ?, 1, ?)";
+	        String insertCuenta = "INSERT INTO Cuentas (numero_cuenta, cbu, tipo_cuenta, fecha_creacion, saldo, id_cliente) VALUES (?, ?, ?, ?, ?, ?)";
 	        PreparedStatement ps = conn.prepareStatement(insertCuenta, Statement.RETURN_GENERATED_KEYS);
 	        ps.setString(1, numeroCuentaGenerado);
 	        ps.setString(2, cbuGenerado);
@@ -190,13 +190,11 @@ public class CuentaDaoImpl implements CuentaDao {
     
     
     private void agregarMovimientoInicial(Connection conn, int idCuenta, double importe) throws SQLException {
-        String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, fecha, importe, detalle, saldo) VALUES (?, 1, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES (?, 1, ?, ?)";
         PreparedStatement ps = conn.prepareStatement(sql);
         ps.setInt(1, idCuenta);
-        ps.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+        ps.setDouble(2, importe);
         ps.setDouble(3, importe);
-        ps.setString(4, "Apertura de cuenta");
-        ps.setDouble(5, importe);
         ps.executeUpdate();
     }
     

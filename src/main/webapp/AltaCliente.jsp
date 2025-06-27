@@ -5,14 +5,17 @@
 <%@ page import="dominio.Nacionalidad" %>
 <%@ page import="dominio.Localidad" %>
 <%@ page import="dominio.Provincia" %>
-
+<%@ page import="dominio.Usuario" %>
+<%
     
-    <%
-    List<Sexo> sexo = (List<Sexo>) request.getAttribute("listaSexo");
-    List<Nacionalidad> nac = (List<Nacionalidad>) request.getAttribute("listaNac");
-    List<Localidad> loca = (List<Localidad>) request.getAttribute("listaLoca");
-    List<Provincia> prov = (List<Provincia>) request.getAttribute("listaProv");
-	%>
+    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
+
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
