@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List, dominio.Cuenta, java.util.ArrayList" %>
+<%@ page import="dominio.Usuario" %>
+<%
+    
+    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
+
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 <!DOCTYPE html>
 <html>
 <head>

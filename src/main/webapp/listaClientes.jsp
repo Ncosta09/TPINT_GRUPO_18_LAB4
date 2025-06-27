@@ -1,10 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="dominio.Cliente" %>
+<%@ page import="dominio.Usuario" %>
+<%
+    
+    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
 
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 <%
     List<Cliente> lista = (List<Cliente>) request.getAttribute("listaClientes");
 %>
+
 
 <!DOCTYPE html>
 <html>

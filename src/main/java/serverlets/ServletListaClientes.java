@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import dominio.Cliente;
 import negocioImpl.ClienteNegocioImpl;
 
@@ -19,7 +21,13 @@ public class ServletListaClientes extends HttpServlet {
     }
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("usuarioLogueado") == null) {
+			response.sendRedirect("Login.jsp");
+			return;
+		}
+
+		ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
         
         String accion = request.getParameter("accion");
 
@@ -36,7 +44,12 @@ public class ServletListaClientes extends HttpServlet {
         request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
     }
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String accion = request.getParameter("accion");
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("usuarioLogueado") == null) {
+			response.sendRedirect("Login.jsp");
+			return;
+		}
+		String accion = request.getParameter("accion");
 
         if ("modificar".equals(accion)) {
             int id = Integer.parseInt(request.getParameter("idCliente"));
