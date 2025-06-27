@@ -86,8 +86,7 @@ CREATE TABLE Cuentas (
 CREATE TABLE Tipo_movimiento (
     id_tipo_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50),
-    descripcion VARCHAR(255),
-    estado BOOLEAN DEFAULT 1
+    descripcion VARCHAR(255)
 );
 
 -- Movimientos
@@ -192,11 +191,11 @@ INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario) VALUES
 INSERT INTO Tipos_cuenta (descripcion) VALUES ('Caja de ahorro'), ('Cuenta corriente');
 
 -- Tipos de movimiento
-INSERT INTO Tipo_movimiento (nombre, descripcion, estado) VALUES
-('Alta de cuenta', 'Creación inicial de cuenta', TRUE),
-('Transferencia', 'Transferencia a otra cuenta', TRUE),
-('Préstamo', 'Depósito por préstamo', TRUE),
-('Pago préstamo', 'Cuota de préstamo pagada', TRUE);
+INSERT INTO Tipo_movimiento (nombre, descripcion) VALUES
+('Alta de cuenta', 'Creación inicial de cuenta'),
+('Transferencia', 'Transferencia a otra cuenta'),
+('Préstamo', 'Depósito por préstamo'),
+('Pago préstamo', 'Cuota de préstamo pagada');
 
 -- Clientes
 INSERT INTO Clientes (
@@ -222,9 +221,9 @@ INSERT INTO Movimientos (
 
 -- Préstamo
 INSERT INTO Prestamos (
-    id_cliente, id_cuenta, fecha_alta, importe_pedido, plazo_meses, cantidad_cuotas, importe_cuota, estado
+    id_cliente, id_cuenta, fecha_alta, importe_pedido, plazo_meses, cantidad_cuotas, importe_cuota
 ) VALUES 
-(2, 2, CURDATE(), 12000.00, 6, 6, 2000.00, 'pendiente');
+(2, 2, CURDATE(), 12000.00, 6, 6, 2000.00);
 
 -- Cuotas
 INSERT INTO Cuotas (
