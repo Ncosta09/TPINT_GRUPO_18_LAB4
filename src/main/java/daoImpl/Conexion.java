@@ -8,7 +8,7 @@ public class Conexion {
 
     private static final String URL = "jdbc:mysql://localhost:3306/bdGestionBanco";
     private static final String USER = "root";
-    private static final String PASS = "1234";
+    private static final String PASS = "root";
 
     private static Conexion instancia;
     private Connection connection;

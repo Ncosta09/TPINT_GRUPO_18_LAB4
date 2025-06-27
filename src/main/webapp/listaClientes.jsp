@@ -103,7 +103,7 @@
                                 
                                 <% if (c.getUsuario().getEstado() == 1) { %>
                                     <form action="ServletBajaCliente" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés dar de baja este cliente?');">
-                                        <input type="hidden" name="idUsuario" value="<%= c.getUsuario().getIdUsuario() %>">
+                                        <input type="hidden" name="idUsuario" value="<%= c.getUsuario().getIdUsuario() %>"></input>
                                         <button type="submit" class="btn btn-sm btn-danger">Dar de baja</button>
                                     </form>
                                 <% } else { %>
@@ -117,9 +117,6 @@
             </div>
         </div>
     </div>
-
-    <script src="js/common.js"></script>
-=======
     
     <script src="js/common.js"></script>
     <script src="js/listaClientes.js"></script>

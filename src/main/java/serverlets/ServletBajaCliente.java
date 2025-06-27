@@ -4,46 +4,42 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import daoImpl.Conexion;
-import java.sql.*;
+
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 @WebServlet("/ServletBajaCliente")
 public class ServletBajaCliente extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    public ServletBajaCliente() {
-        super();
-    }
+    // 1) Creamos el negocio en vez de usar JDBC directo
+    private ClienteNegocio clienteNegocio = new ClienteNegocioImpl();
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String idUsuarioStr = request.getParameter("idUsuario");
+        if (idUsuarioStr == null || idUsuarioStr.isBlank()) {
+            response.sendRedirect("ServletListaClientes?mensaje=ID inválido");
+            return;
+        }
 
-        if (idUsuarioStr != null && !idUsuarioStr.isEmpty()) {
-            int idUsuario = Integer.parseInt(idUsuarioStr);
+        int idUsuario;
+        try {
+            idUsuario = Integer.parseInt(idUsuarioStr);
+        } catch (NumberFormatException e) {
+            response.sendRedirect("ServletListaClientes?mensaje=ID inválido");
+            return;
+        }
 
-            try (Connection conn = Conexion.obtenerConexionDirecta()) {
-                String sql = "UPDATE Usuarios SET estado = 0 WHERE id_usuario = ?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setInt(1, idUsuario);
+        // 2) Delegamos al negocio
+        boolean ok = clienteNegocio.darDeBaja(idUsuario);
 
-                int filasAfectadas = ps.executeUpdate();
-                conn.commit();
-
-                if (filasAfectadas > 0) {
-                    response.sendRedirect("ServletListaClientes?mensaje=Cliente dado de baja correctamente");
-                } else {
-                    response.sendRedirect("ServletListaClientes?mensaje=No se encontró el cliente para dar de baja");
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect("ServletListaClientes?mensaje=Error al intentar dar de baja el cliente");
-            }
-
+        // 3) Redirigimos con feedback
+        if (ok) {
+            response.sendRedirect("ServletListaClientes?mensaje=Cliente dado de baja correctamente");
         } else {
-            response.sendRedirect("ServletListaClientes?mensaje=ID de usuario inválido");
+            response.sendRedirect("ServletListaClientes?mensaje=Error al dar de baja");
         }
     }
 }

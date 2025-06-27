@@ -56,7 +56,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id WHERE u.estado = 1");
+	        PreparedStatement st = cn.prepareStatement("SELECT c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
 
 	        ResultSet rs = st.executeQuery();
 	        
@@ -72,6 +72,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	                cliente.setTelefono(rs.getString("telefono"));
 	                usuario.setEstado(rs.getInt("estado"));
 	                usuario.setTipoUsuario(rs.getInt("tipo_usuario"));
+	                usuario.setIdUsuario(rs.getInt("id_usuario"));
 	                cliente.setUsuario(usuario);
 	                
 	                clientes.add(cliente);
