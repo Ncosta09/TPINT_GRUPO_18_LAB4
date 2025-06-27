@@ -36,7 +36,7 @@ CREATE TABLE Usuarios (
     nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
     pass_usuario VARCHAR(50) NOT NULL,
     tipo_usuario INT NOT NULL,
-    estado BOOLEAN NOT NULL,
+    estado BOOLEAN NOT NULL DEFAULT 1,
     FOREIGN KEY (tipo_usuario) REFERENCES Tipos_usuario(tipo_id)
 );
 
@@ -55,6 +55,7 @@ CREATE TABLE Clientes (
     id_localidad INT NOT NULL,
     email VARCHAR(50),
     telefono VARCHAR(50),
+    fecha_creacion DATE NOT NULL DEFAULT (CURRENT_DATE),
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
     FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo),
     FOREIGN KEY (id_nacionalidad) REFERENCES Nacionalidad(id_nacionalidad),
@@ -75,7 +76,7 @@ CREATE TABLE Cuentas (
     tipo_cuenta INT,
     fecha_creacion DATE,
     saldo DECIMAL(12,2),
-    estado BOOLEAN,
+    estado BOOLEAN DEFAULT 1,
     id_cliente INT,
     FOREIGN KEY (tipo_cuenta) REFERENCES Tipos_cuenta(tipo_id),
     FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente)
@@ -86,7 +87,7 @@ CREATE TABLE Tipo_movimiento (
     id_tipo_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50),
     descripcion VARCHAR(255),
-    estado BOOLEAN
+    estado BOOLEAN DEFAULT 1
 );
 
 -- Movimientos
@@ -94,7 +95,7 @@ CREATE TABLE Movimientos (
     id_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     id_cuenta INT,
     id_tipo_movimiento INT,
-    fecha DATE,
+    fecha DATE DEFAULT (CURRENT_DATE) ,
     importe DECIMAL(12,2),
     saldo DECIMAL(12,2),
     FOREIGN KEY (id_cuenta) REFERENCES Cuentas(id_cuenta),
@@ -106,7 +107,7 @@ CREATE TABLE Transferencias (
     id_transferencia INT AUTO_INCREMENT PRIMARY KEY,
     id_cuenta_origen INT,
     id_cuenta_destino INT,
-    fecha DATE,
+    fecha DATE DEFAULT (CURRENT_DATE),
     importe DECIMAL(12,2),
     detalle VARCHAR(255),
     FOREIGN KEY (id_cuenta_origen) REFERENCES Cuentas(id_cuenta),
@@ -123,7 +124,7 @@ CREATE TABLE Prestamos (
     plazo_meses INT,
     cantidad_cuotas INT,
     importe_cuota DECIMAL(12,2),
-    estado ENUM('pendiente','aprobado','rechazado'),
+    estado ENUM('pendiente','aprobado','rechazado') NOT NULL DEFAULT 'pendiente' ,
     FOREIGN KEY (id_cliente) REFERENCES Clientes(id_cliente),
     FOREIGN KEY (id_cuenta) REFERENCES Cuentas(id_cuenta)
 );
@@ -135,7 +136,7 @@ CREATE TABLE Cuotas (
     numero_cuota INT,
     monto DECIMAL(12,2),
     fecha_pago DATE,
-    pagada BOOLEAN,
+    pagada BOOLEAN DEFAULT 0,
     FOREIGN KEY (id_prestamo) REFERENCES Prestamos(id_prestamo)
 );
 
@@ -182,10 +183,10 @@ INSERT INTO Localidad (nombre, id_provincia) VALUES ('Localidad 10', 10);
 INSERT INTO Tipos_usuario (descripcion_tipo) VALUES ('Administrador'), ('Cliente');
 
 -- Usuarios
-INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario, estado) VALUES 
-('admin', 'admin', 1, TRUE),
-('cliente1', '1234', 2, TRUE),
-('cliente2', '1234', 2, TRUE);
+INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario) VALUES 
+('admin', 'admin', 1),
+('cliente1', '1234', 2),
+('cliente2', '1234', 2);
 
 -- Tipos de cuenta
 INSERT INTO Tipos_cuenta (descripcion) VALUES ('Caja de ahorro'), ('Cuenta corriente');

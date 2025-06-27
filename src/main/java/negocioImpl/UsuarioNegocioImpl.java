@@ -18,4 +18,9 @@ public class UsuarioNegocioImpl implements UsuarioNegocio{
     public Usuario obtenerUsuario(String nombreUsuario, String clave) {
         return UsuarioDao.obtenerUsuario(nombreUsuario, clave);
     }
+
+	@Override
+	public boolean agregarUsuario(Usuario usuario) {
+		return UsuarioDao.insert(usuario);
+	}
 }
