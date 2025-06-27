@@ -167,4 +167,26 @@ public class ClienteDaoImpl implements ClienteDao {
 	        return false;
 	    }
 	}
+
+
+	@Override
+	public int contarClientes(boolean dateFilter) {
+		 int total = 0;
+		 Connection conn;
+		 String filtroMes = "";
+		 if(dateFilter) {
+			 filtroMes= " WHERE MONTH(fecha_creacion) = MONTH(CURRENT_DATE()) AND YEAR(fecha_creacion) = YEAR(CURRENT_DATE())";
+		 }
+		    try {
+		    	conn = Conexion.obtenerConexionDirecta();
+		        PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) AS 'total' FROM Clientes"+filtroMes);
+		        ResultSet rs = ps.executeQuery();
+		        if (rs.next()) {
+		            total = rs.getInt("total");
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+		    return total;
+	}
 }

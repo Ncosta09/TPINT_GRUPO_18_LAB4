@@ -9,4 +9,5 @@ public interface ClienteNegocio {
 	boolean darDeBaja(int idUsuario);
 	Cliente obtenerPorId(int idCliente);
 	boolean modificarCliente(Cliente c);
+	int contarClientes(boolean dateFilter);
 }

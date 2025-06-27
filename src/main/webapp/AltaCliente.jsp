@@ -194,7 +194,7 @@
                     </div>
                     
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='homeAdmin.jsp'">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='ServletHomeAdmin'">Cancelar</button>
                         <button type="submit" class="btn">Guardar Cliente</button>
                     </div>
                 </form>

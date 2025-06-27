@@ -1,5 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ page import="dominio.Usuario" %>
+<%
+    
+    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
+
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -17,28 +27,28 @@
         
         <div class="content">
             <div class="welcome-card">
-                <h2>Bienvenido, Juan Pérez</h2>
+                <h2>Bienvenido, Admin</h2>
                 <p>Panel de administración del sistema bancario</p>
             </div>
             
             <div class="dashboard-cards">
-                <div class="card">
-                    <h3>Total Clientes</h3>
-                    <p>124</p>
-                </div>
-                <div class="card">
-                    <h3>Préstamos Activos</h3>
-                    <p>45</p>
-                </div>
-                <div class="card">
-                    <h3>Préstamos Pendientes</h3>
-                    <p>12</p>
-                </div>
-                <div class="card">
-                    <h3>Nuevos Clientes (Mes)</h3>
-                    <p>8</p>
-                </div>
-            </div>
+			    <div class="card">
+			        <h3>Total Clientes</h3>
+			        <p><%= request.getAttribute("totalClientes") %></p>
+			    </div>
+			    <div class="card">
+			        <h3>Préstamos Activos</h3>
+			        <p>0</p>
+			    </div>
+			    <div class="card">
+			        <h3>Préstamos Pendientes</h3>
+			        <p>0</p>
+			    </div>
+			    <div class="card">
+			        <h3>Nuevos Clientes (Mes)</h3>
+			        <p><%= request.getAttribute("totalClientesMes") %></p>
+			    </div>
+			</div>
         </div>
     </div>
 

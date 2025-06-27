@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     window.location.href = 'homeCliente.jsp';
                 } else {
                     // Redirigir a página de admin después del login
-                    window.location.href = 'homeAdmin.jsp';
+                    window.location.href = 'ServletHomeAdmin';
                 }
             }
         });
