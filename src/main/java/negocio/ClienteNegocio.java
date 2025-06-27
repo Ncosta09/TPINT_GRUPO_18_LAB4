@@ -4,6 +4,7 @@ import java.util.List;
 import dominio.Cliente;
 
 public interface ClienteNegocio {
+	boolean altaCliente(Cliente cliente);
 	List<Cliente> obtenerTodos();
 	boolean darDeBaja(int idUsuario);
 }

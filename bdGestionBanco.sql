@@ -52,14 +52,12 @@ CREATE TABLE Clientes (
     id_nacionalidad INT NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     direccion VARCHAR(100),
-    id_provincia INT NOT NULL,
     id_localidad INT NOT NULL,
     email VARCHAR(50),
     telefono VARCHAR(50),
     FOREIGN KEY (id_usuario) REFERENCES Usuarios(id_usuario),
     FOREIGN KEY (id_sexo) REFERENCES Sexo(id_sexo),
     FOREIGN KEY (id_nacionalidad) REFERENCES Nacionalidad(id_nacionalidad),
-    FOREIGN KEY (id_provincia) REFERENCES Provincia(id_provincia),
     FOREIGN KEY (id_localidad) REFERENCES Localidad(id_localidad)
 );
 
@@ -202,10 +200,10 @@ INSERT INTO Tipo_movimiento (nombre, descripcion, estado) VALUES
 -- Clientes
 INSERT INTO Clientes (
     id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad,
-    fecha_nacimiento, direccion, id_provincia, id_localidad, email, telefono
+    fecha_nacimiento, direccion, id_localidad, email, telefono
 ) VALUES 
-(2, '12345678', '20-12345678-9', 'Juan', 'Pérez', 1, 1, '1990-01-01', 'Calle Falsa 123', 1,1, 'juan@example.com', '1111111111'),
-(3, '87654321', '20-87654321-9', 'Ana', 'Gómez', 2, 2, '1992-02-02', 'Calle Verdadera 456', 2,2, 'ana@example.com', '2222222222');
+(2, '12345678', '20-12345678-9', 'Juan', 'Pérez', 1, 1, '1990-01-01', 'Calle Falsa 123',1, 'juan@example.com', '1111111111'),
+(3, '87654321', '20-87654321-9', 'Ana', 'Gómez', 2, 2, '1992-02-02', 'Calle Verdadera 456',2, 'ana@example.com', '2222222222');
 
 -- Cuentas
 INSERT INTO Cuentas (

@@ -134,9 +134,14 @@ import dominio.Cuenta;
 	            request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
 	            return;
 	        }
-
-	        response.sendRedirect("index.jsp");
+	        
+	        List<Cuenta> cuentas = cuentaNegocio.obtenerTodasLasCuentas();
+	        request.setAttribute("cuentas", cuentas);
+	        request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
 	    }
+
+	      //  response.sendRedirect("index.jsp");
+	    
 
 	    
 	    

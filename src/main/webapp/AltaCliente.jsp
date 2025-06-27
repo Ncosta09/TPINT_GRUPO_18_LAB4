@@ -1,5 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Sexo" %>
+<%@ page import="dominio.Nacionalidad" %>
+<%@ page import="dominio.Localidad" %>
+<%@ page import="dominio.Provincia" %>
+
+    
+    <%
+    List<Sexo> sexo = (List<Sexo>) request.getAttribute("listaSexo");
+    List<Nacionalidad> nac = (List<Nacionalidad>) request.getAttribute("listaNac");
+    List<Localidad> loca = (List<Localidad>) request.getAttribute("listaLoca");
+    List<Provincia> prov = (List<Provincia>) request.getAttribute("listaProv");
+	%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,11 +49,23 @@
                     </div>
                     
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="dni">DNI:</label>
-                            <input type="text" id="dni" name="dni" required>
-                            <div class="error-message" id="dni-error"></div>
-                        </div>
+						<div class="form-group">
+						    <label for="sexo">Sexo:</label>
+						    <select id="sexo" name="sexo" required>
+							  <option value="">-- Seleccione un sexo --</option>
+							  <%
+							    List<dominio.Sexo> sexos = (List<dominio.Sexo>) request.getAttribute("listaSexo");
+							    for (dominio.Sexo s : sexos) {
+							  %>
+							    <option value="<%= s.getIdSexo() %>"><%= s.getDescripcion() %></option>
+							  <%
+							    }
+							  %>
+							</select>
+						    <div class="error-message" id="sexo-error"></div>
+						    
+						</div>
+
                         
                         <div class="form-group">
                             <label for="fechaNacimiento">Fecha de Nacimiento:</label>
@@ -78,44 +103,65 @@
                     </div>
                     
                     <div class="form-row">
-                        <div class="form-group">
-                            <label for="codigoPostal">Código Postal:</label>
-                            <input type="text" id="codigoPostal" name="codigoPostal" required>
-                            <div class="error-message" id="codigoPostal-error"></div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="provincia">Provincia:</label>
-                            <select id="provincia" name="provincia" required>
-                                <option value="">Seleccione una provincia</option>
-                                <option value="Buenos Aires">Buenos Aires</option>
-                                <option value="CABA">CABA</option>
-                                <option value="Catamarca">Catamarca</option>
-                                <option value="Chaco">Chaco</option>
-                                <option value="Chubut">Chubut</option>
-                                <option value="Córdoba">Córdoba</option>
-                                <option value="Corrientes">Corrientes</option>
-                                <option value="Entre Ríos">Entre Ríos</option>
-                                <option value="Formosa">Formosa</option>
-                                <option value="Jujuy">Jujuy</option>
-                                <option value="La Pampa">La Pampa</option>
-                                <option value="La Rioja">La Rioja</option>
-                                <option value="Mendoza">Mendoza</option>
-                                <option value="Misiones">Misiones</option>
-                                <option value="Neuquén">Neuquén</option>
-                                <option value="Río Negro">Río Negro</option>
-                                <option value="Salta">Salta</option>
-                                <option value="San Juan">San Juan</option>
-                                <option value="San Luis">San Luis</option>
-                                <option value="Santa Cruz">Santa Cruz</option>
-                                <option value="Santa Fe">Santa Fe</option>
-                                <option value="Santiago del Estero">Santiago del Estero</option>
-                                <option value="Tierra del Fuego">Tierra del Fuego</option>
-                                <option value="Tucumán">Tucumán</option>
-                            </select>
-                            <div class="error-message" id="provincia-error"></div>
-                        </div>
+						    <div class="form-group">
+						    <label for="nacionalidad">Nacionalidad:</label>
+						    <select id="nacionalidad" name="nacionalidad" required>
+							  <option value="">-- Seleccione una nacionalidad --</option>
+							  <%
+							    List<dominio.Nacionalidad> nacionalidades = (List<dominio.Nacionalidad>) request.getAttribute("listaNac");
+							    for (dominio.Nacionalidad n : nacionalidades) {
+							  %>
+							    <option value="<%= n.getIdNacionalidad() %>"><%= n.getNombre() %></option>
+							  <%
+							    }
+							  %>
+							</select>
+						    <div class="error-message" id="sexo-error"></div>
+						</div>
+                       
                     </div>
+                    
+					<div class="form-row">
+					  <div class="form-group">
+					    <label for="localidad">Localidad:</label>
+					    <select id="localidad" name="localidad" required>
+					      <option value="">-- Seleccione una localidad --</option>
+					      <%
+					        List<dominio.Localidad> localidades =
+					          (List<dominio.Localidad>) request.getAttribute("listaLoca");
+					        for (dominio.Localidad l : localidades) {
+					      %>
+					        <!-- AHORA con data-provincia -->
+					        <option value="<%= l.getIdLocalidad() %>"
+					                data-provincia="<%= l.getIdProvincia() %>">
+					          <%= l.getNombre() %>
+					        </option>
+					      <%
+					        }
+					      %>
+					    </select>
+					    <div class="error-message" id="localidad-error"></div>
+					  </div>
+					
+					  <div class="form-group">
+					    <label for="provincia">Provincia:</label>
+					    <select id="provincia" name="provincia" required disabled>
+					      <option value="">-- Provincia --</option>
+					      <%
+					        List<dominio.Provincia> provincias =
+					          (List<dominio.Provincia>) request.getAttribute("listaProv");
+					        for (dominio.Provincia p : provincias) {
+					      %>
+					        <option value="<%= p.getIdProvincia() %>">
+					          <%= p.getNombre() %>
+					        </option>
+					      <%
+					        }
+					      %>
+					    </select>
+					    <div class="error-message" id="provincia-error"></div>
+					  </div>
+					</div>
                     
                     <div class="form-row">
                         <div class="form-group">
@@ -142,8 +188,22 @@
     
     <div class="notification" id="notification"></div>
 
+
+<script>
+  // Cuando cambie la localidad:
+  document.getElementById('localidad')
+    .addEventListener('change', function() {
+      // Toma el id de la opción seleccionada
+      const selLoc = this;
+      const opt    = selLoc.options[selLoc.selectedIndex];
+      const idProv = opt.getAttribute('data-provincia');
+      // Marca esa provincia que sea el mismo id
+      const selProv = document.getElementById('provincia');
+      selProv.value = idProv || '';
+    });
+</script>
     <script src="js/common.js"></script>
-    <script src="js/AltaCli.js"></script>
+    <!-- <script src="js/AltaCli.js"></script>  -->
 </body>
 </html>
 

@@ -10,6 +10,11 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 
     private ClienteDao clienteDao = new ClienteDaoImpl();
 
+	@Override
+	public boolean altaCliente(Cliente cliente) {
+		return clienteDao.altaCliente(cliente);
+	}
+    
     @Override
     public List<Cliente> obtenerTodos() {
         return clienteDao.obtenerTodos();

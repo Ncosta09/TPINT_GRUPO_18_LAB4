@@ -107,7 +107,13 @@
             </div>
         </div>
     </div>
+<<<<<<< HEAD
 
     <script src="js/common.js"></script>
+=======
+    
+    <script src="js/common.js"></script>
+    <script src="js/listaClientes.js"></script>
+>>>>>>> 75bcb2ae5945837531de9bfe2fcd64d2c42584af
 </body>
 </html>

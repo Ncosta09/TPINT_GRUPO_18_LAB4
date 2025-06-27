@@ -12,4 +12,6 @@ public interface CuentaDao {
    boolean bajaCuenta(int var1);
 
    List<Cliente> obtenerTodos();
+   
+   List<Cuenta> obtenerTodasLasCuentas();
 }

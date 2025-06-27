@@ -63,6 +63,9 @@ public class Cuenta {
 	public String getCbu() {
 		return cbu;
 	}
-
+	
+	public void setCbu(String cbu) {
+	    this.cbu = cbu;
+	}
     
 }

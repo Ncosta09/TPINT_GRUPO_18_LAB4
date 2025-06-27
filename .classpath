@@ -8,14 +8,23 @@
 	<classpathentry kind="src" path="src/main/java"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+<<<<<<< HEAD
 	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v9.0">
 		<attributes>
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/agusd/eclipse-workspace/P2/TPINT_GRUPO_18_LAB4/mysql-connector-java-5.1.47-bin.jar">
+=======
+	<classpathentry kind="lib" path="C:/Users/Julian/Downloads/TP7_GRUPO_18-main/TP7_GRUPO_18-main/mysql-connector-java-5.1.47-bin.jar">
+>>>>>>> 75bcb2ae5945837531de9bfe2fcd64d2c42584af
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.5">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
