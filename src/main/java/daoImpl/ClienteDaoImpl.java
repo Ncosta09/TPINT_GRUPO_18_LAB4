@@ -56,7 +56,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
+	        PreparedStatement st = cn.prepareStatement("SELECT c.id_cliente, c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
 
 	        ResultSet rs = st.executeQuery();
 	        
@@ -65,6 +65,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	            	Cliente cliente = new Cliente();
 	                Usuario usuario = new Usuario();
 	                
+	                cliente.setIdCliente(rs.getInt("id_cliente"));
 	                cliente.setDni(rs.getString("DNI"));
 	                cliente.setNombre(rs.getString("nombre"));
 	                cliente.setApellido(rs.getString("apellido"));
@@ -104,42 +105,67 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public Cliente obtenerPorId(int idCliente) {
 	    Cliente cliente = null;
+	    
 	    try (Connection conn = Conexion.obtenerConexionDirecta()) {
-	        String query = "SELECT * FROM Clientes WHERE id_cliente = ?";
+	    	
+	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_cliente = ?";
+	        
 	        PreparedStatement ps = conn.prepareStatement(query);
 	        ps.setInt(1, idCliente);
 	        ResultSet rs = ps.executeQuery();
+	        
 	        if (rs.next()) {
-	            cliente = new Cliente();
-	            cliente.setIdCliente(rs.getInt("id_cliente"));
-	            cliente.setNombre(rs.getString("nombre"));
-	            cliente.setApellido(rs.getString("apellido"));
-	            cliente.setDni(rs.getString("dni"));
-	            cliente.setEmail(rs.getString("email"));
-	            cliente.setTelefono(rs.getString("telefono"));
-	            
+	        	
+	        	Cliente c = new Cliente();
+                
+	        	c.setIdCliente(rs.getInt("id_cliente"));
+                c.setIdUsuario(rs.getInt("id_usuario"));
+                c.setDni(rs.getString("DNI"));
+                c.setCuil(rs.getString("CUIL"));
+                c.setNombre(rs.getString("nombre"));
+                c.setApellido(rs.getString("apellido"));
+                c.setIdSexo(rs.getInt("id_sexo"));
+                c.setIdNacionalidad(rs.getInt("id_nacionalidad"));
+                c.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+                c.setDireccion(rs.getString("direccion"));
+                c.setIdLocalidad(rs.getInt("id_localidad"));
+                c.setEmail(rs.getString("email"));
+                c.setTelefono(rs.getString("telefono"));
+                
+                return c;
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    return cliente;
+	    return null;
 	}
 	
 	@Override
 	public boolean modificarCliente(Cliente c) {
-	    String sql = "UPDATE Clientes SET dni=?, nombre=?, apellido=?, email=?, telefono=? WHERE id_cliente=?";
+	    String sql = "UPDATE Clientes SET DNI = ?, CUIL = ?, nombre = ?, apellido = ?, id_sexo = ?, id_nacionalidad = ?, fecha_nacimiento= ?, direccion = ?, id_localidad = ?, email = ?, telefono = ? WHERE id_cliente = ?";
 	    try (Connection conn = Conexion.obtenerConexionDirecta();
 	         PreparedStatement ps = conn.prepareStatement(sql)) {
-	        ps.setString(1, c.getDni());
-	        ps.setString(2, c.getNombre());
-	        ps.setString(3, c.getApellido());
-	        ps.setString(4, c.getEmail());
-	        ps.setString(5, c.getTelefono());
-	        ps.setInt(6, c.getIdCliente());
-	        return ps.executeUpdate() > 0;
+
+	        ps.setString (1, c.getDni());
+	        ps.setString (2, c.getCuil());
+	        ps.setString (3, c.getNombre());
+	        ps.setString (4, c.getApellido());
+	        ps.setInt    (5, c.getIdSexo());
+	        ps.setInt    (6, c.getIdNacionalidad());
+	        ps.setDate   (7, new java.sql.Date(c.getFechaNacimiento().getTime()));
+	        ps.setString (8, c.getDireccion());
+	        ps.setInt    (9, c.getIdLocalidad());
+	        ps.setString(10, c.getEmail());
+	        ps.setString(11, c.getTelefono());
+	        ps.setInt   (12, c.getIdCliente());
+	        
+	        int rows = ps.executeUpdate();
+	        conn.commit();
+	        return rows > 0;
+	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
+	        return false;
 	    }
-	    return false;
 	}
 }

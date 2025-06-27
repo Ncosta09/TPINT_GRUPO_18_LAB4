@@ -29,6 +29,7 @@ public class ServletListaClientes extends HttpServlet {
 
 		ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
         
+        /*
         String accion = request.getParameter("accion");
 
         if ("editar".equals(accion)) {
@@ -37,7 +38,7 @@ public class ServletListaClientes extends HttpServlet {
             request.setAttribute("cliente", cliente);
             request.getRequestDispatcher("/editarCliente.jsp").forward(request, response);
             return;
-        }
+        }*/
 
         List<Cliente> lista = clienteNegocio.obtenerTodos();
         request.setAttribute("listaClientes", lista);
@@ -49,7 +50,8 @@ public class ServletListaClientes extends HttpServlet {
 			response.sendRedirect("Login.jsp");
 			return;
 		}
-		String accion = request.getParameter("accion");
+		
+		/*String accion = request.getParameter("accion");
 
         if ("modificar".equals(accion)) {
             int id = Integer.parseInt(request.getParameter("idCliente"));
@@ -71,6 +73,6 @@ public class ServletListaClientes extends HttpServlet {
 
             request.setAttribute("listaClientes", negocio.obtenerTodos());
             request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
-        }
+        }*/
     }
 }

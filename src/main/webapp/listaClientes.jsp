@@ -99,7 +99,7 @@
                             <td><%= (c.getUsuario().getTipoUsuario() == 1) ? "Administrador" : "Cliente" %></td>
                             <td class="actions">
                                 <button class="btn btn-sm" onclick="viewClient('<%= c.getDni() %>')">Ver</button>
-                                <button class="btn btn-sm btn-secondary" onclick="window.location.href='ServletListaClientes?accion=editar&idCliente=<%= c.getIdCliente() %>'">Editar</button>
+                                <button class="btn btn-sm btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/ServletModificarCliente?idCliente=<%= c.getIdCliente() %>'">Editar</button>
                                 
                                 <% if (c.getUsuario().getEstado() == 1) { %>
                                     <form action="ServletBajaCliente" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés dar de baja este cliente?');">
