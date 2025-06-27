@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dominio.Cliente;
 import dominio.Cuenta;
@@ -29,6 +30,12 @@ import dominio.Cuenta;
 	    @Override
 	    protected void doPost(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
+	    	
+	    	HttpSession session = request.getSession(false);
+		    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+		        response.sendRedirect("Login.jsp");
+		        return;
+		    }
 
 	        String accion = request.getParameter("accion");
 
@@ -65,15 +72,15 @@ import dominio.Cuenta;
 
 	        boolean creada = cuentaNegocio.crearCuenta(cuenta);
 
-	        // 🔁 Volvés a cargar la lista de clientes para el JSP
+	        // ðŸ”� VolvÃ©s a cargar la lista de clientes para el JSP
 	        List<Cliente> listaClientes = cuentaNegocio.obtenerTodos();
 	        request.setAttribute("listaClientes", listaClientes);
 
-	        // ✅ Mensaje de feedback
+	        // âœ… Mensaje de feedback
 	        if (creada) {
 	            request.setAttribute("mensaje", "Cuenta creada correctamente.");
 	        } else {
-	            request.setAttribute("mensaje", "El cliente ya tiene 3 cuentas activas o ocurrió un error.");
+	            request.setAttribute("mensaje", "El cliente ya tiene 3 cuentas activas o ocurriÃ³ un error.");
 	        }
 
 	        request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
@@ -114,7 +121,7 @@ import dominio.Cuenta;
 	        if (actualizado) {
 	            request.setAttribute("mensaje", "Cuenta actualizada correctamente");
 	        } else {
-	            request.setAttribute("mensaje", "Ocurrió un error al actualizar la cuenta");
+	            request.setAttribute("mensaje", "OcurriÃ³ un error al actualizar la cuenta");
 	        }
 
 	        request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
@@ -125,6 +132,12 @@ import dominio.Cuenta;
 	    @Override
 	    protected void doGet(HttpServletRequest request, HttpServletResponse response)
 	            throws ServletException, IOException {
+	    	
+	    	HttpSession session = request.getSession(false);
+		    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+		        response.sendRedirect("Login.jsp");
+		        return;
+		    }
 
 	        String accion = request.getParameter("accion");
 
