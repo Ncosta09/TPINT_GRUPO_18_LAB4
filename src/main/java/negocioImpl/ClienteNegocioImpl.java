@@ -23,5 +23,15 @@ public class ClienteNegocioImpl implements ClienteNegocio {
     public boolean darDeBaja(int idUsuario) {
         return clienteDao.darDeBaja(idUsuario);
     }
+    
+    @Override
+    public Cliente obtenerPorId(int idCliente) {
+        return clienteDao.obtenerPorId(idCliente);
+    }
+    
+    @Override
+    public boolean modificarCliente(Cliente c) {
+        return clienteDao.modificarCliente(c);
+    }
 }
 

@@ -5,12 +5,10 @@ import dominio.Cliente;
 
 public interface ClienteDao {
 
-<<<<<<< HEAD
 	List<Cliente> obtenerTodos();
 	boolean darDeBaja(int idUsuario);
-	
-=======
-	boolean altaCliente(Cliente cliente);
-	List<Cliente> obtenerTodos();	
->>>>>>> 75bcb2ae5945837531de9bfe2fcd64d2c42584af
+	boolean altaCliente(Cliente cliente);	
+	Cliente obtenerPorId(int idCliente);
+	boolean modificarCliente(Cliente c);
+
 }

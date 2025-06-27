@@ -18,18 +18,46 @@ public class ServletListaClientes extends HttpServlet {
         super();
     }
     
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		 ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
-	         
-		 List<Cliente> lista = clienteNegocio.obtenerTodos();
-		
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
+        
+        String accion = request.getParameter("accion");
 
-	     request.setAttribute("listaClientes", lista);
-	     request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
-	}
+        if ("editar".equals(accion)) {
+            int id = Integer.parseInt(request.getParameter("idCliente"));
+            Cliente cliente = clienteNegocio.obtenerPorId(id); // ⚠️ método que agregamos ahora
+            request.setAttribute("cliente", cliente);
+            request.getRequestDispatcher("/editarCliente.jsp").forward(request, response);
+            return;
+        }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
-	}
+        List<Cliente> lista = clienteNegocio.obtenerTodos();
+        request.setAttribute("listaClientes", lista);
+        request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
+    }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String accion = request.getParameter("accion");
 
+        if ("modificar".equals(accion)) {
+            int id = Integer.parseInt(request.getParameter("idCliente"));
+            Cliente c = new Cliente();
+            c.setIdCliente(id);
+            c.setDni(request.getParameter("dni"));
+            c.setNombre(request.getParameter("nombre"));
+            c.setApellido(request.getParameter("apellido"));
+            c.setEmail(request.getParameter("email"));
+            c.setTelefono(request.getParameter("telefono"));
+
+            ClienteNegocioImpl negocio = new ClienteNegocioImpl();
+            boolean actualizado = negocio.modificarCliente(c);
+
+            if (actualizado)
+                request.setAttribute("mensaje", "Cliente actualizado correctamente");
+            else
+                request.setAttribute("mensaje", "Error al actualizar");
+
+            request.setAttribute("listaClientes", negocio.obtenerTodos());
+            request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
+        }
+    }
 }

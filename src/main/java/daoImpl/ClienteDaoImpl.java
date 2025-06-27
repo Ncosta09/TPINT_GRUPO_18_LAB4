@@ -97,4 +97,46 @@ public class ClienteDaoImpl implements ClienteDao {
 	    }
 	    return false;
 	}
+	
+	@Override
+	public Cliente obtenerPorId(int idCliente) {
+	    Cliente cliente = null;
+	    try (Connection conn = Conexion.obtenerConexionDirecta()) {
+	        String query = "SELECT * FROM Clientes WHERE id_cliente = ?";
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setInt(1, idCliente);
+	        ResultSet rs = ps.executeQuery();
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            cliente.setIdCliente(rs.getInt("id_cliente"));
+	            cliente.setNombre(rs.getString("nombre"));
+	            cliente.setApellido(rs.getString("apellido"));
+	            cliente.setDni(rs.getString("dni"));
+	            cliente.setEmail(rs.getString("email"));
+	            cliente.setTelefono(rs.getString("telefono"));
+	            
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return cliente;
+	}
+	
+	@Override
+	public boolean modificarCliente(Cliente c) {
+	    String sql = "UPDATE Clientes SET dni=?, nombre=?, apellido=?, email=?, telefono=? WHERE id_cliente=?";
+	    try (Connection conn = Conexion.obtenerConexionDirecta();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        ps.setString(1, c.getDni());
+	        ps.setString(2, c.getNombre());
+	        ps.setString(3, c.getApellido());
+	        ps.setString(4, c.getEmail());
+	        ps.setString(5, c.getTelefono());
+	        ps.setInt(6, c.getIdCliente());
+	        return ps.executeUpdate() > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 }
