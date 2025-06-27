@@ -33,7 +33,22 @@
             <div class="form-container">
                 <h2 class="form-title">Alta de Usuario/Cliente</h2>
                 
-                <form id="altaClienteForm" action="altaCliente" method="post">
+                <form id="altaClienteForm" action="ServletAltaCliente" method="post">
+                
+                <div class="form-row">
+                        <div class="form-group">
+                            <label for="dni">DNI:</label>
+                            <input type="text" id="dni" name="dni" required>
+                            <div class="error-message" id="dni-error">El DNI es obligatorio</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cuil">CUIL:</label>
+                            <input type="text" id="cuil" name="cuil" required>
+                            <div class="error-message" id="cuil-error">El CUIL es obligatorio</div>
+                        </div>
+                    </div>
+                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
@@ -96,14 +111,6 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="ciudad">Ciudad:</label>
-                            <input type="text" id="ciudad" name="ciudad" required>
-                            <div class="error-message" id="ciudad-error"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-						    <div class="form-group">
 						    <label for="nacionalidad">Nacionalidad:</label>
 						    <select id="nacionalidad" name="nacionalidad" required>
 							  <option value="">-- Seleccione una nacionalidad --</option>
@@ -116,9 +123,8 @@
 							    }
 							  %>
 							</select>
-						    <div class="error-message" id="sexo-error"></div>
+						    <div class="error-message" id="nacionalidad-error"></div>
 						</div>
-                       
                     </div>
                     
 					<div class="form-row">
@@ -131,7 +137,7 @@
 					          (List<dominio.Localidad>) request.getAttribute("listaLoca");
 					        for (dominio.Localidad l : localidades) {
 					      %>
-					        <!-- AHORA con data-provincia -->
+					        
 					        <option value="<%= l.getIdLocalidad() %>"
 					                data-provincia="<%= l.getIdProvincia() %>">
 					          <%= l.getNombre() %>
@@ -176,6 +182,13 @@
                             <div class="error-message" id="password-error"></div>
                         </div>
                     </div>
+                     <div class="form-row">
+                        <div class="form-group">
+                            <label for="confirmClave">Confirmar Contraseña:</label>
+                            <input type="password" id="confirmClave" name="confirmClave" required>
+                            <div class="error-message" id="confirmClave-error">Las contraseñas no coinciden</div>
+                        </div>
+                    </div>
                     
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" onclick="window.location.href='homeAdmin.jsp'">Cancelar</button>
@@ -189,21 +202,9 @@
     <div class="notification" id="notification"></div>
 
 
-<script>
-  // Cuando cambie la localidad:
-  document.getElementById('localidad')
-    .addEventListener('change', function() {
-      // Toma el id de la opción seleccionada
-      const selLoc = this;
-      const opt    = selLoc.options[selLoc.selectedIndex];
-      const idProv = opt.getAttribute('data-provincia');
-      // Marca esa provincia que sea el mismo id
-      const selProv = document.getElementById('provincia');
-      selProv.value = idProv || '';
-    });
-</script>
+
     <script src="js/common.js"></script>
-    <!-- <script src="js/AltaCli.js"></script>  -->
+   <script src="js/altaCliente.js"></script> 
 </body>
 </html>
 

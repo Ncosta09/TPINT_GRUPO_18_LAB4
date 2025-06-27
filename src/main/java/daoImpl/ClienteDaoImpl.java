@@ -19,19 +19,21 @@ public class ClienteDaoImpl implements ClienteDao {
 
         try  {
         	conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("INSERT INTO Clientes (DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+        	PreparedStatement ps = conn.prepareStatement("INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
 
-            ps.setString (1, cliente.getDni());
-            ps.setString (2, cliente.getCuil());
-            ps.setString (3, cliente.getNombre());
-            ps.setString (4, cliente.getApellido());
-            ps.setInt (5, cliente.getIdSexo());
-            ps.setInt (6, cliente.getIdNacionalidad());
-            ps.setDate   (7, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
-            ps.setString (8, cliente.getDireccion());
-            ps.setInt (9, cliente.getIdLocalidad());
-            ps.setString (10, cliente.getEmail());
-            ps.setString (11, cliente.getTelefono());
+        	
+        	ps.setInt(1,cliente.getIdUsuario());
+            ps.setString (2, cliente.getDni());
+            ps.setString (3, cliente.getCuil());
+            ps.setString (4, cliente.getNombre());
+            ps.setString (5, cliente.getApellido());
+            ps.setInt (6, cliente.getIdSexo());
+            ps.setInt (7, cliente.getIdNacionalidad());
+            ps.setDate   (8, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
+            ps.setString (9, cliente.getDireccion());
+            ps.setInt (10, cliente.getIdLocalidad());
+            ps.setString (11, cliente.getEmail());
+            ps.setString (12, cliente.getTelefono());
 
             int filas = ps.executeUpdate();
             if (filas > 0) {

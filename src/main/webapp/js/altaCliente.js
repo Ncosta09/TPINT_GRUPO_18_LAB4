@@ -2,10 +2,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('altaClienteForm');
     const notification = document.getElementById('notification');
     
+    function soloLetras(input) {
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ\s]/g, '');
+        });
+    }
+
+    soloLetras(document.getElementById('nombre'));
+    soloLetras(document.getElementById('apellido'));
+    
+    function soloNumeros(input) {
+        input.addEventListener('input', function () {
+            this.value = this.value.replace(/[^0-9]/g, '');
+        });
+    }
+
+    soloNumeros(document.getElementById('dni'));
+    soloNumeros(document.getElementById('cuil'));
+    soloNumeros(document.getElementById('telefono'));
+    
+    
     if (form) {
         form.addEventListener('submit', function(e) {
-            // Validación básica del lado cliente
-            const requiredFields = ['nombre', 'apellido', 'dni', 'email', 'usuario', 'password'];
+            const requiredFields = ['nombre', 'apellido', 'dni','cuil', 'email', 'usuario', 'password'];
             let isValid = true;
             
             requiredFields.forEach(fieldName => {
@@ -28,12 +47,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 showError('email-error', 'Formato de email inválido');
                 isValid = false;
             }
+            const password = document.getElementById('password').value;
+            const confirmClave = document.getElementById('confirmClave').value;
+
+            if (password !== confirmClave) {
+                showError('confirmClave-error', 'Las contraseñas no coinciden');
+                isValid = false;
+            } else {
+                hideError('confirmClave-error');
+            }
             
             if (!isValid) {
                 e.preventDefault();
             }
         });
     }
+    
+    document.getElementById('localidad')
+    .addEventListener('change', function() {
+      // Toma el id de la opción seleccionada
+      const selLoc = this;
+      const opt    = selLoc.options[selLoc.selectedIndex];
+      const idProv = opt.getAttribute('data-provincia');
+      // Marca esa provincia que sea el mismo id
+      const selProv = document.getElementById('provincia');
+      selProv.value = idProv || '';
+    });
     
     function getFieldLabel(fieldName) {
         const labels = {
