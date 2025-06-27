@@ -21,7 +21,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
+	        PreparedStatement st = cn.prepareStatement("SELECT c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id WHERE u.estado = 1");
 
 	        ResultSet rs = st.executeQuery();
 	        
@@ -46,5 +46,22 @@ public class ClienteDaoImpl implements ClienteDao {
 	        e.printStackTrace();
 	    }
 	    return clientes;
+	}
+	
+	public boolean darDeBaja(int idUsuario) {
+	    Connection conn = null;
+	    try {
+	        conn = Conexion.obtenerConexionDirecta();
+	        String sql = "UPDATE Usuarios SET estado = 0 WHERE id_usuario = ?";
+	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ps.setInt(1, idUsuario);
+	        int rows = ps.executeUpdate();
+	        conn.commit();
+	        return rows > 0;
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        try { if (conn != null) conn.rollback(); } catch (Exception ex) {}
+	    }
+	    return false;
 	}
 }

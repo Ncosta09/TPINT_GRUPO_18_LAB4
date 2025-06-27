@@ -5,4 +5,5 @@ import dominio.Cliente;
 
 public interface ClienteNegocio {
 	List<Cliente> obtenerTodos();
+	boolean darDeBaja(int idUsuario);
 }

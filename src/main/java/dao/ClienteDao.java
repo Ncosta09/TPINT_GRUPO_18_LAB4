@@ -6,5 +6,6 @@ import dominio.Cliente;
 public interface ClienteDao {
 
 	List<Cliente> obtenerTodos();
+	boolean darDeBaja(int idUsuario);
 	
 }

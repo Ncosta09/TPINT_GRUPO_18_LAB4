@@ -6,7 +6,6 @@
     List<Cliente> lista = (List<Cliente>) request.getAttribute("listaClientes");
 %>
 
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +31,16 @@
                         <button class="btn" onclick="searchClients()">Buscar</button>
                     </div>
                 </div>
+
+                <!-- Mensaje de éxito o error -->
+                <%
+                    String mensaje = request.getParameter("mensaje");
+                    if (mensaje != null) {
+                %>
+                    <div style="margin: 10px 0; color: green;"><strong><%= mensaje %></strong></div>
+                <%
+                    }
+                %>
                 
                 <div class="filter-container">
                     <select class="filter-select" id="statusFilter">
@@ -81,7 +90,15 @@
                             <td class="actions">
                                 <button class="btn btn-sm" onclick="viewClient('<%= c.getDni() %>')">Ver</button>
                                 <button class="btn btn-sm btn-secondary" onclick="editClient('<%= c.getDni() %>')">Editar</button>
-                                <button class="btn btn-sm btn-danger" onclick="deleteClient('<%= c.getDni() %>')">Eliminar</button>
+                                
+                                <% if (c.getUsuario().getEstado() == 1) { %>
+                                    <form action="ServletBajaCliente" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés dar de baja este cliente?');">
+                                        <input type="hidden" name="idUsuario" value="<%= c.getUsuario().getIdUsuario() %>">
+                                        <button type="submit" class="btn btn-sm btn-danger">Dar de baja</button>
+                                    </form>
+                                <% } else { %>
+                                    <button class="btn btn-sm btn-disabled" disabled>Inactivo</button>
+                                <% } %>
                             </td>
                         </tr>
                         <% } %>
@@ -92,6 +109,5 @@
     </div>
 
     <script src="js/common.js"></script>
-    
 </body>
 </html>
