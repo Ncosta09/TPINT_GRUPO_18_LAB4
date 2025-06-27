@@ -52,7 +52,6 @@ public class ServletUsuario extends HttpServlet {
         	}
         	
         	if(u.getEstado() == 1) {
-        		// 3a. Login Exitoso
                 HttpSession session = request.getSession(true);
                 session.setAttribute("usuarioLogueado", u);
                 
@@ -64,7 +63,6 @@ public class ServletUsuario extends HttpServlet {
         		}
         	}
         	else {
-        		// Login Fallido por usuario inactivo, devuelve mensaje
         		request.setAttribute("error", "Usuario inactivo. Contacte al administrador.");
         		request.getRequestDispatcher("/Login.jsp").forward(request, response);
                 return;

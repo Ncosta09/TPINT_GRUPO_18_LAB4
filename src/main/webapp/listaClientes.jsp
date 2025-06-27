@@ -3,16 +3,17 @@
 <%@ page import="dominio.Cliente" %>
 <%@ page import="dominio.Usuario" %>
 <%
-    
+
+	response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+	response.setHeader("Pragma","no-cache");
+	response.setDateHeader ("Expires", 0);
+
     if (session == null || session.getAttribute("usuarioLogueado") == null) {
         response.sendRedirect("Login.jsp");
         return;
     }
 
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
-%>
-<%
-    List<Cliente> lista = (List<Cliente>) request.getAttribute("listaClientes");
 %>
 
 
@@ -84,6 +85,7 @@
                     </thead>
                     <tbody id="clientsTableBody">
                         <%
+                        	List<Cliente> lista = (List<Cliente>) request.getAttribute("listaClientes");
                             for (Cliente c : lista) {
                         %>
                         <tr>

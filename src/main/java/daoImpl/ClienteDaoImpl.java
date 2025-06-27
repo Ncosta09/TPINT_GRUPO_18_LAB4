@@ -20,8 +20,7 @@ public class ClienteDaoImpl implements ClienteDao {
         try  {
         	conn = Conexion.getConexion().getSQLConexion();
         	PreparedStatement ps = conn.prepareStatement("INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-
-        	
+        	System.out.println("EJECUTO UPDATE");
         	ps.setInt(1,cliente.getIdUsuario());
             ps.setString (2, cliente.getDni());
             ps.setString (3, cliente.getCuil());

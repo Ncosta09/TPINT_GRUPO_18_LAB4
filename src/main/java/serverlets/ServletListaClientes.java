@@ -28,17 +28,6 @@ public class ServletListaClientes extends HttpServlet {
 		}
 
 		ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
-        
-        /*
-        String accion = request.getParameter("accion");
-
-        if ("editar".equals(accion)) {
-            int id = Integer.parseInt(request.getParameter("idCliente"));
-            Cliente cliente = clienteNegocio.obtenerPorId(id); // ⚠️ método que agregamos ahora
-            request.setAttribute("cliente", cliente);
-            request.getRequestDispatcher("/editarCliente.jsp").forward(request, response);
-            return;
-        }*/
 
         List<Cliente> lista = clienteNegocio.obtenerTodos();
         request.setAttribute("listaClientes", lista);
@@ -50,29 +39,7 @@ public class ServletListaClientes extends HttpServlet {
 			response.sendRedirect("Login.jsp");
 			return;
 		}
+		response.sendRedirect("ServletListaClientes");
 		
-		/*String accion = request.getParameter("accion");
-
-        if ("modificar".equals(accion)) {
-            int id = Integer.parseInt(request.getParameter("idCliente"));
-            Cliente c = new Cliente();
-            c.setIdCliente(id);
-            c.setDni(request.getParameter("dni"));
-            c.setNombre(request.getParameter("nombre"));
-            c.setApellido(request.getParameter("apellido"));
-            c.setEmail(request.getParameter("email"));
-            c.setTelefono(request.getParameter("telefono"));
-
-            ClienteNegocioImpl negocio = new ClienteNegocioImpl();
-            boolean actualizado = negocio.modificarCliente(c);
-
-            if (actualizado)
-                request.setAttribute("mensaje", "Cliente actualizado correctamente");
-            else
-                request.setAttribute("mensaje", "Error al actualizar");
-
-            request.setAttribute("listaClientes", negocio.obtenerTodos());
-            request.getRequestDispatcher("/listaClientes.jsp").forward(request, response);
-        }*/
     }
 }

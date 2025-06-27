@@ -80,13 +80,7 @@
         <td><%= c.getCliente().getNombre() + ", " + c.getCliente().getApellido() %></td>
         <td><input type="text" name="numeroCuenta" value="<%= c.getNumeroCuenta() %>" readonly /></td>
         <td><input type="text" name="cbu" value="<%= c.getCbu() %>" readonly /></td>
-        <td class="account-type-cell">
-            <select name="tipoCuenta" class="account-type-select">
-                <option value="Caja de ahorro" <%= c.getTipoCuenta().equalsIgnoreCase("Caja de ahorro") ? "selected" : "" %>>Caja de Ahorro</option>
-                <option value="Cuenta corriente" <%= c.getTipoCuenta().equalsIgnoreCase("Cuenta corriente") ? "selected" : "" %>>Cuenta Corriente</option>
-            </select>
-            <button type="button" class="save-btn" title="Guardar cambio">💾</button>
-        </td>
+        <td><%= c.getTipoCuenta() %></td>
         <td>
             <input type="number" step="0.01" name="saldo" class="saldo-input" value="<%= c.getSaldo() %>" />
             <button type="button" class="save-btn" title="Guardar cambio">💾</button>
