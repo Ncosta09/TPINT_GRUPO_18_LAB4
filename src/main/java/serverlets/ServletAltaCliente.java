@@ -123,7 +123,7 @@ public class ServletAltaCliente extends HttpServlet {
 	        boolean exito = clienteNegocio.altaCliente(cliente);
 
 	        if (exito) {
-	            response.sendRedirect("homeAdmin.jsp");
+	            response.sendRedirect("ServletHomeAdmin");
 	        } else {
 	            request.setAttribute("error", "No se pudo guardar el cliente");
 	            doGet(request, response);

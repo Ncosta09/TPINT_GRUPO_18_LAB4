@@ -23,7 +23,7 @@ const burgerMenu = document.getElementById('burgerMenu');
         });
         
         cancelBtn.addEventListener('click', function() {
-            window.location.href = 'homeAdmin.jsp';
+            window.location.href = 'ServletHomeAdmin';
         });
         
         // Actualizar vista previa cuando cambian los selects

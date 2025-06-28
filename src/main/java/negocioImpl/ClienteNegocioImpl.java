@@ -33,5 +33,10 @@ public class ClienteNegocioImpl implements ClienteNegocio {
     public boolean modificarCliente(Cliente c) {
         return clienteDao.modificarCliente(c);
     }
+
+	@Override
+	public int contarClientes(boolean dateFilter) {
+		return clienteDao.contarClientes(dateFilter);
+	}
 }
 

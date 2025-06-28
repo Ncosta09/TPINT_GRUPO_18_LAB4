@@ -56,7 +56,7 @@ public class ServletUsuario extends HttpServlet {
                 session.setAttribute("usuarioLogueado", u);
                 
         		if(u.getTipoUsuario() == 1) {
-        			response.sendRedirect(request.getContextPath() + "/homeAdmin.jsp");        			
+        			response.sendRedirect(request.getContextPath() + "/ServletHomeAdmin");        			
         		}
         		else if(u.getTipoUsuario() == 2) {
         			response.sendRedirect(request.getContextPath() + "/homeCliente.jsp");
