@@ -174,10 +174,12 @@ public class CuentaDaoImpl implements CuentaDao {
     public List<Cliente> obtenerTodos() {
         List<Cliente> lista = new ArrayList<>();
         String sql = "SELECT id_cliente, nombre, apellido, dni FROM Clientes WHERE id_cliente > 0";
-
-        try (Connection conn = Conexion.obtenerConexionDirecta();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        Connection conn = null;
+        try {
+        	 conn = Conexion.obtenerConexionDirecta();
+        	 conn.setAutoCommit(true);
+	         PreparedStatement ps = conn.prepareStatement(sql);
+	         ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Cliente c = new Cliente();
                 c.setIdCliente(rs.getInt("id_cliente"));

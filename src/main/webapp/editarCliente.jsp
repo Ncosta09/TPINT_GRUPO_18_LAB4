@@ -5,6 +5,17 @@
 <%@ page import="dominio.Nacionalidad" %>
 <%@ page import="dominio.Provincia" %>
 <%@ page import="dominio.Localidad" %>
+<%@ page import="dominio.Usuario" %>
+<%
+    
+    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+        response.sendRedirect("Login.jsp");
+        return;
+    }
+
+    Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+%>
+
 
 <%
   Cliente c = (Cliente) request.getAttribute("cliente");
