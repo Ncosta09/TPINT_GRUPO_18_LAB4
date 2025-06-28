@@ -12,14 +12,18 @@ import negocioImpl.ClienteNegocioImpl;
 public class ServletBajaCliente extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    // 1) Creamos el negocio en vez de usar JDBC directo
     private ClienteNegocio clienteNegocio = new ClienteNegocioImpl();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+    	HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("usuarioLogueado") == null) {
+			response.sendRedirect("Login.jsp");
+			return;
+		}
         String idUsuarioStr = request.getParameter("idUsuario");
-        if (idUsuarioStr == null || idUsuarioStr.isBlank()) {
+        if (idUsuarioStr == null || idUsuarioStr.isEmpty()) {
             response.sendRedirect("ServletListaClientes?mensaje=ID inválido");
             return;
         }
@@ -32,10 +36,8 @@ public class ServletBajaCliente extends HttpServlet {
             return;
         }
 
-        // 2) Delegamos al negocio
         boolean ok = clienteNegocio.darDeBaja(idUsuario);
 
-        // 3) Redirigimos con feedback
         if (ok) {
             response.sendRedirect("ServletListaClientes?mensaje=Cliente dado de baja correctamente");
         } else {

@@ -55,6 +55,7 @@ public class ClienteDaoImpl implements ClienteDao {
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
+	        cn.setAutoCommit(true);
 	        PreparedStatement st = cn.prepareStatement("SELECT c.id_cliente, c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
 
 	        ResultSet rs = st.executeQuery();
