@@ -4,8 +4,8 @@
     		<li><a href="homeAdmin.jsp">Inicio</a></li>
             <li><a href="ServletAltaCliente">Alta de Usuario/Cliente</a></li>
             <li><a href="ServletListaClientes">Lista de Clientes</a></li>
-            <li><a href="CuentaServlet?accion=formAlta">Alta de Cuenta</a></li>
-            <li><a href="CuentaServlet">Lista de Cuentas</a></li>
+            <li><a href="ServletCuenta?accion=formAlta">Alta de Cuenta</a></li>
+            <li><a href="ServletCuenta">Lista de Cuentas</a></li>
             <li><a href="prestamosAdmin.jsp">Gestión de Préstamos</a></li>
     </ul>
 </div> 

@@ -2,7 +2,10 @@
 <%@ page import="java.util.List, dominio.Cuenta, java.util.ArrayList" %>
 <%@ page import="dominio.Usuario" %>
 <%
-    
+    response.setHeader("Cache-Control","no-cache, no-store, must-revalidate");
+    response.setHeader("Pragma","no-cache");
+    response.setDateHeader ("Expires", 0);
+
     if (session == null || session.getAttribute("usuarioLogueado") == null) {
         response.sendRedirect("Login.jsp");
         return;
@@ -10,6 +13,7 @@
 
     Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,6 +39,15 @@
                 </div>
             </div>
 
+            <%
+                String mensaje = request.getParameter("mensaje");
+                if (mensaje != null) {
+            %>
+                <div style="margin: 10px 0; color: green;"><strong><%= mensaje %></strong></div>
+            <%
+                }
+            %>
+
             <div class="filter-container">
                 <select class="filter-select" id="tipoFilter">
                     <option value="">Todos los tipos</option>
@@ -49,10 +62,11 @@
                 </select>
 
                 <button class="btn" id="filterBtn">Filtrar</button>
+                <button class="btn btn-secondary" onclick="clearFilters()">Limpiar</button>
                 <button class="btn btn-success" onclick="window.location.href='ServletCuenta?accion=formAlta'">+ Nueva Cuenta</button>
             </div>
 
-            <table>
+            <table id="cuentasTable">
                 <thead>
                     <tr>
                         <th>Cliente</th>
@@ -60,7 +74,8 @@
                         <th>CBU</th>
                         <th>Tipo de Cuenta</th>
                         <th>Saldo</th>
-                        <th>Estado</th> 
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="cuentasTableBody">
@@ -70,47 +85,45 @@
 
     for (Cuenta c : cuentas) {
 %>
-<tr data-cliente="<%= c.getCliente().getNombre() + " " + c.getCliente().getApellido() %>"
-    data-tipo="<%= c.getTipoCuenta().trim().toLowerCase() %>"
-    data-estado="<%= c.isEstado() ? "activa" : "inactiva" %>">
-    <form action="ServletCuenta" method="post">
-        <input type="hidden" name="accion" value="actualizar" />
-        <input type="hidden" name="id" value="<%= c.getId() %>" />
-
-        <td><%= c.getCliente().getNombre() + ", " + c.getCliente().getApellido() %></td>
-        <td><input type="text" name="numeroCuenta" value="<%= c.getNumeroCuenta() %>" readonly /></td>
-        <td><input type="text" name="cbu" value="<%= c.getCbu() %>" readonly /></td>
-        <td><%= c.getTipoCuenta() %></td>
-        <td>
-            <input type="number" step="0.01" name="saldo" class="saldo-input" value="<%= c.getSaldo() %>" />
-            <button type="button" class="save-btn" title="Guardar cambio">💾</button>
-        </td>
-        <td>
-            <select name="estado" class="estado-select">
-                <option value="Activa" <%= c.isEstado() ? "selected" : "" %>>Activa</option>
-                <option value="Inactiva" <%= !c.isEstado() ? "selected" : "" %>>Inactiva</option>
-            </select>
-            <button type="button" class="save-btn" title="Guardar cambio">💾</button>
-        </td>
-    </form>
-</tr>
+                <tr data-cliente="<%= c.getCliente().getNombre() + " " + c.getCliente().getApellido() %>"
+                    data-tipo="<%= c.getTipoCuenta().trim().toLowerCase() %>"
+                    data-estado="<%= c.isEstado() ? "activa" : "inactiva" %>">
+                    
+                    <td><%= c.getCliente().getNombre() + ", " + c.getCliente().getApellido() %></td>
+                    <td><%= c.getNumeroCuenta() %></td>
+                    <td><%= c.getCbu() %></td>
+                    <td><%= c.getTipoCuenta() %></td>
+                    <td>$<%= String.format("%.2f", c.getSaldo()) %></td>
+                    <td>
+                        <span class="badge <%= c.isEstado() ? "badge-active" : "badge-inactive" %>">
+                            <%= c.isEstado() ? "Activa" : "Inactiva" %>
+                        </span>
+                    </td>
+                    <td class="actions">
+                        <button class="btn btn-sm" onclick="viewAccount('<%= c.getId() %>')">Ver</button>
+                        <button class="btn btn-sm btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/ServletModificarCuenta?idCuenta=<%= c.getId() %>'">Editar</button>
+                        
+                        <% if (c.isEstado()) { %>
+                            <form action="ServletBajaCuenta" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés dar de baja esta cuenta?');">
+                                <input type="hidden" name="idCuenta" value="<%= c.getId() %>">
+                                <button type="submit" class="btn btn-sm btn-danger">Dar de baja</button>
+                            </form>
+                        <% } else { %>
+                            <button class="btn btn-sm btn-disabled" disabled>Inactiva</button>
+                        <% } %>
+                    </td>
+                </tr>
 <%
     }
 %>
                 </tbody>
             </table>
-
-            <div class="pagination" id="pagination">
-                <button class="active">1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>Siguiente</button>
-            </div>
         </div>
     </div>
 </div>
 
 <div class="notification" id="notification"></div>
+<script src="js/common.js"></script>
 <script src="js/listaCuentas.js"></script>
 </body>
 </html>

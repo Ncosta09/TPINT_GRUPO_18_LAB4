@@ -33,4 +33,8 @@ public class CuentaNegocioImpl implements CuentaNegocio {
    public List<Cuenta> obtenerTodasLasCuentas() {
        return dao.obtenerTodasLasCuentas();
    }
+   
+   public Cuenta obtenerPorId(int idCuenta) {
+		 return dao.obtenerPorId(idCuenta);
+	 }
 }
