@@ -90,6 +90,7 @@ public class CuentaDaoImpl implements CuentaDao {
         try {
             conn = Conexion.getConexion().getSQLConexion();
             PreparedStatement ps = conn.prepareStatement("UPDATE Cuentas SET saldo = ?, estado = ? WHERE id_cuenta = ?");
+            conn.setAutoCommit(false);
 
             ps.setDouble(1, cuenta.getSaldo());
             ps.setBoolean(2, cuenta.isEstado());

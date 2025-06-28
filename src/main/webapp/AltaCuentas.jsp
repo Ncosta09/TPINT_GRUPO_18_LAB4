@@ -41,28 +41,28 @@
     </div>
 <% } %>
                 
-                <form id="accountForm" action="CuentaServlet?accion=alta" method="post">
+                <form id="accountForm" action="ServletCuenta?accion=alta" method="post">
                     <div class="form-group">
                         <label for="cliente">Cliente:</label> 
                         
                         <%@ page import="java.util.List" %>
-<%@ page import="dominio.Cliente" %>
-
-<select id="cliente" name="cliente" required>
-    <option value="">Seleccione un cliente...</option>
-    <%
-        List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
-        if (listaClientes != null) {
-            for (Cliente cli : listaClientes) {
-    %>
-    <option value="<%= cli.getIdCliente() %>">
-        <%= cli.getNombre() %> <%= cli.getApellido() %> (DNI: <%= cli.getDni() %>)
-    </option>
-    <%
-            }
-        }
-    %>
-</select>
+				<%@ page import="dominio.Cliente" %>
+				
+				<select id="cliente" name="cliente" required>
+				    <option value="">Seleccione un cliente...</option>
+				    <%
+				        List<Cliente> listaClientes = (List<Cliente>) request.getAttribute("listaClientes");
+				        if (listaClientes != null) {
+				            for (Cliente cli : listaClientes) {
+				    %>
+				    <option value="<%= cli.getIdCliente() %>">
+				        <%= cli.getNombre() %> <%= cli.getApellido() %> (DNI: <%= cli.getDni() %>)
+				    </option>
+				    <%
+				            }
+				        }
+				    %>
+				</select>
 
 
 
