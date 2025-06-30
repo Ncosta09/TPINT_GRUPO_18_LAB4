@@ -22,6 +22,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Bancaria - Panel Administrador</title>
     <link rel="stylesheet" href="CSS/listaClientes.css" type="text/css" />
+
+<!-- DataTables -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables -->
+<link rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    
 </head>
 <body>
     <jsp:include page="/header.jsp" />
@@ -35,10 +45,10 @@
             <div class="table-container">
                 <div class="table-header">
                     <h2 class="table-title">Lista de Clientes</h2>
-                    <div class="search-container">
+                    <!-- <div class="search-container">
                         <input type="text" class="search-input" id="searchInput" placeholder="Buscar cliente...">
                         <button class="btn" onclick="searchClients()">Buscar</button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Mensaje de éxito o error -->
@@ -51,7 +61,7 @@
                     }
                 %>
                 
-                <div class="filter-container">
+                <!-- <div class="filter-container">
                     <select class="filter-select" id="statusFilter">
                         <option value="">Todos los estados</option>
                         <option value="activo">Activo</option>
@@ -67,7 +77,7 @@
                     
                     <button class="btn" onclick="filterClients()">Filtrar</button>
                     <button class="btn btn-secondary" onclick="clearFilters()">Limpiar</button>
-                </div>
+                </div> -->
                 
                 <table id="clientsTable">
                     <thead>
@@ -117,6 +127,18 @@
             </div>
         </div>
     </div>
+    
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	  $('#clientsTable').DataTable({
+    	    paging: true,
+    	    pageLength: 10,
+    	    lengthMenu: [5, 10, 15, 20],
+    	    searching: true
+    	  });
+    	});
+
+    </script>
     
     <script src="js/common.js"></script>
     <script src="js/listaClientes.js"></script>
