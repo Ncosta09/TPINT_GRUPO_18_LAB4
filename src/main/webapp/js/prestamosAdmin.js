@@ -1,46 +1,5 @@
 // Datos de ejemplo para los préstamos
-const loansData = [
-    {
-        id: 'PR001',
-        cliente: 'María González',
-        tipo: 'personal',
-        monto: 50000.00,
-        plazo: 24,
-        estado: 'pendiente',
-        fechaSolicitud: '10/01/2024',
-        destino: 'Compra de electrodomésticos'
-    },
-    {
-        id: 'PR002',
-        cliente: 'Juan Pérez',
-        tipo: 'hipotecario',
-        monto: 500000.00,
-        plazo: 60,
-        estado: 'aprobado',
-        fechaSolicitud: '05/01/2024',
-        destino: 'Compra de vivienda'
-    },
-    {
-        id: 'PR003',
-        cliente: 'Ana López',
-        tipo: 'automotriz',
-        monto: 100000.00,
-        plazo: 36,
-        estado: 'activo',
-        fechaSolicitud: '01/01/2024',
-        destino: 'Compra de automóvil'
-    },
-    {
-        id: 'PR004',
-        cliente: 'Carlos Rodríguez',
-        tipo: 'emprendimiento',
-        monto: 200000.00,
-        plazo: 48,
-        estado: 'pendiente',
-        fechaSolicitud: '15/01/2024',
-        destino: 'Inversión en negocio'
-    }
-];
+
 
 function searchLoans() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();

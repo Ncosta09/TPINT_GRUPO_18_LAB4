@@ -104,7 +104,7 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        p.setImportePedido(monto);
 	        p.setPlazoMeses(meses);
 	        p.setCantidadCuotas(meses);
-	        p.setImporteCuota(Math.round((monto / meses) * 100.0) / 100.0);
+	        p.setImporteCuota(Math.round((monto / meses) * 100.0) / 100.0);//Calculamos monto de las cuotas segun los meses.
 	        p.setEstado("pendiente");
 
 	        PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();

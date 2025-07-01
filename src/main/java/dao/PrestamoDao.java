@@ -9,4 +9,5 @@ public interface PrestamoDao {
     List<Prestamo> listarPrestamosPendientes();
     boolean actualizarEstado(int idPrestamo, String nuevoEstado);
     List<Prestamo> listarPrestamosPorCliente(int idCliente);
+	List<Prestamo> listarTodos();
 }

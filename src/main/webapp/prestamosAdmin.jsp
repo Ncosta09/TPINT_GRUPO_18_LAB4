@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Prestamo" %>
+<%@ page import="java.text.SimpleDateFormat" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -61,47 +64,64 @@
                         </tr>
                     </thead>
                     <tbody id="loansTableBody">
-                        <tr>
-                            <td>PR001</td>
-                            <td>María González</td>
-                            <td>Personal</td>
-                            <td>$50,000.00</td>
-                            <td>24 meses</td>
-                            <td><span class="badge badge-pending">Pendiente</span></td>
-                            <td>10/01/2024</td>
-                            <td class="actions">
-                                <button class="btn btn-sm" onclick="viewLoan('PR001')">Ver</button>
-                                <button class="btn btn-sm btn-success" onclick="approveLoan('PR001')">Aprobar</button>
-                                <button class="btn btn-sm btn-danger" onclick="rejectLoan('PR001')">Rechazar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PR002</td>
-                            <td>Juan Pérez</td>
-                            <td>Hipotecario</td>
-                            <td>$500,000.00</td>
-                            <td>60 meses</td>
-                            <td><span class="badge badge-approved">Aprobado</span></td>
-                            <td>05/01/2024</td>
-                            <td class="actions">
-                                <button class="btn btn-sm" onclick="viewLoan('PR002')">Ver</button>
-                                <button class="btn btn-sm btn-secondary" onclick="editLoan('PR002')">Editar</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>PR003</td>
-                            <td>Ana López</td>
-                            <td>Automotriz</td>
-                            <td>$100,000.00</td>
-                            <td>36 meses</td>
-                            <td><span class="badge badge-active">Activo</span></td>
-                            <td>01/01/2024</td>
-                            <td class="actions">
-                                <button class="btn btn-sm" onclick="viewLoan('PR003')">Ver</button>
-                                <button class="btn btn-sm btn-secondary" onclick="editLoan('PR003')">Editar</button>
-                            </td>
-                        </tr>
-                    </tbody>
+<%
+	List<Prestamo> prestamos = (List<Prestamo>) request.getAttribute("prestamosPendientes");
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+	if (prestamos != null && !prestamos.isEmpty()) {
+		for (Prestamo p : prestamos) {
+%>
+	<tr>
+		<td>PR<%= String.format("%03d", p.getIdPrestamo()) %></td>
+		<td><%= p.getIdCliente() %></td> <!-- Idealmente deberías mostrar el nombre del cliente -->
+		<td>Tipo no definido</td> <!-- Si tenés un campo tipo, reemplazá esto por p.getTipo() -->
+		<td>$<%= String.format("%,.2f", p.getImportePedido()) %></td>
+		<td><%= p.getPlazoMeses() %> meses</td>
+		<td>
+			<%
+				String estado = p.getEstado();
+				String badgeClass = "badge ";
+				if ("pendiente".equalsIgnoreCase(estado)) badgeClass += "badge-pending";
+				else if ("aprobado".equalsIgnoreCase(estado)) badgeClass += "badge-approved";
+				else if ("rechazado".equalsIgnoreCase(estado)) badgeClass += "badge-rejected";
+				else if ("activo".equalsIgnoreCase(estado)) badgeClass += "badge-active";
+				else badgeClass += "badge-default";
+			%>
+			<span class="<%= badgeClass %>"><%= estado %></span>
+		</td>
+		<td><%= sdf.format(p.getFechaAlta()) %></td>
+		<td class="actions">
+			<form method="post" action="ServletAutorizarPrestamo">
+				<input type="hidden" name="idPrestamo" value="<%= p.getIdPrestamo() %>" />
+				<button class="btn btn-sm" name="accion" value="ver">Ver</button>
+				<%
+					if ("pendiente".equalsIgnoreCase(estado)) {
+				%>
+					<button class="btn btn-sm btn-success" name="accion" value="aprobar">Aprobar</button>
+					<button class="btn btn-sm btn-danger" name="accion" value="rechazar">Rechazar</button>
+				<%
+					} else {
+				%>
+					<button class="btn btn-sm btn-secondary" name="accion" value="editar">Editar</button>
+				<%
+					}
+				%>
+			</form>
+		</td>
+	</tr>
+<%
+		}
+	} else {
+%>
+	<tr>
+		<td colspan="8">No hay préstamos pendientes.</td>
+	</tr>
+<%
+	}
+%>
+
+
+</tbody>
                 </table>
             </div>
         </div>
