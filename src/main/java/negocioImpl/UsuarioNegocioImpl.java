@@ -23,4 +23,19 @@ public class UsuarioNegocioImpl implements UsuarioNegocio{
 	public boolean agregarUsuario(Usuario usuario) {
 		return UsuarioDao.insert(usuario);
 	}
+	
+    @Override
+    public Usuario obtenerPorId(int idUsuario) {
+        return UsuarioDao.obtenerPorId(idUsuario);
+    }
+
+    @Override
+    public boolean actualizarUsername(int idUsuario, String nuevoUsername) {
+        return UsuarioDao.updateUsername(idUsuario, nuevoUsername);
+    }
+
+    @Override
+    public boolean actualizarContrasena(int idUsuario, String nuevaPass) {
+        return UsuarioDao.updatePassword(idUsuario, nuevaPass);
+    }
 }

@@ -11,6 +11,69 @@ import dominio.Usuario;
 public class UsuarioDaoImpl implements UsuarioDao {
 	
 	@Override
+    public Usuario obtenerPorId(int idUsuario) {
+		Connection conn;
+		
+        try {	
+        	conn = Conexion.getConexion().getSQLConexion();
+        	PreparedStatement ps = conn.prepareStatement("SELECT id_usuario, username, password, estado, tipo_usuario FROM Usuarios WHERE id_usuario = ?");
+        	
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Usuario u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombreUsuario(rs.getString("username"));
+                u.setPassUsuario(rs.getString("password"));
+                u.setEstado(rs.getInt("estado"));
+                u.setTipoUsuario(rs.getInt("tipo_usuario"));
+                return u;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+	
+    @Override
+    public boolean updateUsername(int idUsuario, String nuevoUsername) {
+    	Connection conn;
+    	
+        try {	
+        	conn = Conexion.getConexion().getSQLConexion();
+        	PreparedStatement ps = conn.prepareStatement("UPDATE Usuarios SET nombre_usuario = ? WHERE id_usuario = ?");        	
+        	
+            ps.setString(1, nuevoUsername);
+            ps.setInt(2, idUsuario);
+            int rows = ps.executeUpdate();
+            conn.commit();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updatePassword(int idUsuario, String nuevaPass) {
+    	Connection conn;
+    	
+        try {
+        	conn = Conexion.getConexion().getSQLConexion();
+        	PreparedStatement ps = conn.prepareStatement("UPDATE Usuarios SET pass_usuario = ? WHERE id_usuario = ?");     
+        	
+            ps.setString(1, nuevaPass);
+            ps.setInt(2, idUsuario);
+            int rows = ps.executeUpdate();
+            conn.commit();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+	
+	@Override
 	public boolean validarCredenciales(String nombreUsuario, String clave) {
         Connection conn;
 				

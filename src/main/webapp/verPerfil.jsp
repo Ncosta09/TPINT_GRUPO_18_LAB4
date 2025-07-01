@@ -43,6 +43,47 @@
 <body>
     <jsp:include page="/header.jsp" />
     
+    
+  <dialog id="dlgUser">
+    <form method="post" action="ServletModificarUsuario">
+      <h3>Cambiar nombre de usuario</h3>
+      <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
+      <div>
+        <label for="nuevoUsuario">Nuevo usuario:</label><br/>
+        <input type="text" id="nuevoUsuario" name="nuevoUsuario"
+               value="${u.username}" required autofocus>
+      </div>
+      <div style="margin-top:1em;">
+        <button type="submit" name="action" value="cambiarUsuario">
+          Guardar
+        </button>
+        <button type="button" onclick="this.closest('dialog').close()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="dlgPass">
+    <form method="post" action="ServletModificarUsuario">
+      <h3>Cambiar contraseña</h3>
+      <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
+      <div>
+        <label for="nuevaContrasena">Nueva contraseña:</label><br/>
+        <input type="password" id="nuevaContrasena"
+               name="nuevaContrasena" required>
+      </div>
+      <div style="margin-top:1em;">
+        <button type="submit" name="action" value="cambiarContrasena">
+          Guardar
+        </button>
+        <button type="button" onclick="this.closest('dialog').close()">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </dialog>
+    
     <div class="container">
         <jsp:include page="/sidebarCliente.jsp" />
         
@@ -182,14 +223,14 @@
                 <div class="profile-actions">
                     <button class="btn btn-secondary" onclick="window.location.href='homeCliente.jsp'">Volver</button>
                     <!--  <button class="btn" onclick="editProfile()">Editar Perfil</button> -->
-                    <button class="btn" onclick="changePassword()">Cambiar Contraseña</button>
-                    <button class="btn" onclick="changePassword()">Cambiar Usuario</button>
+                    <button class="btn" onclick="document.getElementById('dlgPass').showModal()">Cambiar Contraseña</button>
+                    <button class="btn" onclick="document.getElementById('dlgUser').showModal()">Cambiar Usuario</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script src="js/common.js"></script>
-    <script src="js/verPerfil.js"></script>
+    <!-- <script src="js/verPerfil.js"></script> -->
 </body>
 </html> 

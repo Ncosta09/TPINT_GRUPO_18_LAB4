@@ -7,4 +7,8 @@ public interface UsuarioDao {
 	Usuario obtenerUsuario(String nombreUsuario, String clave);
 	boolean insert(Usuario usuario);
 	
+	Usuario obtenerPorId(int idUsuario);
+    boolean updateUsername(int idUsuario, String nuevoUsername);
+    boolean updatePassword(int idUsuario, String nuevaPass);
+	
 }

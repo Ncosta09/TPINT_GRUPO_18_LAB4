@@ -34,11 +34,6 @@ public class ServletPerfil extends HttpServlet {
 			response.sendRedirect("Login.jsp");
 			return;
 		}
-		
-		if (session == null || session.getAttribute("usuarioLogueado") == null) {
-			response.sendRedirect("Login.jsp");
-			return;
-		}
 
         request.setAttribute("listaSexo", inputsNegocio.obtenerTodosSexo());
         request.setAttribute("listaNac",  inputsNegocio.obtenerTodosNacionalidad());
