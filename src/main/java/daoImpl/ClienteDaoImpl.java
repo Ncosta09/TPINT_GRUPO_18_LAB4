@@ -190,4 +190,39 @@ public class ClienteDaoImpl implements ClienteDao {
 		    }
 		    return total;
 	}
+	
+	@Override
+	public Cliente obtenerClientePorUsuario(int idUsuario) {
+	    Cliente cliente = null;
+	    
+	    try  {
+	    	Connection conn = Conexion.obtenerConexionDirecta();
+	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_usuario = ?";
+	        
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	            cliente = new Cliente();
+	            cliente.setIdCliente(rs.getInt("id_cliente"));
+	            cliente.setIdUsuario(rs.getInt("id_usuario"));
+	            cliente.setDni(rs.getString("DNI"));
+	            cliente.setCuil(rs.getString("CUIL"));
+	            cliente.setNombre(rs.getString("nombre"));
+	            cliente.setApellido(rs.getString("apellido"));
+	            cliente.setIdSexo(rs.getInt("id_sexo"));
+	            cliente.setIdNacionalidad(rs.getInt("id_nacionalidad"));
+	            cliente.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+	            cliente.setDireccion(rs.getString("direccion"));
+	            cliente.setIdLocalidad(rs.getInt("id_localidad"));
+	            cliente.setEmail(rs.getString("email"));
+	            cliente.setTelefono(rs.getString("telefono"));
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return cliente;
+	}
+	
 }

@@ -37,4 +37,10 @@ public class CuentaNegocioImpl implements CuentaNegocio {
    public Cuenta obtenerPorId(int idCuenta) {
 		 return dao.obtenerPorId(idCuenta);
 	 }
+   
+   @Override
+   public List<Cuenta> obtenerCuentasPorCliente(int idCliente) {
+       return dao.obtenerCuentasPorCliente(idCliente);
+   }
+   
 }

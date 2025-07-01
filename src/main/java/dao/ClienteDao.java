@@ -11,5 +11,5 @@ public interface ClienteDao {
 	Cliente obtenerPorId(int idCliente);
 	boolean modificarCliente(Cliente c);
 	int contarClientes(boolean dateFilter);
-
+	Cliente obtenerClientePorUsuario(int idUsuario);
 }

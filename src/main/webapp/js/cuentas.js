@@ -1,99 +1,75 @@
-// Obtener elementos del DOM
-const burgerMenu = document.getElementById('burgerMenu'); // asumido que está en Header.jsp
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const cuentaForm = document.getElementById('cuentaForm');
-const cancelBtn = cuentaForm.querySelector('button[type="reset"]'); // botón cancelar
-const notification = document.getElementById('notification');
-
-
-if (burgerMenu) {
-    burgerMenu.addEventListener('click', function () {
-        sidebar.classList.toggle('active');
-        overlay.classList.toggle('active');
-    });
-}
-
-
-overlay.addEventListener('click', function () {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-});
-
-
-cancelBtn.addEventListener('click', function () {
- window.location.href = '#'; //Cambiar al correcto luego
-});
-
-// Al enviar el formulario
-cuentaForm.addEventListener('submit', function (e) {
-	e.preventDefault();
-});
-
+// Declarar TODAS las variables al inicio
 let currentPage = 1;
 let totalPages = 1;
 let currentAccount = '';
+let currentAccountNumber = '';
 let movementsData = [];
 
-// Datos de ejemplo para movimientos
-const sampleMovements = {
-    '1234567890': [
-        { fecha: '2024-01-15', descripcion: 'Transferencia recibida', tipo: 'transferencia', monto: 5000, saldo: 25430.50 },
-        { fecha: '2024-01-14', descripcion: 'Pago de servicios', tipo: 'pago', monto: -1200, saldo: 20430.50 },
-        { fecha: '2024-01-13', descripcion: 'Depósito en efectivo', tipo: 'deposito', monto: 3000, saldo: 21630.50 },
-        { fecha: '2024-01-12', descripcion: 'Retiro en cajero', tipo: 'retiro', monto: -500, saldo: 18630.50 },
-        { fecha: '2024-01-11', descripcion: 'Transferencia enviada', tipo: 'transferencia', monto: -1500, saldo: 19130.50 }
-    ],
-    '0987654321': [
-        { fecha: '2024-01-15', descripcion: 'Intereses ganados', tipo: 'deposito', monto: 150, saldo: 19800.00 },
-        { fecha: '2024-01-10', descripcion: 'Depósito programado', tipo: 'deposito', monto: 2000, saldo: 19650.00 },
-        { fecha: '2024-01-05', descripcion: 'Retiro en cajero', tipo: 'retiro', monto: -800, saldo: 17650.00 },
-        { fecha: '2024-01-01', descripcion: 'Transferencia recibida', tipo: 'transferencia', monto: 5000, saldo: 18450.00 }
-    ]
-};
-
-function viewMovements(accountNumber) {
-    currentAccount = accountNumber;
+// Función principal que se ejecuta al hacer clic en "Ver Movimientos"
+function viewMovements(accountId, accountNumber) {
+    
+    // Asignar valores a las variables
+    currentAccount = accountId;
+    currentAccountNumber = accountNumber;
     currentPage = 1;
     
+    // Actualizar la interfaz
     document.getElementById('selectedAccount').textContent = accountNumber;
     document.getElementById('movementsSection').classList.add('active');
     
-    // Cargar movimientos de la cuenta seleccionada
-    movementsData = sampleMovements[accountNumber] || [];
-    displayMovements();
+    // Cargar los movimientos
+    loadMovements();
 }
 
 function closeMovements() {
     document.getElementById('movementsSection').classList.remove('active');
     currentAccount = '';
+    currentAccountNumber = '';
     movementsData = [];
 }
 
+function loadMovements() {
+    if (!currentAccount) {
+        return;
+    }
+    
+    let url = 'ServletMovimientos?idCuenta=' + currentAccount;
+    
+    const tipoMovimiento = document.getElementById('movementType').value;
+    const fechaDesde = document.getElementById('startDate').value;
+    const fechaHasta = document.getElementById('endDate').value;
+    
+    if (tipoMovimiento) {
+        url += '&tipoMovimiento=' + encodeURIComponent(tipoMovimiento);
+    }
+    if (fechaDesde) {
+        url += '&fechaDesde=' + fechaDesde;
+    }
+    if (fechaHasta) {
+        url += '&fechaHasta=' + fechaHasta;
+    }
+    
+    console.log('URL final:', url);
+    
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error del servidor: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            movementsData = data;
+            currentPage = 1;
+            displayMovements();
+        })
+        .catch(error => {
+            alert('Error al cargar movimientos: ' + error.message);
+        });
+}
+
 function filterMovements() {
-    const movementType = document.getElementById('movementType').value;
-    const startDate = document.getElementById('startDate').value;
-    const endDate = document.getElementById('endDate').value;
-    
-    let filteredData = sampleMovements[currentAccount] || [];
-    
-    // Filtrar por tipo
-    if (movementType) {
-        filteredData = filteredData.filter(movement => movement.tipo === movementType);
-    }
-    
-    // Filtrar por fecha
-    if (startDate) {
-        filteredData = filteredData.filter(movement => movement.fecha >= startDate);
-    }
-    
-    if (endDate) {
-        filteredData = filteredData.filter(movement => movement.fecha <= endDate);
-    }
-    
-    movementsData = filteredData;
-    currentPage = 1;
-    displayMovements();
+    loadMovements();
 }
 
 function displayMovements() {
@@ -101,28 +77,33 @@ function displayMovements() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const pageData = movementsData.slice(startIndex, endIndex);
-    
+
     totalPages = Math.ceil(movementsData.length / itemsPerPage);
-    
+
     const tbody = document.getElementById('movementsTableBody');
     tbody.innerHTML = '';
-    
-    pageData.forEach(movement => {
+
+    if (pageData.length === 0) {
         const row = document.createElement('tr');
-        const montoClass = movement.monto >= 0 ? 'movement-credit' : 'movement-debit';
-        const montoSign = movement.monto >= 0 ? '+' : '';
-        
-        row.innerHTML = `
-            <td>${formatDate(movement.fecha)}</td>
-            <td>${movement.descripcion}</td>
-            <td>${capitalizeFirst(movement.tipo)}</td>
-            <td class="${montoClass}">${montoSign}$${Math.abs(movement.monto).toLocaleString()}</td>
-            <td>$${movement.saldo.toLocaleString()}</td>
-        `;
-        
+        row.innerHTML = '<td colspan="5" style="text-align: center;">No hay movimientos para mostrar</td>';
         tbody.appendChild(row);
-    });
-    
+    } else {
+        pageData.forEach(movement => {
+            const row = document.createElement('tr');
+            const montoClass = movement.monto >= 0 ? 'movement-credit' : 'movement-debit';
+            const montoSign = movement.monto >= 0 ? '+' : '';
+
+            row.innerHTML = `
+                <td>${formatDate(movement.fecha)}</td>
+                <td>${movement.descripcion}</td>
+                <td>${capitalizeFirst(movement.tipo)}</td>
+                <td class="${montoClass}">${montoSign}$${Math.abs(movement.monto).toLocaleString()}</td>
+                <td>$${movement.saldo.toLocaleString()}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
     updatePagination();
 }
 
@@ -130,16 +111,14 @@ function updatePagination() {
     const pageInfo = document.getElementById('pageInfo');
     const prevBtn = document.querySelector('.pagination button:first-child');
     const nextBtn = document.querySelector('.pagination button:last-child');
-    
-    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-    
-    prevBtn.disabled = currentPage === 1;
-    nextBtn.disabled = currentPage === totalPages;
+
+    if (pageInfo) pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+    if (prevBtn) prevBtn.disabled = currentPage === 1;
+    if (nextBtn) nextBtn.disabled = currentPage === totalPages || totalPages === 0;
 }
 
 function changePage(direction) {
     const newPage = currentPage + direction;
-    
     if (newPage >= 1 && newPage <= totalPages) {
         currentPage = newPage;
         displayMovements();
@@ -155,21 +134,18 @@ function capitalizeFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-// Limpiar filtros
 function clearFilters() {
     document.getElementById('movementType').value = '';
     document.getElementById('startDate').value = '';
     document.getElementById('endDate').value = '';
-    
     if (currentAccount) {
-        movementsData = sampleMovements[currentAccount] || [];
-        currentPage = 1;
-        displayMovements();
+        loadMovements();
     }
 }
 
-// Agregar botón para limpiar filtros
+// Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
+    
     const filterContainer = document.querySelector('.filter-container');
     if (filterContainer) {
         const clearButton = document.createElement('button');
@@ -178,36 +154,13 @@ document.addEventListener('DOMContentLoaded', function() {
         clearButton.onclick = clearFilters;
         filterContainer.appendChild(clearButton);
     }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Botón de nueva cuenta
-    const btnNuevaCuenta = document.getElementById('btnNuevaCuenta');
-    if (btnNuevaCuenta) {
-        btnNuevaCuenta.addEventListener('click', function() {
-            // Aquí iría la lógica para abrir modal o redirigir
-            console.log('Nueva cuenta solicitada');
-        });
-    }
-    
-    // Botones de acción en las cuentas
-    const actionButtons = document.querySelectorAll('.btn-action');
-    actionButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const action = this.dataset.action;
-            const cuentaId = this.dataset.cuentaId;
-            
-            switch(action) {
-                case 'ver':
-                    console.log('Ver cuenta:', cuentaId);
-                    break;
-                case 'transferir':
-                    console.log('Transferir desde cuenta:', cuentaId);
-                    break;
-                case 'pagar':
-                    console.log('Pagar desde cuenta:', cuentaId);
-                    break;
-            }
-        });
-    });
+	
+	// Agrega event listeners a los botones "Ver Movimientos"
+	document.querySelectorAll('.ver-movimientos').forEach(button => {
+	    button.addEventListener('click', function() {
+	        const accountId = this.getAttribute('data-id');
+	        const accountNumber = this.getAttribute('data-numero');
+	        viewMovements(accountId, accountNumber);
+	    });
+	});	
 });

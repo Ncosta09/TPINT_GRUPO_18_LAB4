@@ -16,4 +16,6 @@ public interface CuentaDao {
    List<Cuenta> obtenerTodasLasCuentas();
    
    Cuenta obtenerPorId(int idCuenta);
+
+   List<Cuenta> obtenerCuentasPorCliente(int idCliente);  
 }
