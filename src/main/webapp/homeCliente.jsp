@@ -58,7 +58,7 @@
                     <h4>Pagar Cuotas</h4>
                     <p>Gestionar pagos de préstamos</p>
                 </div>
-                <div class="action-card" onclick="window.location.href='verPerfil.jsp'">
+                <div class="action-card" onclick="window.location.href='ServletPerfil'">
                     <h4>Mi Perfil</h4>
                     <p>Ver y editar información personal</p>
                 </div>

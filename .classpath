@@ -18,7 +18,7 @@
 			<attribute name="owner.project.facets" value="jst.web"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Julian/Desktop/java-proyectos/TPfinalTest/TPINT_GRUPO_18_LAB4/mysql-connector-java-5.1.47-bin.jar">
+	<classpathentry kind="lib" path="C:/Users/nicoc/OneDrive/Escritorio/TPI - LABIV/TPINT_GRUPO_18_LAB4/mysql-connector-java-5.1.47-bin.jar">
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
