@@ -8,9 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dominio.Cliente;
 import dominio.Usuario;
 import negocio.UsuarioNegocio;
 import negocioImpl.UsuarioNegocioImpl;
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 /**
  * Servlet implementation class ServletUsuario
@@ -41,7 +44,6 @@ public class ServletUsuario extends HttpServlet {
         boolean valido = usuarioNegocio.validar(nombreUsuario, clave);
         
         if (valido) {
-        	
         	Usuario u = usuarioNegocio.obtenerUsuario(nombreUsuario, clave);
         	
         	if (u == null) {
@@ -51,6 +53,9 @@ public class ServletUsuario extends HttpServlet {
                 return;
         	}
         	
+
+
+        	
         	if(u.getEstado() == 1) {
                 HttpSession session = request.getSession(true);
                 session.setAttribute("usuarioLogueado", u);
@@ -59,6 +64,10 @@ public class ServletUsuario extends HttpServlet {
         			response.sendRedirect(request.getContextPath() + "/ServletHomeAdmin");        			
         		}
         		else if(u.getTipoUsuario() == 2) {
+                	ClienteNegocio cn = new ClienteNegocioImpl();
+                    Cliente c = cn.obtenerPorIdUsuario(u.getIdUsuario());  
+                    session.setAttribute("clienteLogueado", c);
+                    
         			response.sendRedirect(request.getContextPath() + "/homeCliente.jsp");
         		}
         	}

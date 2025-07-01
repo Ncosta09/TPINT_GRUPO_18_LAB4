@@ -28,6 +28,11 @@ public class ClienteNegocioImpl implements ClienteNegocio {
     public Cliente obtenerPorId(int idCliente) {
         return clienteDao.obtenerPorId(idCliente);
     }
+
+    @Override
+    public Cliente obtenerPorIdUsuario(int idUsuario) {
+    	return clienteDao.obtenerPorIdUsuario(idUsuario);
+    }
     
     @Override
     public boolean modificarCliente(Cliente c) {

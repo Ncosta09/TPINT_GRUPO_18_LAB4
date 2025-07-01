@@ -1,4 +1,36 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Cliente" %>
+<%@ page import="dominio.Usuario" %>
+<%@ page import="dominio.Sexo" %>
+<%@ page import="dominio.Nacionalidad" %>
+<%@ page import="dominio.Provincia" %>
+<%@ page import="dominio.Localidad" %>
+<%@ page import="java.util.Date" %>
+
+
+<%
+  List<Sexo> sexos = (List<Sexo>) request.getAttribute("listaSexo");
+  List<Nacionalidad> nacs = (List<Nacionalidad>) request.getAttribute("listaNac");
+  List<Provincia> provs = (List<Provincia>) request.getAttribute("listaProv");
+  List<Localidad> locs = (List<Localidad>) request.getAttribute("listaLoca");
+%>
+
+<%
+    
+    Cliente clienteLogueado = null;
+
+    if (session != null && session.getAttribute("clienteLogueado") != null) {
+    	clienteLogueado = (Cliente) session.getAttribute("clienteLogueado");
+    }
+    
+    Usuario usuarioLogueado = null;
+
+    if (session != null && session.getAttribute("usuarioLogueado") != null) {
+        usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
+    }
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,22 +59,41 @@
                     <h3 class="section-title">Información Personal</h3>
                     <div class="profile-row">
                         <div class="profile-field">
-                            <label class="field-label">DNI:</label>
-                            <div class="field-value">12345678</div>
+                        	<label class="field-label">Nombre:</label>
+                            <div class="field-value"><%= clienteLogueado.getNombre() %></div>
                         </div>
                         <div class="profile-field">
-                            <label class="field-label">Nombre:</label>
-                            <div class="field-value">María</div>
+                        	<label class="field-label">Apellido:</label>
+                            <div class="field-value"><%= clienteLogueado.getApellido() %></div>
                         </div>
                     </div>
                     <div class="profile-row">
                         <div class="profile-field">
-                            <label class="field-label">Apellido:</label>
-                            <div class="field-value">González</div>
+                            <label class="field-label">Sexo:</label>
+                     		<% 
+						       for (Sexo s : sexos) {
+						           if (s.getIdSexo() == clienteLogueado.getIdSexo()) {
+						    %>
+                            <div class="field-value"><%= s.getDescripcion() %></div>
+						    <%
+						             break;
+						           }
+						       }
+						    %>
                         </div>
                         <div class="profile-field">
-                            <label class="field-label">Fecha de Nacimiento:</label>
-                            <div class="field-value">15/03/1985</div>
+                        	<label class="field-label">DNI:</label>
+                            <div class="field-value"><%= clienteLogueado.getDni() %></div>
+                        </div>
+                    </div>
+                    <div class="profile-row">
+                        <div class="profile-field">
+                        	<label class="field-label">Fecha de Nacimiento:</label>
+                            <div class="field-value"><%= clienteLogueado.getFechaNacimiento() %></div>
+                        </div>
+                        <div class="profile-field">
+                            <label class="field-label">Nacionalidad:</label>
+                            <div class="field-value"><%= clienteLogueado.getApellido() %></div>
                         </div>
                     </div>
                 </div>
@@ -52,11 +103,11 @@
                     <div class="profile-row">
                         <div class="profile-field">
                             <label class="field-label">Email:</label>
-                            <div class="field-value">maria.gonzalez@email.com</div>
+                            <div class="field-value"><%= clienteLogueado.getEmail() %></div>
                         </div>
                         <div class="profile-field">
                             <label class="field-label">Teléfono:</label>
-                            <div class="field-value">11-1234-5678</div>
+                            <div class="field-value"><%= clienteLogueado.getTelefono() %></div>
                         </div>
                     </div>
                 </div>
@@ -66,21 +117,37 @@
                     <div class="profile-row">
                         <div class="profile-field">
                             <label class="field-label">Dirección:</label>
-                            <div class="field-value">Av. Corrientes 1234</div>
+                            <div class="field-value"><%= clienteLogueado.getDireccion() %></div>
                         </div>
                         <div class="profile-field">
-                            <label class="field-label">Ciudad:</label>
-                            <div class="field-value">Buenos Aires</div>
+                            <label class="field-label">Localidad:</label>
+                            <% 
+						       for (Localidad l : locs) {
+						           if (l.getIdLocalidad() == clienteLogueado.getIdLocalidad()) {
+						    %>
+                            <div class="field-value"><%= l.getNombre() %></div>
+						    <%
+						             break;
+						           }
+						       }
+						    %>
                         </div>
                     </div>
                     <div class="profile-row">
                         <div class="profile-field">
-                            <label class="field-label">Código Postal:</label>
-                            <div class="field-value">1043</div>
+                            <label class="field-label">Provincia:</label>
+                            <% 
+						       for (Provincia p : provs) {
+						           if (p.getIdProvincia() == clienteLogueado.getIdLocalidad()) {
+						    %>
+                            <div class="field-value"><%= p.getNombre() %></div>
+						    <%
+						             break;
+						           }
+						       }
+						    %>
                         </div>
                         <div class="profile-field">
-                            <label class="field-label">Provincia:</label>
-                            <div class="field-value">CABA</div>
                         </div>
                     </div>
                 </div>
@@ -90,29 +157,33 @@
                     <div class="profile-row">
                         <div class="profile-field">
                             <label class="field-label">Usuario:</label>
-                            <div class="field-value">maria.gonzalez</div>
-                        </div>
-                        <div class="profile-field">
-                            <label class="field-label">Tipo de Usuario:</label>
-                            <div class="field-value">Cliente</div>
-                        </div>
-                    </div>
-                    <div class="profile-row">
-                        <div class="profile-field">
-                            <label class="field-label">Fecha de Registro:</label>
-                            <div class="field-value">01/01/2020</div>
+                            <div class="field-value"><%= usuarioLogueado.getNombreUsuario() %></div>
                         </div>
                         <div class="profile-field">
                             <label class="field-label">Estado:</label>
-                            <div class="field-value"><span class="badge badge-active">Activo</span></div>
+                            <div class="field-value">
+                            <% 
+						       
+						           if (usuarioLogueado.getEstado() == 1) {
+						    %>
+						    		<span class="badge badge-active">Activo</span>
+						    <% 
+						           } else {
+						    %>
+									<span class="badge badge-inactive">Inactivo</span>
+							<% 
+						           } 
+						    %>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="profile-actions">
                     <button class="btn btn-secondary" onclick="window.location.href='homeCliente.jsp'">Volver</button>
-                    <button class="btn" onclick="editProfile()">Editar Perfil</button>
-                    <button class="btn btn-secondary" onclick="changePassword()">Cambiar Contraseña</button>
+                    <!--  <button class="btn" onclick="editProfile()">Editar Perfil</button> -->
+                    <button class="btn" onclick="changePassword()">Cambiar Contraseña</button>
+                    <button class="btn" onclick="changePassword()">Cambiar Usuario</button>
                 </div>
             </div>
         </div>

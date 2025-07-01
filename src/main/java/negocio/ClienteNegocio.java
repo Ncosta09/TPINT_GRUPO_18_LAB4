@@ -8,6 +8,7 @@ public interface ClienteNegocio {
 	List<Cliente> obtenerTodos();
 	boolean darDeBaja(int idUsuario);
 	Cliente obtenerPorId(int idCliente);
+	Cliente obtenerPorIdUsuario(int idUsuario);
 	boolean modificarCliente(Cliente c);
 	int contarClientes(boolean dateFilter);
 }

@@ -9,6 +9,7 @@ public interface ClienteDao {
 	boolean darDeBaja(int idUsuario);
 	boolean altaCliente(Cliente cliente);	
 	Cliente obtenerPorId(int idCliente);
+	Cliente obtenerPorIdUsuario(int idUsuario);
 	boolean modificarCliente(Cliente c);
 	int contarClientes(boolean dateFilter);
 

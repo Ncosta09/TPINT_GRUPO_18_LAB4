@@ -141,6 +141,44 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 	
 	@Override
+	public Cliente obtenerPorIdUsuario(int idUsuario) {
+	    Cliente cliente = null;
+	    
+	    try (Connection conn = Conexion.obtenerConexionDirecta()) {
+	    	
+	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_usuario = ?";
+	        
+	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps.setInt(1, idUsuario);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        if (rs.next()) {
+	        	
+	        	Cliente c = new Cliente();
+                
+	        	c.setIdCliente(rs.getInt("id_cliente"));
+                c.setIdUsuario(rs.getInt("id_usuario"));
+                c.setDni(rs.getString("DNI"));
+                c.setCuil(rs.getString("CUIL"));
+                c.setNombre(rs.getString("nombre"));
+                c.setApellido(rs.getString("apellido"));
+                c.setIdSexo(rs.getInt("id_sexo"));
+                c.setIdNacionalidad(rs.getInt("id_nacionalidad"));
+                c.setFechaNacimiento(rs.getDate("fecha_nacimiento"));
+                c.setDireccion(rs.getString("direccion"));
+                c.setIdLocalidad(rs.getInt("id_localidad"));
+                c.setEmail(rs.getString("email"));
+                c.setTelefono(rs.getString("telefono"));
+                
+                return c;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return null;
+	}
+	
+	@Override
 	public boolean modificarCliente(Cliente c) {
 	    String sql = "UPDATE Clientes SET DNI = ?, CUIL = ?, nombre = ?, apellido = ?, id_sexo = ?, id_nacionalidad = ?, fecha_nacimiento= ?, direccion = ?, id_localidad = ?, email = ?, telefono = ? WHERE id_cliente = ?";
 	    try (Connection conn = Conexion.obtenerConexionDirecta();
