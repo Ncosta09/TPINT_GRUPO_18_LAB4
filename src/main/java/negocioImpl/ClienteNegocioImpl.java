@@ -43,5 +43,11 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	public int contarClientes(boolean dateFilter) {
 		return clienteDao.contarClientes(dateFilter);
 	}
+
+	@Override
+	public Cliente obtenerClientePorUsuario(int idUsuario) {
+	    return clienteDao.obtenerClientePorUsuario(idUsuario);
+	}
+
 }
 

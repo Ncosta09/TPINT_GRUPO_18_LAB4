@@ -1,4 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Cuenta" %>
+
+<%
+  List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
+  String error = (String) request.getAttribute("error");
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,6 +31,10 @@
                     Mis Cuentas
                 </h2>
                 
+                <% if (error != null) { %>
+                    <div class="error-alert"><%= error %></div>
+                <% } %>
+                
                 <table id="accountsTable">
                     <thead>
                         <tr>
@@ -34,28 +46,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1234567890</td>
-                            <td>Cuenta Corriente</td>
-                            <td>$25,430.50</td>
-                            <td><span class="status-active">Activa</span></td>
-                            <td>
-                                <button class="btn btn-sm" onclick="viewMovements('1234567890')">Ver Movimientos</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>0987654321</td>
-                            <td>Caja de Ahorro</td>
-                            <td>$19,800.00</td>
-                            <td><span class="status-active">Activa</span></td>
-                            <td>
-                                <button class="btn btn-sm" onclick="viewMovements('0987654321')">Ver Movimientos</button>
-                            </td>
-                        </tr>
+                        <% if (cuentas != null && !cuentas.isEmpty()) { %>
+                            <% for (Cuenta cuenta : cuentas) { %>
+                                <tr>
+                                    <td><%= cuenta.getNumeroCuenta() %></td>
+                                    <td><%= cuenta.getTipoCuenta() %></td>
+                                    <td>$<%= String.format("%.2f", cuenta.getSaldo()) %></td>
+                                    <td>
+                                        <span class="<%= cuenta.isEstado() ? "status-active" : "status-inactive" %>">
+                                            <%= cuenta.isEstado() ? "Activa" : "Inactiva" %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                      <button class="btn btn-sm ver-movimientos"
+										        data-id="<%= cuenta.getId() %>"
+										        data-numero="<%= cuenta.getNumeroCuenta() %>">
+										    Ver Movimientos
+										</button>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="5" style="text-align: center;">No tienes cuentas registradas</td>
+                            </tr>
+                        <% } %>
                     </tbody>
                 </table>
             </div>
-            
+
             <div class="movements-section" id="movementsSection">
                 <h3 class="section-title">
                     <span class="section-icon">📊</span>
@@ -66,14 +85,12 @@
                     <select class="filter-select" id="movementType">
                         <option value="">Todos los tipos</option>
                         <option value="transferencia">Transferencia</option>
-                        <option value="deposito">Depósito</option>
-                        <option value="retiro">Retiro</option>
-                        <option value="pago">Pago</option>
+                        <option value="alta de cuenta">Alta de cuenta</option>
+                        <option value="préstamo">Préstamo</option>
+                        <option value="pago préstamo">Pago préstamo</option>
                     </select>
-                    
                     <input type="date" class="filter-input" id="startDate" placeholder="Fecha desde">
                     <input type="date" class="filter-input" id="endDate" placeholder="Fecha hasta">
-                    
                     <button class="btn" onclick="filterMovements()">Filtrar</button>
                     <button class="btn btn-secondary" onclick="closeMovements()">Cerrar</button>
                 </div>
@@ -102,7 +119,7 @@
         </div>
     </div>
 
-    <script src="js/common.js"></script>
-    <script src="js/cuentas.js"></script>
+<script src="js/common.js"></script>
+<script src="js/cuentas.js"></script>
 </body>
 </html>

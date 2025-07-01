@@ -214,4 +214,45 @@ public class CuentaDaoImpl implements CuentaDao {
         ps.setDouble(3, importe);
         ps.executeUpdate();
     }
+    
+    @Override
+    public List<Cuenta> obtenerCuentasPorCliente(int idCliente) {
+        List<Cuenta> cuentas = new ArrayList<>();
+        Connection conn = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
+            String sql = "SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.descripcion as tipo_cuenta_desc, cl.id_cliente, cl.nombre, cl.apellido FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.id_cliente = ? AND c.estado = 1 ORDER BY c.numero_cuenta";
+
+            
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, idCliente);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                Cuenta cuenta = new Cuenta();
+                cuenta.setId(rs.getInt("id_cuenta"));
+                cuenta.setNumeroCuenta(rs.getString("numero_cuenta"));
+                cuenta.setCbu(rs.getString("cbu"));
+                cuenta.setSaldo(rs.getDouble("saldo"));
+                cuenta.setEstado(rs.getBoolean("estado"));
+                cuenta.setTipoCuenta(rs.getString("tipo_cuenta_desc"));
+                
+                Cliente cliente = new Cliente();
+                cliente.setIdCliente(rs.getInt("id_cliente"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setApellido(rs.getString("apellido"));
+                cuenta.setCliente(cliente);
+                
+                cuentas.add(cuenta);
+            }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return cuentas;
+    }
+    
 }
