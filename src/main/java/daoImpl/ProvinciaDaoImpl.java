@@ -15,12 +15,14 @@ public class ProvinciaDaoImpl implements ProvinciaDao{
 	public List<Provincia> obtenerTodosProvincia() {
 	    List<Provincia> provincia = new ArrayList<>();
 	    Connection cn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT id_provincia, nombre FROM Provincia");
+	        st = cn.prepareStatement("SELECT id_provincia, nombre FROM Provincia");
 
-	        ResultSet rs = st.executeQuery();
+	        rs = st.executeQuery();
 	        
 	            while (rs.next()) {
 	                
@@ -34,7 +36,9 @@ public class ProvinciaDaoImpl implements ProvinciaDao{
 	            
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, st, cn);
+        }
 	    return provincia;
 	}
 

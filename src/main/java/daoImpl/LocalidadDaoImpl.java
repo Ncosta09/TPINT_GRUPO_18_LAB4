@@ -15,12 +15,14 @@ public class LocalidadDaoImpl implements LocalidadDao{
 	public List<Localidad> obtenerTodosLocalidad() {
 	    List<Localidad> localidad = new ArrayList<>();
 	    Connection cn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT id_localidad, nombre, id_provincia FROM Localidad");
+	        st = cn.prepareStatement("SELECT id_localidad, nombre, id_provincia FROM Localidad");
 
-	        ResultSet rs = st.executeQuery();
+	        rs = st.executeQuery();
 	        
 	            while (rs.next()) {
 	                
@@ -35,7 +37,9 @@ public class LocalidadDaoImpl implements LocalidadDao{
 	            
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, st, cn);
+        }
 	    return localidad;
 	}
 

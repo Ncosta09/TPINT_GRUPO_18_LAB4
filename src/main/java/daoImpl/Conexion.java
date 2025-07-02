@@ -11,49 +11,45 @@ public class Conexion {
     private static final String PASS = "root";
 
     private static Conexion instancia;
-    private Connection connection;
 
     private Conexion() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            this.connection = DriverManager.getConnection(URL, USER, PASS);
-            this.connection.setAutoCommit(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     public static Conexion getConexion() {
         if (instancia == null) {
-            instancia = new Conexion();
+            synchronized (Conexion.class) {
+                if (instancia == null) {
+                    instancia = new Conexion();
+                }
+            }
         }
         return instancia;
     }
 
+
     public Connection getSQLConexion() {
-        return this.connection;
-    }
-
-    public void cerrarConexion() {
-        try {
-            if (this.connection != null && !this.connection.isClosed()) {
-                this.connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        instancia = null;
-    }
-
-    public static Connection obtenerConexionDirecta() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Connection conn = DriverManager.getConnection(URL, USER, PASS);
-            conn.setAutoCommit(false);
-            return conn;
+            Connection connection = DriverManager.getConnection(URL, USER, PASS);
+            connection.setAutoCommit(true);
+            return connection;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public void cerrarConexion(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void resetearInstancia() {
+        instancia = null;
     }
 }

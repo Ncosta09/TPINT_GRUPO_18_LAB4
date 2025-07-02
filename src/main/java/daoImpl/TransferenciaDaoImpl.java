@@ -27,7 +27,6 @@ public class TransferenciaDaoImpl implements TransferenciaDao {
             int result = ps.executeUpdate();
             
             if (result > 0) {
-                conn.commit(); 
                 return true;
             }
             return false;
@@ -35,6 +34,8 @@ public class TransferenciaDaoImpl implements TransferenciaDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            Utils.closeResources(ps, conn);
         }
     }
     
@@ -44,6 +45,7 @@ public class TransferenciaDaoImpl implements TransferenciaDao {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
         try {
             conn = Conexion.getConexion().getSQLConexion();
             String sql = "SELECT COUNT(*) FROM Transferencias t " +
@@ -59,6 +61,8 @@ public class TransferenciaDaoImpl implements TransferenciaDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return cantidad;
     }

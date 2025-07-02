@@ -15,11 +15,12 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean altaCliente(Cliente cliente) {
 		boolean resultado = false;
-		Connection conn;
+		Connection conn = null;
+		PreparedStatement ps = null;
 
         try  {
         	conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+        	ps = conn.prepareStatement("INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
         	ps.setInt(1,cliente.getIdUsuario());
             ps.setString (2, cliente.getDni());
             ps.setString (3, cliente.getCuil());
@@ -40,6 +41,8 @@ public class ClienteDaoImpl implements ClienteDao {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(ps, conn);
         }
 
         return resultado;
@@ -50,13 +53,14 @@ public class ClienteDaoImpl implements ClienteDao {
 	public List<Cliente> obtenerTodos() {
 	    List<Cliente> clientes = new ArrayList<>();
 	    Connection cn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        cn.setAutoCommit(true);
-	        PreparedStatement st = cn.prepareStatement("SELECT c.id_cliente, c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
+	        st = cn.prepareStatement("SELECT c.id_cliente, c.DNI, c.nombre, c.apellido, c.email, c.telefono, u.estado, u.tipo_usuario, t.descripcion_tipo, u.id_usuario FROM Clientes c JOIN Usuarios u ON c.id_usuario = u.id_usuario JOIN Tipos_usuario t ON u.tipo_usuario = t.tipo_id");
 
-	        ResultSet rs = st.executeQuery();
+	        rs = st.executeQuery();
 	        
 	            while (rs.next()) {
 	                
@@ -79,38 +83,45 @@ public class ClienteDaoImpl implements ClienteDao {
 	            
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, st, cn);
+        }
 	    return clientes;
 	}
 	
 	public boolean darDeBaja(int idUsuario) {
 	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    
 	    try {
-	        conn = Conexion.obtenerConexionDirecta();
+	        conn = Conexion.getConexion().getSQLConexion();
 	        String sql = "UPDATE Usuarios SET estado = 0 WHERE id_usuario = ?";
-	        PreparedStatement ps = conn.prepareStatement(sql);
+	        ps = conn.prepareStatement(sql);
 	        ps.setInt(1, idUsuario);
 	        int rows = ps.executeUpdate();
-	        conn.commit();
 	        return rows > 0;
 	    } catch (Exception e) {
 	        e.printStackTrace();
-	        try { if (conn != null) conn.rollback(); } catch (Exception ex) {}
-	    }
+	    } finally {
+            Utils.closeResources(ps, conn);
+        }
 	    return false;
 	}
 	
 	@Override
 	public Cliente obtenerPorId(int idCliente) {
 	    Cliente cliente = null;
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
 	    
-	    try (Connection conn = Conexion.obtenerConexionDirecta()) {
-	    	
+	    try {
+	        conn = Conexion.getConexion().getSQLConexion();
 	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_cliente = ?";
 	        
-	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps = conn.prepareStatement(query);
 	        ps.setInt(1, idCliente);
-	        ResultSet rs = ps.executeQuery();
+	        rs = ps.executeQuery();
 	        
 	        if (rs.next()) {
 	        	
@@ -134,21 +145,26 @@ public class ClienteDaoImpl implements ClienteDao {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 	    return null;
 	}
 	
 	@Override
 	public Cliente obtenerPorIdUsuario(int idUsuario) {
 	    Cliente cliente = null;
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
 	    
-	    try (Connection conn = Conexion.obtenerConexionDirecta()) {
-	    	
+	    try {
+	        conn = Conexion.getConexion().getSQLConexion();
 	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_usuario = ?";
 	        
-	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps = conn.prepareStatement(query);
 	        ps.setInt(1, idUsuario);
-	        ResultSet rs = ps.executeQuery();
+	        rs = ps.executeQuery();
 	        
 	        if (rs.next()) {
 	        	
@@ -172,15 +188,21 @@ public class ClienteDaoImpl implements ClienteDao {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 	    return null;
 	}
 	
 	@Override
 	public boolean modificarCliente(Cliente c) {
 	    String sql = "UPDATE Clientes SET DNI = ?, CUIL = ?, nombre = ?, apellido = ?, id_sexo = ?, id_nacionalidad = ?, fecha_nacimiento= ?, direccion = ?, id_localidad = ?, email = ?, telefono = ? WHERE id_cliente = ?";
-	    try (Connection conn = Conexion.obtenerConexionDirecta();
-	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    
+	    try {
+	        conn = Conexion.getConexion().getSQLConexion();
+	        ps = conn.prepareStatement(sql);
 
 	        ps.setString (1, c.getDni());
 	        ps.setString (2, c.getCuil());
@@ -196,48 +218,58 @@ public class ClienteDaoImpl implements ClienteDao {
 	        ps.setInt   (12, c.getIdCliente());
 	        
 	        int rows = ps.executeUpdate();
-	        conn.commit();
 	        return rows > 0;
 	        
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        return false;
-	    }
+	    } finally {
+            Utils.closeResources(ps, conn);
+        }
 	}
 
 
 	@Override
 	public int contarClientes(boolean dateFilter) {
 		 int total = 0;
-		 Connection conn;
+		 Connection conn = null;
+		 PreparedStatement ps = null;
+		 ResultSet rs = null;
 		 String filtroMes = "";
+		 
 		 if(dateFilter) {
 			 filtroMes= " WHERE MONTH(fecha_creacion) = MONTH(CURRENT_DATE()) AND YEAR(fecha_creacion) = YEAR(CURRENT_DATE())";
 		 }
+		 
 		    try {
-		    	conn = Conexion.obtenerConexionDirecta();
-		        PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) AS 'total' FROM Clientes"+filtroMes);
-		        ResultSet rs = ps.executeQuery();
+		    	conn = Conexion.getConexion().getSQLConexion();
+		        ps = conn.prepareStatement("SELECT COUNT(*) AS 'total' FROM Clientes"+filtroMes);
+		        rs = ps.executeQuery();
 		        if (rs.next()) {
 		            total = rs.getInt("total");
 		        }
 		    } catch (SQLException e) {
 		        e.printStackTrace();
-		    }
+		    } finally {
+                Utils.closeResources(rs, ps, conn);
+            }
 		    return total;
 	}
 	
 	@Override
 	public Cliente obtenerClientePorUsuario(int idUsuario) {
 	    Cliente cliente = null;
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
 	    
 	    try  {
-	    	Connection conn = Conexion.obtenerConexionDirecta();
+	    	conn = Conexion.getConexion().getSQLConexion();
 	        String query = "SELECT c.id_cliente, c.id_usuario, c.DNI, c.CUIL, c.nombre, c.apellido, c.id_sexo, c.id_nacionalidad, c.fecha_nacimiento, c.direccion, c.id_localidad, c.email, c.telefono FROM Clientes c WHERE c.id_usuario = ?";
 	        
-	        PreparedStatement ps = conn.prepareStatement(query);
+	        ps = conn.prepareStatement(query);
 	        ps.setInt(1, idUsuario);
-	        ResultSet rs = ps.executeQuery();
+	        rs = ps.executeQuery();
 	        
 	        if (rs.next()) {
 	            cliente = new Cliente();
@@ -257,7 +289,9 @@ public class ClienteDaoImpl implements ClienteDao {
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 	    return cliente;
 	}
 	

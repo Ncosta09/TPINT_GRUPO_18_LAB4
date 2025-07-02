@@ -17,14 +17,16 @@ public class CuotaDaoImpl implements CuotaDao {
     public List<Cuota> obtenerCuotasPorPrestamo(int idPrestamo) {
         List<Cuota> cuotas = new ArrayList<>();
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
         try {
             conn = Conexion.getConexion().getSQLConexion();
             String query = "SELECT * FROM Cuotas WHERE id_prestamo = ?";
-            PreparedStatement ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(query);
             ps.setInt(1, idPrestamo);
 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
 
             while (rs.next()) {
                 Cuota c = new Cuota();
@@ -37,11 +39,10 @@ public class CuotaDaoImpl implements CuotaDao {
                 cuotas.add(c);
             }
 
-            rs.close();
-            ps.close();
-
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
 
         return cuotas;
@@ -51,11 +52,12 @@ public class CuotaDaoImpl implements CuotaDao {
     
     public boolean generarCuotasParaPrestamo(int idPrestamo, int cantidadCuotas, double montoCuota) {
         Connection conn = null;
+        PreparedStatement ps = null;
 
         try {
             conn = Conexion.getConexion().getSQLConexion();
             String query = "INSERT INTO Cuotas (id_prestamo, numero_cuota, monto, pagada) VALUES (?, ?, ?, 0)";
-            PreparedStatement ps = conn.prepareStatement(query);
+            ps = conn.prepareStatement(query);
 
             for (int i = 1; i <= cantidadCuotas; i++) {
                 ps.setInt(1, idPrestamo);
@@ -65,17 +67,12 @@ public class CuotaDaoImpl implements CuotaDao {
             }
 
             ps.executeBatch();
-            conn.commit();
-            ps.close();
             return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            try {
-                if (conn != null) conn.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
+        } finally {
+            Utils.closeResources(ps, conn);
         }
 
         return false;
