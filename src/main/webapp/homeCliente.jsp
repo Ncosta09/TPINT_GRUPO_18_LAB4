@@ -18,43 +18,43 @@
         
         <div class="content">
             <div class="welcome-card">
-                <h2>Bienvenido, María González</h2>
+                <h2>Bienvenido, <%= request.getAttribute("nombreCliente") %></h2>
                 <p>Panel de cliente del sistema bancario</p>
             </div>
             
             <div class="dashboard-cards">
-                <div class="card" onclick="window.location.href='cuentas.jsp'">
+                <div class="card" onclick="window.location.href='ServletCuentasCliente'">
                     <div class="card-icon">💰</div>
                     <h3>Saldo Total</h3>
-                    <p>$45,230.50</p>
+                    <p>$<%= String.format("%,.2f", request.getAttribute("saldoTotal")) %></p>
                 </div>
-                <div class="card" onclick="window.location.href='transferencias.jsp'">
+                <div class="card" onclick="window.location.href='ServletTransferencia'">
                     <div class="card-icon">💸</div>
                     <h3>Transferencias (Mes)</h3>
-                    <p>8</p>
+                    <p><%= request.getAttribute("transferenciasMes") %></p>
                 </div>
-                <div class="card" onclick="window.location.href='pedirPrestamo.jsp'">
+                <div class="card" onclick="window.location.href='ServletPedirPrestamo'">
                     <div class="card-icon">📋</div>
                     <h3>Préstamos Activos</h3>
-                    <p>2</p>
+                    <p><%= request.getAttribute("prestamosActivos") %></p>
                 </div>
-                <div class="card" onclick="window.location.href='pagarCuotas.jsp'">
+                <div class="card" onclick="window.location.href='ServletPagarCuotas'">
                     <div class="card-icon">📊</div>
                     <h3>Cuotas Pendientes</h3>
-                    <p>5</p>
+                    <p><%= request.getAttribute("cuotasPendientes") %></p>
                 </div>
             </div>
             
             <div class="quick-actions">
-                <div class="action-card" onclick="window.location.href='transferencias.jsp'">
+                <div class="action-card" onclick="window.location.href='ServletTransferencia'">
                     <h4>Nueva Transferencia</h4>
                     <p>Realizar transferencia entre cuentas</p>
                 </div>
-                <div class="action-card" onclick="window.location.href='pedirPrestamo.jsp'">
+                <div class="action-card" onclick="window.location.href='ServletPedirPrestamo'">
                     <h4>Solicitar Préstamo</h4>
                     <p>Nueva solicitud de préstamo</p>
                 </div>
-                <div class="action-card" onclick="window.location.href='pagarCuotas.jsp'">
+                <div class="action-card" onclick="window.location.href='ServletPagarCuotas'">
                     <h4>Pagar Cuotas</h4>
                     <p>Gestionar pagos de préstamos</p>
                 </div>

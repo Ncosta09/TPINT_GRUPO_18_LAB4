@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.List" %>
+<%@ page import="dominio.Cuenta" %>
+<%@ page import="dominio.Usuario" %>
+<%@ page import="dominio.Cliente" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,44 +27,46 @@
                     Nueva Transferencia
                 </h2>
                 
-                <form id="transferForm" action="transferencia" method="post">
+                <!-- Mensajes de error y éxito -->
+                <% if (request.getAttribute("error") != null) { %>
+                    <div class="alert alert-error">
+                        <%= request.getAttribute("error") %>
+                    </div>
+                <% } %>
+                
+                <% if (request.getAttribute("mensaje") != null) { %>
+                    <div class="alert alert-success">
+                        <%= request.getAttribute("mensaje") %>
+                    </div>
+                <% } %>
+                
+                <form id="transferForm" action="ServletTransferencia" method="post">
                     <div class="form-group">
                         <label for="cuentaOrigen">Cuenta Origen:</label>
                         <select id="cuentaOrigen" name="cuentaOrigen" required>
                             <option value="">Seleccione una cuenta</option>
-                            <option value="1234567890">1234567890 - Cuenta Corriente ($25,430.50)</option>
-                            <option value="0987654321">0987654321 - Caja de Ahorro ($19,800.00)</option>
+                            <% 
+                            List<Cuenta> cuentasCliente = (List<Cuenta>) request.getAttribute("cuentasCliente");
+                            if (cuentasCliente != null) {
+                                for (Cuenta cuenta : cuentasCliente) {
+                                    if (cuenta.isEstado()) {
+                            %>
+                                <option value="<%= cuenta.getId() %>">
+                                    <%= cuenta.getNumeroCuenta() %> - <%= cuenta.getTipoCuenta() %> ($<%= String.format("%,.2f", cuenta.getSaldo()) %>)
+                                </option>
+                            <%
+                                    }
+                                }
+                            }
+                            %>
                         </select>
                         <div class="error-message" id="cuentaOrigen-error"></div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="tipoTransferencia">Tipo de Transferencia:</label>
-                        <select id="tipoTransferencia" name="tipoTransferencia" required>
-                            <option value="">Seleccione el tipo</option>
-                            <option value="misma_entidad">Misma Entidad</option>
-                            <option value="otra_entidad">Otra Entidad</option>
-                            <option value="cbu">Por CBU</option>
-                        </select>
-                        <div class="error-message" id="tipoTransferencia-error"></div>
-                    </div>
-                    
-                    <div class="form-group" id="destinatarioGroup">
-                        <label for="destinatario">Destinatario:</label>
-                        <input type="text" id="destinatario" name="destinatario" placeholder="Nombre del destinatario">
-                        <div class="error-message" id="destinatario-error"></div>
-                    </div>
-                    
-                    <div class="form-group" id="cuentaDestinoGroup">
-                        <label for="cuentaDestino">Cuenta Destino:</label>
-                        <input type="text" id="cuentaDestino" name="cuentaDestino" placeholder="Número de cuenta o CBU">
+                        <label for="cuentaDestino">Cuenta Destino (Número de cuenta o CBU):</label>
+                        <input type="text" id="cuentaDestino" name="cuentaDestino" placeholder="Ingrese número de cuenta o CBU" required>
                         <div class="error-message" id="cuentaDestino-error"></div>
-                    </div>
-                    
-                    <div class="form-group" id="cbuGroup" style="display: none;">
-                        <label for="cbu">CBU:</label>
-                        <input type="text" id="cbu" name="cbu" placeholder="22 dígitos" maxlength="22">
-                        <div class="error-message" id="cbu-error"></div>
                     </div>
                     
                     <div class="form-group">
@@ -71,12 +77,11 @@
                     
                     <div class="form-group">
                         <label for="concepto">Concepto:</label>
-                        <input type="text" id="concepto" name="concepto" placeholder="Descripción de la transferencia" required>
-                        <div class="error-message" id="concepto-error"></div>
+                        <input type="text" id="concepto" name="concepto" placeholder="Descripción de la transferencia">
                     </div>
                     
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" onclick="window.location.href='homeCliente.jsp'">Cancelar</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='ServletHomeCliente'">Cancelar</button>
                         <button type="submit" class="btn">Realizar Transferencia</button>
                     </div>
                 </form>

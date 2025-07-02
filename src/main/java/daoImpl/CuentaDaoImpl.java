@@ -255,4 +255,25 @@ public class CuentaDaoImpl implements CuentaDao {
         return cuentas;
     }
     
+    @Override
+    public boolean actualizarSaldo(int idCuenta, double nuevoSaldo) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
+            String sql = "UPDATE Cuentas SET saldo = ? WHERE id_cuenta = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setDouble(1, nuevoSaldo);
+            ps.setInt(2, idCuenta);
+            
+            int result = ps.executeUpdate();
+            return result > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 }

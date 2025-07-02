@@ -18,4 +18,6 @@ public interface CuentaDao {
    Cuenta obtenerPorId(int idCuenta);
 
    List<Cuenta> obtenerCuentasPorCliente(int idCliente);  
+
+   boolean actualizarSaldo(int idCuenta, double nuevoSaldo);
 }

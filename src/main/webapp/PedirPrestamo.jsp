@@ -136,7 +136,7 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 
 					<div class="form-actions">
 						<button type="button" class="btn btn-secondary"
-							onclick="window.location.href='homeCliente.jsp'">Cancelar</button>
+							onclick="window.location.href='ServletHomeCliente'">Cancelar</button>
 						<button type="submit" class="btn" name="btnSolicitarPrestamo">Solicitar
 							Préstamo</button>
 					</div>

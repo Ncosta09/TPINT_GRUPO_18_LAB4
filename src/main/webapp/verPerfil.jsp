@@ -223,7 +223,7 @@
                 </div>
                 
                 <div class="profile-actions">
-                    <button class="btn btn-secondary" onclick="window.location.href='homeCliente.jsp'">Volver</button>
+                    <button class="btn btn-secondary" onclick="window.location.href='ServletHomeCliente'">Volver</button>
                     <!--  <button class="btn" onclick="editProfile()">Editar Perfil</button> -->
                     <button class="btn" onclick="document.getElementById('dlgPass').showModal()">Cambiar Contraseña</button>
                     <button class="btn" onclick="document.getElementById('dlgUser').showModal()">Cambiar Usuario</button>

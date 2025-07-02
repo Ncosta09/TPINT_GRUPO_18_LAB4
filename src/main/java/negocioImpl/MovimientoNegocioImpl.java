@@ -21,5 +21,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
                                                                  String fechaDesde, String fechaHasta) {
         return movimientoDao.obtenerMovimientosPorCuentaConFiltros(idCuenta, tipoMovimiento, fechaDesde, fechaHasta);
     }
+    
+    @Override
+    public boolean insertarMovimiento(Movimiento movimiento) {
+        return movimientoDao.insertarMovimiento(movimiento);
+    }
 	
 }
