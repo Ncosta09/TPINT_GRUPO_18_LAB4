@@ -1,0 +1,99 @@
+dialog {
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: white;
+  max-width: 450px;
+  width: 90%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  animation: fadeIn 0.2s ease-out;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.4);
+  animation: backdropFadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes backdropFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+dialog form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+dialog h3 {
+  margin: 0;
+  color: #1e40af;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: left;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+dialog h3::before {
+  content: "👤";
+  font-size: 1rem;
+}
+
+dialog .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+dialog label {
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+dialog input[type="text"],
+dialog input[type="password"] {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+  color: #374151;
+}
+
+dialog .button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}

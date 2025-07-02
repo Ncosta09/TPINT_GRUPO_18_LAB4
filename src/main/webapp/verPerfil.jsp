@@ -37,52 +37,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Bancaria - Mi Perfil</title>
-    <link rel="stylesheet" href="CSS/common.css" type="text/css" />
     <link rel="stylesheet" href="CSS/verPerfil.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/dialog.css" type="text/css" />
+    <link rel="stylesheet" href="CSS/common.css" type="text/css" />
 </head>
 <body>
     <jsp:include page="/header.jsp" />
     
-    
-  <dialog id="dlgUser">
-    <form method="post" action="ServletModificarUsuario">
-      <h3>Cambiar nombre de usuario</h3>
-      <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
-      <div>
-        <label for="nuevoUsuario">Nuevo usuario:</label><br/>
-        <input type="text" id="nuevoUsuario" name="nuevoUsuario"
-               value="${u.username}" required autofocus>
-      </div>
-      <div style="margin-top:1em;">
-        <button type="submit" name="action" value="cambiarUsuario">
-          Guardar
-        </button>
-        <button type="button" onclick="this.closest('dialog').close()">
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </dialog>
-
-  <dialog id="dlgPass">
-    <form method="post" action="ServletModificarUsuario">
-      <h3>Cambiar contraseña</h3>
-      <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
-      <div>
-        <label for="nuevaContrasena">Nueva contraseña:</label><br/>
-        <input type="password" id="nuevaContrasena"
-               name="nuevaContrasena" required>
-      </div>
-      <div style="margin-top:1em;">
-        <button type="submit" name="action" value="cambiarContrasena">
-          Guardar
-        </button>
-        <button type="button" onclick="this.closest('dialog').close()">
-          Cancelar
-        </button>
-      </div>
-    </form>
-  </dialog>
+	<dialog id="dlgUser">
+	    <form method="post" action="ServletModificarUsuario">
+	        <h3>Cambiar nombre de usuario</h3>
+	        <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
+	        
+	        <div class="form-group">
+	            <label for="nuevoUsuario">Nuevo usuario:</label>
+	            <input type="text" id="nuevoUsuario" name="nuevoUsuario" value="${u.username}" required autofocus>
+	        </div>
+	        
+	        <div class="button-group">
+	            <button class="btn btn-secondary" type="button" onclick="this.closest('dialog').close()">
+	                Cancelar
+	            </button>
+	            <button class="btn" type="submit" name="action" value="cambiarUsuario">
+	                Guardar
+	            </button>
+	        </div>
+	    </form>
+	</dialog>
+	
+	<dialog id="dlgPass">
+	    <form method="post" action="ServletModificarUsuario">
+	        <h3>Cambiar contraseña</h3>
+	        <input type="hidden" name="idUsuario" value="${usuarioLogueado.idUsuario}">
+	        
+	        <div class="form-group">
+	            <label for="nuevaContrasena">Nueva contraseña:</label>
+	            <input type="password" id="nuevaContrasena" name="nuevaContrasena" required>
+	        </div>
+	        
+	        <div class="button-group">
+	            <button class="btn btn-secondary" type="button" onclick="this.closest('dialog').close()">
+	                Cancelar
+	            </button>
+	            <button class="btn" type="submit" name="action" value="cambiarContrasena">
+	                Guardar
+	            </button>
+	        </div>
+	    </form>
+	</dialog>
     
     <div class="container">
         <jsp:include page="/sidebarCliente.jsp" />
