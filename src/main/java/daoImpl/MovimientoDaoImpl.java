@@ -121,7 +121,12 @@ public class MovimientoDaoImpl implements MovimientoDao{
             ps.setDouble(4, movimiento.getSaldo());
             
             int result = ps.executeUpdate();
-            return result > 0;
+            
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+                return true;
+            }
+            return false;
             
         } catch (SQLException e) {
             e.printStackTrace();

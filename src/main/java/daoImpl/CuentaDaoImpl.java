@@ -268,7 +268,12 @@ public class CuentaDaoImpl implements CuentaDao {
             ps.setInt(2, idCuenta);
             
             int result = ps.executeUpdate();
-            return result > 0;
+            
+            if (result > 0) {
+                conn.commit(); // Confirmar la transacción
+                return true;
+            }
+            return false;
             
         } catch (SQLException e) {
             e.printStackTrace();
