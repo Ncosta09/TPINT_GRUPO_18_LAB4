@@ -10,4 +10,5 @@ public interface PrestamoDao {
     boolean actualizarEstado(int idPrestamo, String nuevoEstado);
     List<Prestamo> listarPrestamosPorCliente(int idCliente);
 	List<Prestamo> listarTodos();
+	public Prestamo obtenerPrestamoPorId(int idPrestamo);
 }

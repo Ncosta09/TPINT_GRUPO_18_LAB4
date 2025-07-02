@@ -15,6 +15,9 @@ import dominio.Prestamo;
 import dominio.Usuario;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
+import negocioImpl.CuotaNegocioImpl;
+
+
 
 
 @WebServlet("/ServletGestionPrestamos")
@@ -57,9 +60,65 @@ HttpSession session = request.getSession(false);
 	}
 
 	
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+	    HttpSession session = request.getSession(false);
+
+	    if (session == null || session.getAttribute("usuarioLogueado") == null) {
+	        response.sendRedirect("Login.jsp");
+	        return;
+	    }
+
+	    PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();
+	    CuotaNegocioImpl cuotas=new CuotaNegocioImpl();
+	    Prestamo seleccionado=new Prestamo();
+	    
+	    
+	    String mensaje = null;
+
+	    try {
+	        String idStr = request.getParameter("idPrestamo");
+	        if (idStr != null && !idStr.isEmpty()) {
+	            int idPrestamo = Integer.parseInt(idStr);
+
+	            if (request.getParameter("btnAprobar") != null) {
+	                prestamoNegocio.actualizarEstado(idPrestamo, "aprobado");
+	                seleccionado=prestamoNegocio.obtenerPrestamoPorId(idPrestamo);
+	                cuotas.generarCuotasParaPrestamo(idPrestamo,seleccionado.getCantidadCuotas(),seleccionado.getImporteCuota());
+	                mensaje = "Préstamo aprobado correctamente ✅";
+	            } else if (request.getParameter("btnRechazar") != null) {
+	                prestamoNegocio.actualizarEstado(idPrestamo, "rechazado");
+	                mensaje = "Préstamo rechazado correctamente ✅";
+	            } 
+	        }
+
+	     // Recargamos lista.
+	        List<Prestamo> prestamos = prestamoNegocio.listarTodos();
+	        request.setAttribute("prestamosPendientes", prestamos);
+
+	        // Pasamos la notificacion.
+	        if (mensaje != null) {
+	            request.setAttribute("mensajeEstado", mensaje);
+	        }
+
+	        request.getRequestDispatcher("/prestamosAdmin.jsp").forward(request, response);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        request.setAttribute("mensajeEstado", "Ocurrió un error: " + e.getMessage());
+	        request.getRequestDispatcher("/prestamosAdmin.jsp").forward(request, response);
+	    }
+		
+	}
+		
+	
+	
+	
+		
+		
+		
+		
+		
 	}
 
-}
+

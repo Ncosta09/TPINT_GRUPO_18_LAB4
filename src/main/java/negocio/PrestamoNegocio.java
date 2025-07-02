@@ -10,4 +10,5 @@ public interface PrestamoNegocio {
 	    List<Prestamo> listarPrestamosPendientes();
 	    boolean actualizarEstado(int idPrestamo, String nuevoEstado);
 	    List<Prestamo> listarTodos();
+		public Prestamo obtenerPrestamoPorId(int idPrestamo);
 }

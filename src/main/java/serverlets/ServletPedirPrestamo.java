@@ -111,9 +111,9 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        boolean exito = prestamoNegocio.pedirPrestamo(p);
 
 	        if (exito) {
-	            request.setAttribute("mensaje", "Solicitud de préstamo enviada con éxito.");
+	            request.setAttribute("mensaje", "Solicitud de préstamo enviada con éxito.✅");
 	        } else {
-	            request.setAttribute("mensaje", "No se pudo enviar la solicitud.");
+	            request.setAttribute("mensaje", "No se pudo enviar la solicitud. ❌");
 	        }
 
 	    } catch (Exception e) {

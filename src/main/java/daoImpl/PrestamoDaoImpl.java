@@ -191,4 +191,39 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	    return false;
 	}
 
+	@Override
+	public Prestamo obtenerPrestamoPorId(int idPrestamo) {
+		 Prestamo prestamo = null;
+		    Connection conn = null;
+
+		    try {
+		        conn = Conexion.getConexion().getSQLConexion();
+		        String query = "SELECT * FROM Prestamos WHERE id_prestamo = ?";
+		        PreparedStatement ps = conn.prepareStatement(query);
+		        ps.setInt(1, idPrestamo);
+
+		        ResultSet rs = ps.executeQuery();
+
+		        if (rs.next()) {
+		            prestamo = new Prestamo();
+		            prestamo.setIdPrestamo(rs.getInt("id_prestamo"));
+		            prestamo.setIdCliente(rs.getInt("id_cliente"));
+		            prestamo.setIdCuenta(rs.getInt("id_cuenta"));
+		            prestamo.setFechaAlta(rs.getDate("fecha_alta"));
+		            prestamo.setImportePedido(rs.getDouble("importe_pedido"));
+		            prestamo.setPlazoMeses(rs.getInt("plazo_meses"));
+		            prestamo.setCantidadCuotas(rs.getInt("cantidad_cuotas"));
+		            prestamo.setImporteCuota(rs.getDouble("importe_cuota"));
+		            prestamo.setEstado(rs.getString("estado"));
+		        }
+
+		        rs.close();
+		        ps.close();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+
+		    return prestamo;
+	}
+
 }

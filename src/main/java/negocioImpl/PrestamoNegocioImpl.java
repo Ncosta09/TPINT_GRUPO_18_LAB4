@@ -43,6 +43,14 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 		
 		return dao.listarTodos();
 	}
+
+
+	@Override
+	public Prestamo obtenerPrestamoPorId(int idPrestamo) {
+		return dao.obtenerPrestamoPorId(idPrestamo);
+	}
+	
+	
 	
 	
 }

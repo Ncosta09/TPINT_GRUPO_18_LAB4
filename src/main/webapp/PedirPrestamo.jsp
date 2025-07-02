@@ -51,6 +51,14 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 						<strong>Monto máximo:</strong> $500,000
 					</p>
 				</div>
+				
+				<% if (request.getAttribute("mensaje") != null) { %>
+    <div class="alert-success" id="mensajeExito">
+        <%= request.getAttribute("mensaje") %>
+        <span style="float:right; cursor:pointer;" onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+<% } %>
+
 
 				<form id="loanForm" action="ServletPedirPrestamo" method="post">
 					<div class="form-group">
@@ -73,17 +81,6 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 						<div class="error-message" id="plazo-error"></div>
 					</div>
 
-					<div class="form-group">
-						<label for="tipoPrestamo">Tipo de Préstamo:</label> <select
-							id="tipoPrestamo" name="tipoPrestamo" required>
-							<option value="">Seleccione el tipo</option>
-							<option value="personal">Personal</option>
-							<option value="hipotecario">Hipotecario</option>
-							<option value="automotriz">Automotriz</option>
-							<option value="emprendimiento">Emprendimiento</option>
-						</select>
-						<div class="error-message" id="tipoPrestamo-error"></div>
-					</div>
 
 					<div class="form-group">
 						<label for="destino">Destino del Préstamo:</label> <input
@@ -148,6 +145,18 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 	<div class="notification" id="notification"></div>
 
 	<script src="js/common.js"></script>
-	<script src="js/pedirPrestamo.js"></script>
+	
+	<script>
+    setTimeout(() => {
+        const mensaje = document.getElementById('mensajeExito');
+        if (mensaje) {
+            mensaje.style.transition = 'opacity 0.5s ease';
+            mensaje.style.opacity = '0';
+            setTimeout(() => mensaje.style.display = 'none', 500);
+        }
+    }, 5000);
+</script>
+	
+
 </body>
 </html>

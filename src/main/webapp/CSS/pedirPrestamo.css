@@ -1,3 +1,22 @@
+
+.alert-success {
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 15px 20px;
+    border: 1px solid #badbcc;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    position: relative;
+    animation: fadeIn 0.5s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 .loan-container {
     background-color: white;
     border-radius: 8px;
