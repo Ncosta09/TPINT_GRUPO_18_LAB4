@@ -271,3 +271,76 @@
                 flex-direction: column;
             }
         }
+        
+        /* Estilos para alertas */
+        .alert {
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            font-weight: 500;
+            font-size: 14px;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .alert.fade-out {
+            opacity: 0;
+        }
+        
+        .alert-error {
+            background-color: #fef2f2;
+            border-color: #fecaca;
+            color: #991b1b;
+        }
+        
+        .alert-error::before {
+            content: "⚠️";
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .alert-success {
+            background-color: #f0fdf4;
+            border-color: #bbf7d0;
+            color: #166534;
+        }
+        
+        .alert-success::before {
+            content: "✅";
+            margin-right: 8px;
+            font-size: 14px;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        
+        /* Animación para errores */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }

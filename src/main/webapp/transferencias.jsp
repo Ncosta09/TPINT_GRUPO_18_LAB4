@@ -52,7 +52,7 @@
                                     if (cuenta.isEstado()) {
                             %>
                                 <option value="<%= cuenta.getId() %>">
-                                    <%= cuenta.getNumeroCuenta() %> - <%= cuenta.getTipoCuenta() %> ($<%= String.format("%,.2f", cuenta.getSaldo()) %>)
+                                    <%= cuenta.getNumeroCuenta() %> - <%= cuenta.getTipoCuenta().getDescripcion() %> ($<%= String.format("%,.2f", cuenta.getSaldo()) %>)
                                 </option>
                             <%
                                     }

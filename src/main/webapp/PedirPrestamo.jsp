@@ -104,7 +104,7 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 							%>
 							<option value="<%=cuenta.getId()%>">
 								<%=cuenta.getNumeroCuenta()%> -
-								<%=cuenta.getTipoCuenta()%>
+								<%=cuenta.getTipoCuenta().getDescripcion()%>
 							</option>
 							<%
 							}

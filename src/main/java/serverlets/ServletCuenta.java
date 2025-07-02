@@ -12,18 +12,24 @@ import javax.servlet.http.HttpSession;
 
 import dominio.Cliente;
 import dominio.Cuenta;
+import dominio.TipoCuenta;
+import dominio.exceptions.TipoCuentaExistenteException;
 import negocio.CuentaNegocio;
+import negocio.TipoCuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.TipoCuentaNegocioImpl;
 
 @WebServlet("/ServletCuenta")
 public class ServletCuenta extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private CuentaNegocio cuentaNegocio;
+    private TipoCuentaNegocio tipoCuentaNegocio;
 
     @Override
     public void init() throws ServletException {
         super.init();
         cuentaNegocio = new CuentaNegocioImpl();
+        tipoCuentaNegocio = new TipoCuentaNegocioImpl();
     }
 
     @Override
@@ -56,22 +62,32 @@ public class ServletCuenta extends HttpServlet {
     private void altaCuenta(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int idCliente = Integer.parseInt(request.getParameter("cliente"));
-        String tipoCuenta = request.getParameter("tipoCuenta");
+        String descripcionTipoCuenta = request.getParameter("tipoCuenta");
+
+        TipoCuenta tipoCuenta = tipoCuentaNegocio.obtenerPorDescripcion(descripcionTipoCuenta);
+        if (tipoCuenta == null) {
+            request.setAttribute("error", "Tipo de cuenta no válido.");
+            List<Cliente> listaClientes = cuentaNegocio.obtenerTodos();
+            request.setAttribute("listaClientes", listaClientes);
+            request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
+            return;
+        }
 
         Cuenta cuenta = new Cuenta();
         cuenta.setCliente(new dominio.Cliente(idCliente));
         cuenta.setTipoCuenta(tipoCuenta);
         cuenta.setSaldo(10000.00);
 
-        boolean creada = cuentaNegocio.crearCuenta(cuenta);
-
         List<Cliente> listaClientes = cuentaNegocio.obtenerTodos();
         request.setAttribute("listaClientes", listaClientes);
 
-        if (creada) {
-            request.setAttribute("mensaje", "Cuenta creada correctamente.");
-        } else {
-            request.setAttribute("mensaje", "El cliente ya tiene 3 cuentas activas o ocurrió un error.");
+        try {
+            int idCuentaCreada = cuentaNegocio.crearCuenta(cuenta);
+            request.setAttribute("mensaje", "Cuenta creada correctamente");
+        } catch (TipoCuentaExistenteException e) {
+            request.setAttribute("error", e.getMessage());
+        } catch (RuntimeException e) {
+            request.setAttribute("error", "Error del sistema: " + e.getMessage());
         }
 
         request.getRequestDispatcher("AltaCuentas.jsp").forward(request, response);
@@ -95,8 +111,15 @@ public class ServletCuenta extends HttpServlet {
     private void modificarCuenta(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String tipoCuenta = request.getParameter("tipoCuenta");
+        String descripcionTipoCuenta = request.getParameter("tipoCuenta");
         double saldo = Double.parseDouble(request.getParameter("saldo"));
+
+        TipoCuenta tipoCuenta = tipoCuentaNegocio.obtenerPorDescripcion(descripcionTipoCuenta);
+        if (tipoCuenta == null) {
+            request.setAttribute("mensaje", "Tipo de cuenta no válido.");
+            request.getRequestDispatcher("listaCuentas.jsp").forward(request, response);
+            return;
+        }
 
         Cuenta cuenta = new Cuenta();
         cuenta.setId(id);

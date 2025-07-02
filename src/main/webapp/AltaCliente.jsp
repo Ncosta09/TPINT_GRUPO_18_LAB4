@@ -36,6 +36,12 @@
             <div class="form-container">
                 <h2 class="form-title">Alta de Usuario/Cliente</h2>
                 
+                <% if (request.getAttribute("error") != null) { %>
+                    <div class="alert alert-error" id="errorAlert">
+                        <%= request.getAttribute("error") %>
+                    </div>
+                <% } %>
+                
                 <form id="altaClienteForm" action="ServletAltaCliente" method="post">
                 
                 <div class="form-row">

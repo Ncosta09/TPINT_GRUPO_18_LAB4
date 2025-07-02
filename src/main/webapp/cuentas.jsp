@@ -55,7 +55,7 @@
                             <% for (Cuenta cuenta : cuentas) { %>
                                 <tr>
                                     <td><%= cuenta.getNumeroCuenta() %></td>
-                                    <td><%= cuenta.getTipoCuenta() %></td>
+                                    <td><%= cuenta.getTipoCuenta().getDescripcion() %></td>
                                     <td>$<%= String.format("%.2f", cuenta.getSaldo()) %></td>
                                     <td>
                                         <span class="<%= cuenta.isEstado() ? "status-active" : "status-inactive" %>">

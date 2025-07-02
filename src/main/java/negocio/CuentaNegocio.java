@@ -2,12 +2,13 @@ package negocio;
 
 import dominio.Cliente;
 import dominio.Cuenta;
+import dominio.exceptions.TipoCuentaExistenteException;
 import java.util.List;
 
 public interface CuentaNegocio {
    boolean modificarCuenta(Cuenta var1);
 
-   boolean crearCuenta(Cuenta var1);
+   int crearCuenta(Cuenta var1) throws TipoCuentaExistenteException;
 
    boolean bajaCuenta(int var1);
 

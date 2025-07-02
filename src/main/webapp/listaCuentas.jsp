@@ -94,13 +94,13 @@
     for (Cuenta c : cuentas) {
 %>
                 <tr data-cliente="<%= c.getCliente().getNombre() + " " + c.getCliente().getApellido() %>"
-                    data-tipo="<%= c.getTipoCuenta().trim().toLowerCase() %>"
+                    data-tipo="<%= c.getTipoCuenta().getDescripcion().trim().toLowerCase() %>"
                     data-estado="<%= c.isEstado() ? "activa" : "inactiva" %>">
                     
                     <td><%= c.getCliente().getNombre() + ", " + c.getCliente().getApellido() %></td>
                     <td><%= c.getNumeroCuenta() %></td>
                     <td><%= c.getCbu() %></td>
-                    <td><%= c.getTipoCuenta() %></td>
+                    <td><%= c.getTipoCuenta().getDescripcion() %></td>
                     <td>$<%= String.format("%.2f", c.getSaldo()) %></td>
                     <td>
                         <span class="badge <%= c.isEstado() ? "badge-active" : "badge-inactive" %>">

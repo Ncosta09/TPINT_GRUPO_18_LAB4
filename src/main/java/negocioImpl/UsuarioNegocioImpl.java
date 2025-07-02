@@ -3,6 +3,7 @@ package negocioImpl;
 import dao.UsuarioDao;
 import daoImpl.UsuarioDaoImpl;
 import dominio.Usuario;
+import dominio.exceptions.UsuarioExistenteException;
 import negocio.UsuarioNegocio;
 
 public class UsuarioNegocioImpl implements UsuarioNegocio{
@@ -20,7 +21,11 @@ public class UsuarioNegocioImpl implements UsuarioNegocio{
     }
 
 	@Override
-	public boolean agregarUsuario(Usuario usuario) {
+	public boolean agregarUsuario(Usuario usuario) throws UsuarioExistenteException {
+		if (UsuarioDao.existeUsuarioPorNombre(usuario.getNombreUsuario())) {
+			throw new UsuarioExistenteException(usuario.getNombreUsuario());
+		}
+		
 		return UsuarioDao.insert(usuario);
 	}
 	

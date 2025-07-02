@@ -112,7 +112,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
         PreparedStatement ps = null;
         
         try {
-            conn = Conexion.getConexion().getSQLConexion();
+            conn = Conexion.obtenerConexionDirecta();
             String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES (?, ?, ?, ?)";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, movimiento.getIdCuenta());
@@ -123,7 +123,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
             int result = ps.executeUpdate();
             
             if (result > 0) {
-                conn.commit(); // Confirmar la transacción
+                conn.commit();
                 return true;
             }
             return false;

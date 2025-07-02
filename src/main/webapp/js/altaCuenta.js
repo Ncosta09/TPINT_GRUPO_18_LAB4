@@ -1,3 +1,15 @@
+document.addEventListener('DOMContentLoaded', function() {
+    const alerts = document.querySelectorAll('.alert');
+    alerts.forEach(alert => {
+        setTimeout(() => {
+            alert.classList.add('fade-out');
+            setTimeout(() => {
+                alert.remove();
+            }, 500);
+        }, 5000);
+    });
+});
+
 const burgerMenu = document.getElementById('burgerMenu');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');

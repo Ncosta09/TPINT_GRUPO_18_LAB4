@@ -34,12 +34,18 @@
                     <span class="form-icon">🏦</span>
                     Alta de Cuenta Bancaria
                 </h2>
-                <% String mensaje = (String) request.getAttribute("mensaje"); %>
-<% if (mensaje != null) { %>
-    <div class="alert alert-success">
-        <%= mensaje %>
-    </div>
-<% } %>
+
+                <% if (request.getAttribute("error") != null) { %>
+                    <div class="alert alert-error" id="errorAlert">
+                        <%= request.getAttribute("error") %>
+                    </div>
+                <% } %>
+                
+                <% if (request.getAttribute("mensaje") != null) { %>
+                    <div class="alert alert-success" id="successAlert">
+                        <%= request.getAttribute("mensaje") %>
+                    </div>
+                <% } %>
                 
                 <form id="accountForm" action="ServletCuenta?accion=alta" method="post">
                     <div class="form-group">

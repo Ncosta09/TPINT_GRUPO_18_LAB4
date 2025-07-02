@@ -4,7 +4,7 @@ public class Cuenta {
     private int idCuenta;
     private Cliente cliente;
     private String numeroCuenta;
-    private String tipoCuenta;
+    private TipoCuenta tipoCuenta;
     private String cbu;
     private double saldo;
     private boolean estado; // Para baja lógica
@@ -46,11 +46,11 @@ public class Cuenta {
 		this.estado = estado;
 	}
 
-	public String getTipoCuenta() {
+	public TipoCuenta getTipoCuenta() {
 		return tipoCuenta;
 	}
 
-	public void setTipoCuenta(String tipoCuenta) {
+	public void setTipoCuenta(TipoCuenta tipoCuenta) {
 		this.tipoCuenta = tipoCuenta;
 	}
 	public int getId() {

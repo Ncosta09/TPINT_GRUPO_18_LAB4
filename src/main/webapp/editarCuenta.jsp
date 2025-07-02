@@ -53,7 +53,7 @@
                         
                         <div class="form-group">
                             <label for="tipoCuenta">Tipo de Cuenta:</label>
-                            <input type="text" id="tipoCuenta" value="<%= c.getTipoCuenta() %>" readonly class="readonly-field">
+                            <input type="text" id="tipoCuenta" value="<%= c.getTipoCuenta().getDescripcion() %>" readonly class="readonly-field">
                         </div>
                     </div>
                     

@@ -1,6 +1,7 @@
 package daoImpl;
 
 import dominio.Cliente;
+import dominio.TipoCuenta;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,7 +22,7 @@ public class CuentaDaoImpl implements CuentaDao {
         Connection cn = null;
         try {
             cn = Conexion.getConexion().getSQLConexion();
-            PreparedStatement st = cn.prepareStatement("SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.descripcion as tipo_cuenta_desc, cl.nombre, cl.apellido, cl.id_cliente FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente ORDER BY cl.apellido, cl.nombre");
+            PreparedStatement st = cn.prepareStatement("SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.tipo_id, tc.descripcion as tipo_cuenta_desc, cl.nombre, cl.apellido, cl.id_cliente FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente ORDER BY cl.apellido, cl.nombre");
 
             ResultSet rs = st.executeQuery();
             
@@ -32,7 +33,11 @@ public class CuentaDaoImpl implements CuentaDao {
                 cuenta.setCbu(rs.getString("cbu"));
                 cuenta.setSaldo(rs.getDouble("saldo"));
                 cuenta.setEstado(rs.getBoolean("estado"));
-                cuenta.setTipoCuenta(rs.getString("tipo_cuenta_desc"));
+                
+                TipoCuenta tipoCuenta = new TipoCuenta();
+                tipoCuenta.setTipoId(rs.getInt("tipo_id"));
+                tipoCuenta.setDescripcion(rs.getString("tipo_cuenta_desc"));
+                cuenta.setTipoCuenta(tipoCuenta);
                 
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("id_cliente"));
@@ -56,7 +61,7 @@ public class CuentaDaoImpl implements CuentaDao {
         Connection cn = null;
         try {
             cn = Conexion.getConexion().getSQLConexion();
-            PreparedStatement st = cn.prepareStatement("SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.descripcion as tipo_cuenta_desc, cl.nombre, cl.apellido, cl.id_cliente FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.id_cuenta = ?");
+            PreparedStatement st = cn.prepareStatement("SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.tipo_id, tc.descripcion as tipo_cuenta_desc, cl.nombre, cl.apellido, cl.id_cliente FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.id_cuenta = ?");
             st.setInt(1, idCuenta);
             
             try (ResultSet rs = st.executeQuery()) {
@@ -67,7 +72,11 @@ public class CuentaDaoImpl implements CuentaDao {
                     c.setCbu(rs.getString("cbu"));
                     c.setSaldo(rs.getDouble("saldo"));
                     c.setEstado(rs.getBoolean("estado"));
-                    c.setTipoCuenta(rs.getString("tipo_cuenta_desc"));
+                    
+                    TipoCuenta tipoCuenta = new TipoCuenta();
+                    tipoCuenta.setTipoId(rs.getInt("tipo_id"));
+                    tipoCuenta.setDescripcion(rs.getString("tipo_cuenta_desc"));
+                    c.setTipoCuenta(tipoCuenta);
                     
                     dominio.Cliente cli = new dominio.Cliente();
                     cli.setIdCliente(rs.getInt("id_cliente"));
@@ -107,14 +116,10 @@ public class CuentaDaoImpl implements CuentaDao {
     }
 
     @Override
-    public boolean crearCuenta(Cuenta cuenta) {
-        try (Connection conn = Conexion.obtenerConexionDirecta()) {
-            String sqlCheck = "SELECT COUNT(*) FROM Cuentas WHERE id_cliente = ? AND estado = 1";
-            PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
-            psCheck.setInt(1, cuenta.getCliente().getIdCliente());
-            ResultSet rs = psCheck.executeQuery();
-            if (rs.next() && rs.getInt(1) >= 3) return false;
-
+    public int crearCuentaYRetornarId(Cuenta cuenta) {
+        Connection conn;
+        try {
+            conn = Conexion.obtenerConexionDirecta();
             String numeroCuentaGenerado = generarNumeroCuenta();
             String cbuGenerado = generarCBU();
 
@@ -122,7 +127,7 @@ public class CuentaDaoImpl implements CuentaDao {
             PreparedStatement ps = conn.prepareStatement(insertCuenta, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, numeroCuentaGenerado);
             ps.setString(2, cbuGenerado);
-            ps.setInt(3, obtenerIdTipoCuenta(conn, cuenta.getTipoCuenta()));
+            ps.setInt(3, cuenta.getTipoCuenta().getTipoId());
             ps.setDate(4, new java.sql.Date(System.currentTimeMillis()));
             ps.setDouble(5, 10000.00);
             ps.setInt(6, cuenta.getCliente().getIdCliente());
@@ -132,17 +137,21 @@ public class CuentaDaoImpl implements CuentaDao {
                 ResultSet keys = ps.getGeneratedKeys();
                 if (keys.next()) {
                     int idCuenta = keys.getInt(1);
-                    agregarMovimientoInicial(conn, idCuenta, 10000.00);
+                    conn.commit();
+                    return idCuenta;
                 }
-                conn.commit();
-                return true;
-            }else {
-                conn.rollback();
             }
+            conn.rollback();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return -1;
+    }
+
+    @Override
+    public boolean crearCuenta(Cuenta cuenta) {
+        int resultado = crearCuentaYRetornarId(cuenta);
+        return resultado > 0;
     }
 
     private String generarNumeroCuenta() {
@@ -197,24 +206,6 @@ public class CuentaDaoImpl implements CuentaDao {
         return lista;
     }
 
-    private int obtenerIdTipoCuenta(Connection conn, String descripcion) throws SQLException {
-        String query = "SELECT tipo_id FROM Tipos_cuenta WHERE descripcion = ?";
-        PreparedStatement ps = conn.prepareStatement(query);
-        ps.setString(1, descripcion);
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) return rs.getInt(1);
-        else throw new SQLException("Tipo de cuenta no encontrado");
-    }
-
-    private void agregarMovimientoInicial(Connection conn, int idCuenta, double importe) throws SQLException {
-        String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES (?, 1, ?, ?)";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setInt(1, idCuenta);
-        ps.setDouble(2, importe);
-        ps.setDouble(3, importe);
-        ps.executeUpdate();
-    }
-    
     @Override
     public List<Cuenta> obtenerCuentasPorCliente(int idCliente) {
         List<Cuenta> cuentas = new ArrayList<>();
@@ -222,7 +213,7 @@ public class CuentaDaoImpl implements CuentaDao {
         
         try {
             conn = Conexion.getConexion().getSQLConexion();
-            String sql = "SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.descripcion as tipo_cuenta_desc, cl.id_cliente, cl.nombre, cl.apellido FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.id_cliente = ? AND c.estado = 1 ORDER BY c.numero_cuenta";
+            String sql = "SELECT c.id_cuenta, c.numero_cuenta, c.cbu, c.saldo, c.estado, tc.tipo_id, tc.descripcion as tipo_cuenta_desc, cl.id_cliente, cl.nombre, cl.apellido FROM Cuentas c INNER JOIN Tipos_cuenta tc ON c.tipo_cuenta = tc.tipo_id INNER JOIN Clientes cl ON c.id_cliente = cl.id_cliente WHERE c.id_cliente = ? AND c.estado = 1 ORDER BY c.numero_cuenta";
 
             
             PreparedStatement ps = conn.prepareStatement(sql);
@@ -237,7 +228,11 @@ public class CuentaDaoImpl implements CuentaDao {
                 cuenta.setCbu(rs.getString("cbu"));
                 cuenta.setSaldo(rs.getDouble("saldo"));
                 cuenta.setEstado(rs.getBoolean("estado"));
-                cuenta.setTipoCuenta(rs.getString("tipo_cuenta_desc"));
+                
+                TipoCuenta tipoCuenta = new TipoCuenta();
+                tipoCuenta.setTipoId(rs.getInt("tipo_id"));
+                tipoCuenta.setDescripcion(rs.getString("tipo_cuenta_desc"));
+                cuenta.setTipoCuenta(tipoCuenta);
                 
                 Cliente cliente = new Cliente();
                 cliente.setIdCliente(rs.getInt("id_cliente"));
@@ -270,7 +265,7 @@ public class CuentaDaoImpl implements CuentaDao {
             int result = ps.executeUpdate();
             
             if (result > 0) {
-                conn.commit(); // Confirmar la transacción
+                conn.commit();
                 return true;
             }
             return false;
@@ -281,4 +276,23 @@ public class CuentaDaoImpl implements CuentaDao {
         }
     }
     
+
+
+    public boolean existeTipoCuentaCliente(int idCliente, int tipoCuentaId) {
+       Connection conn;
+        try {
+            conn = Conexion.obtenerConexionDirecta();
+            String sqlCheck = "SELECT COUNT(*) FROM Cuentas WHERE id_cliente = ? AND estado = 1 AND tipo_cuenta = ?";
+            PreparedStatement psCheck = conn.prepareStatement(sqlCheck);
+            psCheck.setInt(1, idCliente);
+            psCheck.setInt(2, tipoCuentaId);
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
