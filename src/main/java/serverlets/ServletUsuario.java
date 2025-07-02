@@ -68,7 +68,7 @@ public class ServletUsuario extends HttpServlet {
                     Cliente c = cn.obtenerPorIdUsuario(u.getIdUsuario());  
                     session.setAttribute("clienteLogueado", c);
                     
-        			response.sendRedirect(request.getContextPath() + "/homeCliente.jsp");
+        			response.sendRedirect(request.getContextPath() + "/ServletHomeCliente");
         		}
         	}
         	else {

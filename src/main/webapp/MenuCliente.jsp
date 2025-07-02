@@ -6,7 +6,7 @@
 
 <div class="sidebar" id="sidebar">
     <ul class="sidebar-menu">
-        <li><a href="homeCliente.jsp" class="<%= "home".equals(activePage) ? "active" : "" %>">Inicio</a></li>
+        <li><a href="ServletHomeCliente" class="<%= "home".equals(activePage) ? "active" : "" %>">Inicio</a></li>
         <li><a href="verPerfil.jsp" class="<%= "perfil".equals(activePage) ? "active" : "" %>">Ver Perfil</a></li>
         <li><a href="cuentas.jsp" class="<%= "cuentas".equals(activePage) ? "active" : "" %>">Ver Cuentas</a></li>
         <li><a href="transferencias.jsp" class="<%= "transferencias".equals(activePage) ? "active" : "" %>">Transferencias</a></li>

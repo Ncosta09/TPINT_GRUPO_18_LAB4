@@ -55,7 +55,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
         try {
             conn = Conexion.getConexion().getSQLConexion();
             
-            // String Builder para evitar la concatenación de strings.
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT m.id_movimiento, m.id_cuenta, m.id_tipo_movimiento, m.fecha, m.importe, m.saldo, tm.nombre as tipo_descripcion FROM Movimientos m INNER JOIN Tipo_movimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento WHERE m.id_cuenta = ? ");
             
@@ -105,6 +104,29 @@ public class MovimientoDaoImpl implements MovimientoDao{
         }
         
         return movimientos;
+    }
+    
+    @Override
+    public boolean insertarMovimiento(Movimiento movimiento) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
+            String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES (?, ?, ?, ?)";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, movimiento.getIdCuenta());
+            ps.setInt(2, movimiento.getIdTipoMovimiento());
+            ps.setDouble(3, movimiento.getImporte());
+            ps.setDouble(4, movimiento.getSaldo());
+            
+            int result = ps.executeUpdate();
+            return result > 0;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 	
 }

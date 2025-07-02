@@ -43,4 +43,9 @@ public class CuentaNegocioImpl implements CuentaNegocio {
        return dao.obtenerCuentasPorCliente(idCliente);
    }
    
+   @Override
+   public boolean actualizarSaldo(int idCuenta, double nuevoSaldo) {
+       return dao.actualizarSaldo(idCuenta, nuevoSaldo);
+   }
+   
 }
