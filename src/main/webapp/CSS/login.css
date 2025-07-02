@@ -24,6 +24,35 @@
     font-weight: bold;
 }
 
+.error-alert {
+    background-color: #dc3545;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
+    animation: slideDown 0.3s ease-out;
+}
+
+.error-icon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .input-group {
     margin-bottom: 15px;
     display: flex;
@@ -40,6 +69,13 @@
     background-color: #444;
     color: #fff;
     font-size: 14px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.input-group input:focus {
+    background-color: #555;
+    box-shadow: 0 0 0 2px #3da9fc;
+    outline: none;
 }
 
 .input-group input::placeholder {
@@ -67,11 +103,15 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 .login-btn:hover {
     background-color: #1e80d1;
+}
+
+.login-btn:active {
+    transform: translateY(1px);
 }
 
 .links {
@@ -84,8 +124,22 @@
 .links a {
     color: #ccc;
     text-decoration: none;
+    transition: color 0.3s;
 }
 
 .links a:hover {
+    color: #3da9fc;
     text-decoration: underline;
+}
+
+@media (max-width: 400px) {
+    .login-container {
+        width: 90%;
+        padding: 30px 20px;
+    }
+    
+    .error-alert {
+        font-size: 13px;
+        padding: 10px 12px;
+    }
 }

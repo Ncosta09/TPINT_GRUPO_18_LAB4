@@ -1,78 +1,80 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const registerToggle = document.getElementById('registerToggle');
-    const confirmPasswordGroup = document.getElementById('confirm-password-group');
-    const submitBtn = document.getElementById('submitBtn');
-    const loginForm = document.getElementById('loginForm');
+    const loginForm = document.querySelector('.login-form');
+    const errorAlert = document.querySelector('.error-alert');
     
-    let isRegisterMode = false;
-    
-    if (registerToggle) {
-        registerToggle.addEventListener('click', function() {
-            isRegisterMode = !isRegisterMode;
-            
-            if (isRegisterMode) {
-                confirmPasswordGroup.style.display = 'block';
-                submitBtn.textContent = 'Registrarse';
-                registerToggle.textContent = '¿Ya tienes cuenta? Inicia sesión';
-            } else {
-                confirmPasswordGroup.style.display = 'none';
-                submitBtn.textContent = 'Iniciar Sesión';
-                registerToggle.textContent = '¿No tienes cuenta? Regístrate aquí';
-            }
-        });
+    // ocultar alerta a los 5 segundos
+    if (errorAlert) {
+        setTimeout(() => {
+            errorAlert.style.animation = 'slideUp 0.3s ease-out forwards';
+        }, 5000);
     }
     
+    // Agregar validación básica del lado cliente
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            const username = document.querySelector('input[name="nombreUsuario"]').value.trim();
+            const password = document.querySelector('input[name="clave"]').value.trim();
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            let isValid = true;
-            
-            // Validar usuario
-            const usernameError = validateRequired(username, 'Usuario');
-            if (usernameError) {
-                showError('username-error', usernameError);
-                isValid = false;
-            } else {
-                hideError('username-error');
+            if (!username || !password) {
+                e.preventDefault();
+                showClientError('Por favor, complete todos los campos');
+                return false;
             }
             
-            // Validar contraseña
-            const passwordError = validateRequired(password, 'Contraseña');
-            if (passwordError) {
-                showError('password-error', passwordError);
-                isValid = false;
-            } else {
-                hideError('password-error');
-            }
+            // Mostrar indicador de carga
+            const submitBtn = document.querySelector('.login-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Iniciando sesión...';
+            submitBtn.disabled = true;
             
-            // Validar confirmación de contraseña en modo registro
-            if (isRegisterMode) {
-                const confirmPassword = document.getElementById('confirmPassword').value;
-                if (password !== confirmPassword) {
-                    showError('confirm-password-error', 'Las contraseñas no coinciden');
-                    isValid = false;
-                } else {
-                    hideError('confirm-password-error');
-                }
-            }
-            
-            if (isValid) {
-                // Aquí se enviaría el formulario
-                console.log('Formulario válido, enviando...');
-                
-                // Simulación de redirección según el modo
-                if (isRegisterMode) {
-                    // Redirigir a página de cliente después del registro
-                    window.location.href = 'homeCliente.jsp';
-                } else {
-                    // Redirigir a página de admin después del login
-                    window.location.href = 'ServletHomeAdmin';
-                }
-            }
+            // Si hay error del servidor, restaurar el botón
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
         });
     }
-}); 
+    
+    // Función para mostrar errores del lado cliente
+    function showClientError(message) {
+        // Remover alerta existente si hay una
+        const existingAlert = document.querySelector('.error-alert');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+        
+        // Crear nueva alerta
+        const alert = document.createElement('div');
+        alert.className = 'error-alert';
+        alert.innerHTML = `
+            <span class="error-icon">⚠️</span>
+            ${message}
+        `;
+        
+        // Insertar después del h2
+        const h2 = document.querySelector('.login-form h2');
+        h2.insertAdjacentElement('afterend', alert);
+        
+        // ocultar después de 3 segundos
+        setTimeout(() => {
+            alert.style.animation = 'slideUp 0.3s ease-out forwards';
+            setTimeout(() => alert.remove(), 300);
+        }, 3000);
+    }
+});
+
+// Agregar animación slideUp al CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+    }
+`;
+document.head.appendChild(style);

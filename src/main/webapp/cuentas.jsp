@@ -15,6 +15,11 @@
     <title>Sistema de Gestión Bancaria - Mis Cuentas</title>
     <link rel="stylesheet" href="CSS/common.css" type="text/css" />
     <link rel="stylesheet" href="CSS/cuentas.css" type="text/css" />
+    
+    <!-- DataTables CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
     <jsp:include page="/header.jsp" />
@@ -58,11 +63,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                      <button class="btn btn-sm ver-movimientos"
-										        data-id="<%= cuenta.getId() %>"
-										        data-numero="<%= cuenta.getNumeroCuenta() %>">
-										    Ver Movimientos
-										</button>
+                                        <button class="btn btn-sm ver-movimientos"
+                                                data-id="<%= cuenta.getId() %>"
+                                                data-numero="<%= cuenta.getNumeroCuenta() %>">
+                                            Ver Movimientos
+                                        </button>
                                     </td>
                                 </tr>
                             <% } %>
@@ -76,23 +81,15 @@
             </div>
 
             <div class="movements-section" id="movementsSection">
-                <h3 class="section-title">
-                    <span class="section-icon">📊</span>
-                    Movimientos de la Cuenta: <span id="selectedAccount"></span>
-                </h3>
-                
-                <div class="filter-container">
-                    <select class="filter-select" id="movementType">
-                        <option value="">Todos los tipos</option>
-                        <option value="transferencia">Transferencia</option>
-                        <option value="alta de cuenta">Alta de cuenta</option>
-                        <option value="préstamo">Préstamo</option>
-                        <option value="pago préstamo">Pago préstamo</option>
-                    </select>
-                    <input type="date" class="filter-input" id="startDate" placeholder="Fecha desde">
-                    <input type="date" class="filter-input" id="endDate" placeholder="Fecha hasta">
-                    <button class="btn" onclick="filterMovements()">Filtrar</button>
-                    <button class="btn btn-secondary" onclick="closeMovements()">Cerrar</button>
+                <div class="movements-header">
+                    <h3 class="section-title">
+                        <span class="section-icon">📊</span>
+                        Movimientos de la Cuenta: <span id="selectedAccount"></span>
+                    </h3>
+                    
+                    <button class="btn-close" onclick="closeMovements()" title="Cerrar movimientos">
+                        <span class="close-icon">×</span>
+                    </button>
                 </div>
                 
                 <table id="movementsTable">
@@ -109,12 +106,6 @@
                         <!-- Los movimientos se cargarán dinámicamente -->
                     </tbody>
                 </table>
-                
-                <div class="pagination" id="pagination">
-                    <button onclick="changePage(-1)">Anterior</button>
-                    <span id="pageInfo">Página 1 de 1</span>
-                    <button onclick="changePage(1)">Siguiente</button>
-                </div>
             </div>
         </div>
     </div>

@@ -69,46 +69,113 @@ tr:hover {
     display: block;
 }
 
-.filter-container {
+/* Header de movimientos con botón cerrar */
+.movements-header {
     display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
+    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
 }
 
-.filter-select, .filter-input {
+.movements-header .section-title {
+    margin: 0;
+    flex-grow: 1;
+}
+
+/* Botón cerrar con cruz */
+.btn-close {
+    background: #dc3545;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-left: 15px;
+}
+
+.btn-close:hover {
+    background: #c82333;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-close:active {
+    transform: scale(0.95);
+}
+
+.close-icon {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+    user-select: none;
+}
+
+/* Estilos para DataTables en movimientos */
+.movements-section .dataTables_wrapper {
+    margin-top: 20px;
+}
+
+.movements-section .dataTables_filter {
+    margin-bottom: 15px;
+}
+
+.movements-section .dataTables_filter input {
     padding: 8px 12px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 14px;
+    margin-left: 10px;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 5px;
-    align-items: center;
+.movements-section .dataTables_length select {
+    padding: 5px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
-.pagination button {
-    padding: 5px 10px;
+.movements-section .dataTables_info {
+    margin-top: 10px;
+    color: #666;
+}
+
+.movements-section .dataTables_paginate {
+    margin-top: 15px;
+}
+
+.movements-section .dataTables_paginate .paginate_button {
+    padding: 8px 12px;
+    margin: 0 2px;
     border: 1px solid #ddd;
     background-color: white;
     cursor: pointer;
     border-radius: 4px;
+    text-decoration: none;
+    color: #333;
 }
 
-.pagination button:hover {
+.movements-section .dataTables_paginate .paginate_button:hover {
     background-color: #f0f0f0;
 }
 
-.pagination button:disabled {
+.movements-section .dataTables_paginate .paginate_button.current {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.movements-section .dataTables_paginate .paginate_button.disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
+/* Estilos de colores para montos */
 .movement-credit {
     color: #28a745;
     font-weight: bold;
@@ -119,14 +186,17 @@ tr:hover {
     font-weight: bold;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-    .filter-container {
+    .movements-header {
         flex-direction: column;
-        align-items: stretch;
+        align-items: flex-start;
+        gap: 10px;
     }
     
-    .filter-select, .filter-input {
-        width: 100%;
+    .btn-close {
+        align-self: flex-end;
+        margin-left: 0;
     }
     
     table {
@@ -136,4 +206,4 @@ tr:hover {
     th, td {
         padding: 8px 5px;
     }
-} 
+}
