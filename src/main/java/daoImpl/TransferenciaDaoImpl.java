@@ -23,9 +23,18 @@ public class TransferenciaDaoImpl implements TransferenciaDao {
             ps.setInt(2, transferencia.getIdCuentaDestino());
             ps.setDouble(3, transferencia.getImporte());
             ps.setString(4, transferencia.getDetalle());
-            
+
+            System.out.println(ps.getParameterMetaData());
+
+
             int result = ps.executeUpdate();
-            return result > 0;
+            System.out.println(result);
+            
+            if (result > 0) {
+                conn.commit(); 
+                return true;
+            }
+            return false;
             
         } catch (SQLException e) {
             e.printStackTrace();
