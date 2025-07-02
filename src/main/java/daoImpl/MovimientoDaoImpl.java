@@ -16,15 +16,17 @@ public class MovimientoDaoImpl implements MovimientoDao{
     public List<Movimiento> obtenerMovimientosPorCuenta(int idCuenta) {
         List<Movimiento> movimientos = new ArrayList<>();
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             conn = Conexion.getConexion().getSQLConexion();
             String sql = "SELECT m.id_movimiento, m.id_cuenta, m.id_tipo_movimiento, m.fecha, m.importe, m.saldo, tm.nombre as tipo_descripcion FROM Movimientos m INNER JOIN Tipo_movimiento tm ON m.id_tipo_movimiento = tm.id_tipo_movimiento WHERE m.id_cuenta = ? ORDER BY m.fecha DESC";
             
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setInt(1, idCuenta);
             
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             
             while (rs.next()) {
                 Movimiento movimiento = new Movimiento();
@@ -41,6 +43,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
             
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         
         return movimientos;
@@ -51,6 +55,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
                                                                  String fechaDesde, String fechaHasta) {
         List<Movimiento> movimientos = new ArrayList<>();
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         
         try {
             conn = Conexion.getConexion().getSQLConexion();
@@ -70,7 +76,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
             
             sql.append("ORDER BY m.fecha DESC");
             
-            PreparedStatement ps = conn.prepareStatement(sql.toString());
+            ps = conn.prepareStatement(sql.toString());
             int paramIndex = 1;
             ps.setInt(paramIndex++, idCuenta);
             
@@ -84,7 +90,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
                 ps.setString(paramIndex++, fechaHasta);
             }
             
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             
             while (rs.next()) {
                 Movimiento movimiento = new Movimiento();
@@ -101,6 +107,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
             
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         
         return movimientos;
@@ -112,7 +120,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
         PreparedStatement ps = null;
         
         try {
-            conn = Conexion.obtenerConexionDirecta();
+            conn = Conexion.getConexion().getSQLConexion();
             String sql = "INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES (?, ?, ?, ?)";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, movimiento.getIdCuenta());
@@ -123,7 +131,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
             int result = ps.executeUpdate();
             
             if (result > 0) {
-                conn.commit();
                 return true;
             }
             return false;
@@ -131,6 +138,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            Utils.closeResources(ps, conn);
         }
     }
 	

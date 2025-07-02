@@ -16,12 +16,14 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
 	public List<Nacionalidad> obtenerTodosNacionalidad() {
 	    List<Nacionalidad> nacionalidad = new ArrayList<>();
 	    Connection cn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT id_nacionalidad, nombre FROM Nacionalidad");
+	        st = cn.prepareStatement("SELECT id_nacionalidad, nombre FROM Nacionalidad");
 
-	        ResultSet rs = st.executeQuery();
+	        rs = st.executeQuery();
 	        
 	            while (rs.next()) {
 	                
@@ -35,7 +37,9 @@ public class NacionalidadDaoImpl implements NacionalidadDao{
 	            
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, st, cn);
+        }
 	    return nacionalidad;
 	}
 }

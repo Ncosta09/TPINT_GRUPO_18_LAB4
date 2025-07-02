@@ -14,10 +14,15 @@ public class TipoCuentaDaoImpl implements TipoCuentaDao {
     @Override
     public List<TipoCuenta> obtenerTodos() {
         List<TipoCuenta> tipos = new ArrayList<>();
-        try (Connection conn = Conexion.obtenerConexionDirecta()) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
             String sql = "SELECT tipo_id, descripcion FROM Tipos_cuenta ORDER BY descripcion";
-            PreparedStatement ps = conn.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
             
             while (rs.next()) {
                 TipoCuenta tipo = new TipoCuenta();
@@ -27,17 +32,24 @@ public class TipoCuentaDaoImpl implements TipoCuentaDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return tipos;
     }
 
     @Override
     public TipoCuenta obtenerPorId(int tipoId) {
-        try (Connection conn = Conexion.obtenerConexionDirecta()) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
             String sql = "SELECT tipo_id, descripcion FROM Tipos_cuenta WHERE tipo_id = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setInt(1, tipoId);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             
             if (rs.next()) {
                 TipoCuenta tipo = new TipoCuenta();
@@ -47,17 +59,24 @@ public class TipoCuentaDaoImpl implements TipoCuentaDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return null;
     }
 
     @Override
     public TipoCuenta obtenerPorDescripcion(String descripcion) {
-        try (Connection conn = Conexion.obtenerConexionDirecta()) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
             String sql = "SELECT tipo_id, descripcion FROM Tipos_cuenta WHERE descripcion = ?";
-            PreparedStatement ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
             ps.setString(1, descripcion);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             
             if (rs.next()) {
                 TipoCuenta tipo = new TipoCuenta();
@@ -67,6 +86,8 @@ public class TipoCuentaDaoImpl implements TipoCuentaDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return null;
     }

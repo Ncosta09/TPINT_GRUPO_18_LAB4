@@ -12,14 +12,16 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	
 	@Override
     public Usuario obtenerPorId(int idUsuario) {
-		Connection conn;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
         try {	
         	conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("SELECT id_usuario, nombre_usuario, pass_usuario, estado, tipo_usuario FROM Usuarios WHERE id_usuario = ?");
+        	ps = conn.prepareStatement("SELECT id_usuario, nombre_usuario, pass_usuario, estado, tipo_usuario FROM Usuarios WHERE id_usuario = ?");
         	
             ps.setInt(1, idUsuario);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             if (rs.next()) {
                 Usuario u = new Usuario();
                 u.setIdUsuario(rs.getInt("id_usuario"));
@@ -31,71 +33,79 @@ public class UsuarioDaoImpl implements UsuarioDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return null;
     }
 	
     @Override
     public boolean updateUsername(int idUsuario, String nuevoUsername) {
-    	Connection conn;
+    	Connection conn = null;
+    	PreparedStatement ps = null;
     	
         try {	
         	conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("UPDATE Usuarios SET nombre_usuario = ? WHERE id_usuario = ?");        	
+        	ps = conn.prepareStatement("UPDATE Usuarios SET nombre_usuario = ? WHERE id_usuario = ?");        	
         	
             ps.setString(1, nuevoUsername);
             ps.setInt(2, idUsuario);
             int rows = ps.executeUpdate();
-            conn.commit();
             return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            Utils.closeResources(ps, conn);
         }
     }
 
     @Override
     public boolean updatePassword(int idUsuario, String nuevaPass) {
-    	Connection conn;
+    	Connection conn = null;
+    	PreparedStatement ps = null;
     	
         try {
         	conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("UPDATE Usuarios SET pass_usuario = ? WHERE id_usuario = ?");     
+        	ps = conn.prepareStatement("UPDATE Usuarios SET pass_usuario = ? WHERE id_usuario = ?");     
         	
             ps.setString(1, nuevaPass);
             ps.setInt(2, idUsuario);
             int rows = ps.executeUpdate();
-            conn.commit();
             return rows > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            Utils.closeResources(ps, conn);
         }
     }
 	
 	@Override
 	public boolean validarCredenciales(String nombreUsuario, String clave) {
-        Connection conn;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
 		try{
-			
 			conn = Conexion.getConexion().getSQLConexion();
-        	PreparedStatement ps = conn.prepareStatement("SELECT 1 FROM Usuarios WHERE nombre_usuario = ? AND pass_usuario = ?");
+        	ps = conn.prepareStatement("SELECT 1 FROM Usuarios WHERE nombre_usuario = ? AND pass_usuario = ?");
 
-			
 			ps.setString(1, nombreUsuario);
 			ps.setString(2, clave);
 			
-			try (ResultSet rs = ps.executeQuery()) {
-	            return rs.next();
-	        }
+			rs = ps.executeQuery();
+            return rs.next();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        return false;
-	    }
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 	}
 	
 	public Usuario obtenerUsuario(String nombreUsuario, String clave) {
-        Connection conn;
+        Connection conn = null;
         ResultSet rs = null;
         PreparedStatement ps = null;
 
@@ -120,6 +130,8 @@ public class UsuarioDaoImpl implements UsuarioDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            Utils.closeResources(rs, ps, conn);
         }
         return null;
     }
@@ -132,8 +144,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	    String query = "INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario) VALUES (?, ?, ?)";
 
 	    try {
-	        conn = Conexion.obtenerConexionDirecta();
-	        conn.setAutoCommit(false); // Desactivar auto-commit para manejar la transacción manualmente
+	        conn = Conexion.getConexion().getSQLConexion();
 	        ps = conn.prepareStatement(query);
 	        
 	        ps.setString(1, usuario.getNombreUsuario());
@@ -141,44 +152,36 @@ public class UsuarioDaoImpl implements UsuarioDao {
 	        ps.setInt(3, usuario.getTipoUsuario());
 	        
 	        int rowsAffected = ps.executeUpdate();
-	        
-	        if (rowsAffected > 0) {
-	            conn.commit();
-	            return true;
-	        } else {
-	            conn.rollback();
-	            return false;
-	        }
+	        return rowsAffected > 0;
 	    } catch (SQLException e) {
-	        try {
-	            if (conn != null) {
-	                conn.rollback();
-	            }
-	        } catch (SQLException rollbackEx) {
-	            rollbackEx.printStackTrace();
-	        }
 	        e.printStackTrace();
 	        return false;
-	    }
+	    } finally {
+            Utils.closeResources(ps, conn);
+        }
 	}
 
 	@Override
 	public boolean existeUsuarioPorNombre(String nombreUsuario) {
-		Connection conn;
+		Connection conn = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		
 		try {
 			conn = Conexion.getConexion().getSQLConexion();
-			PreparedStatement ps = conn.prepareStatement("SELECT COUNT(*) FROM Usuarios WHERE nombre_usuario = ?");
+			ps = conn.prepareStatement("SELECT COUNT(*) FROM Usuarios WHERE nombre_usuario = ?");
 			
 			ps.setString(1, nombreUsuario);
-			ResultSet rs = ps.executeQuery();
+			rs = ps.executeQuery();
 			
 			if (rs.next()) {
 				return rs.getInt(1) > 0;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 		
 		return false;
 	}

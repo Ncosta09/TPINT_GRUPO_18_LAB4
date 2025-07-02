@@ -17,12 +17,14 @@ public class SexoDaoImpl implements SexoDao{
 	public List<Sexo> obtenerTodosSexo() {
 	    List<Sexo> sexo = new ArrayList<>();
 	    Connection cn = null;
+	    PreparedStatement st = null;
+	    ResultSet rs = null;
 
 	    try {
 	        cn = Conexion.getConexion().getSQLConexion();
-	        PreparedStatement st = cn.prepareStatement("SELECT id_sexo, descripcion FROM Sexo");
+	        st = cn.prepareStatement("SELECT id_sexo, descripcion FROM Sexo");
 
-	        ResultSet rs = st.executeQuery();
+	        rs = st.executeQuery();
 	        
 	            while (rs.next()) {
 	                
@@ -36,7 +38,9 @@ public class SexoDaoImpl implements SexoDao{
 	            
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	    }
+	    } finally {
+            Utils.closeResources(rs, st, cn);
+        }
 	    return sexo;
 	}
 }
