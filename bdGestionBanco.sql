@@ -183,20 +183,7 @@ INSERT INTO Tipo_movimiento (nombre, descripcion) VALUES
 
 -- #DATA# (inserts generados por Cursor)
 
--- Completar Sexos (15 total)
-INSERT INTO Sexo (descripcion) VALUES 
-('No binario'),
-('Prefiere no decir'),
-('Fluido'),
-('Agénero'),
-('Bigénero'),
-('Pangénero'),
-('Demigénero'),
-('Género fluido'),
-('Andrógino'),
-('Neutro'),
-('Transgénero'),
-('Cisgénero');
+
 
 -- Completar Nacionalidades (15 total)
 INSERT INTO Nacionalidad (nombre) VALUES 
@@ -247,21 +234,7 @@ INSERT INTO Localidad (nombre, id_provincia) VALUES
 ('La Rioja Capital', 14),
 ('San Fernando del Valle de Catamarca', 15);
 
--- Completar Tipos de usuario (15 total)
-INSERT INTO Tipos_usuario (descripcion_tipo) VALUES 
-('Operador'),
-('Supervisor'),
-('Gerente'),
-('Auditor'),
-('Soporte técnico'),
-('Analista'),
-('Consultor'),
-('Director'),
-('Vicepresidente'),
-('CEO'),
-('Desarrollador'),
-('Tester'),
-('DBA');
+
 
 -- Usuarios (15 total)
 INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario) VALUES 
@@ -281,36 +254,7 @@ INSERT INTO Usuarios (nombre_usuario, pass_usuario, tipo_usuario) VALUES
 ('cliente13', 'pass123', 2),
 ('cliente14', 'pass123', 2);
 
--- Completar Tipos de cuenta (15 total)
-INSERT INTO Tipos_cuenta (descripcion) VALUES 
-('Cuenta sueldo'),
-('Cuenta de inversión'),
-('Cuenta para menores'),
-('Cuenta empresarial'),
-('Cuenta premium'),
-('Cuenta digital'),
-('Cuenta internacional'),
-('Cuenta de ahorro programado'),
-('Cuenta especial'),
-('Cuenta de jubilación'),
-('Cuenta de comercio'),
-('Cuenta universitaria'),
-('Cuenta de construcción');
 
--- Completar Tipos de movimiento (15 total)
-INSERT INTO Tipo_movimiento (nombre, descripcion) VALUES 
-('Depósito', 'Depósito en efectivo'),
-('Retiro', 'Retiro en efectivo'),
-('Pago de servicios', 'Pago de facturas'),
-('Compra con tarjeta', 'Compra con tarjeta de débito'),
-('Interés ganado', 'Interés generado por saldo'),
-('Comisión', 'Cobro de comisión'),
-('Cheque depositado', 'Depósito de cheque'),
-('Cheque emitido', 'Cheque emitido'),
-('Débito automático', 'Débito automático programado'),
-('Crédito automático', 'Crédito automático programado'),
-('Cancelación de cuenta', 'Cierre de cuenta'),
-('Ajuste de saldo', 'Ajuste administrativo');
 
 -- Clientes (15 total)
 INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacionalidad, fecha_nacimiento, direccion, id_localidad, email, telefono) VALUES 
@@ -327,25 +271,24 @@ INSERT INTO Clientes (id_usuario, DNI, CUIL, nombre, apellido, id_sexo, id_nacio
 (12, '11111111', '20-11111111-1', 'Luis', 'Morales', 1, 1, '1993-02-28', 'Catamarca 852', 11, 'luis.morales@email.com', '0385-111-1111'),
 (13, '22222222', '20-22222222-2', 'Carmen', 'Vargas', 2, 1, '1984-10-05', 'San Luis 963', 12, 'carmen.vargas@email.com', '0264-222-2222'),
 (14, '33333333', '20-33333333-3', 'Fernando', 'Castro', 1, 1, '1994-07-17', 'Jujuy 159', 13, 'fernando.castro@email.com', '0388-333-3333'),
-(15, '44444444', '20-44444444-4', 'Valeria', 'Rojas', 2, 1, '1982-12-03', 'La Rioja 753', 14, 'valeria.rojas@email.com', '0380-444-4444'),
-(16, '55555555', '20-55555555-5', 'Gustavo', 'Mendoza', 1, 1, '1996-09-11', 'Catamarca 951', 15, 'gustavo.mendoza@email.com', '0383-555-5555');
+(15, '44444444', '20-44444444-4', 'Valeria', 'Rojas', 2, 1, '1982-12-03', 'La Rioja 753', 14, 'valeria.rojas@email.com', '0380-444-4444');
 
 -- Cuentas (14 total, una por cliente, saldo inicial 10000)
 INSERT INTO Cuentas (numero_cuenta, cbu, tipo_cuenta, fecha_creacion, saldo, id_cliente) VALUES 
 ('001-123456-7', '0110123456789012345678', 1, CURDATE(), 10000.00, 1),
 ('001-234567-8', '0110234567890123456789', 2, CURDATE(), 10000.00, 2),
-('001-345678-9', '0110345678901234567890', 3, CURDATE(), 10000.00, 3),
-('001-456789-0', '0110456789012345678901', 4, CURDATE(), 10000.00, 4),
-('001-567890-1', '0110567890123456789012', 5, CURDATE(), 10000.00, 5),
-('001-678901-2', '0110678901234567890123', 6, CURDATE(), 10000.00, 6),
-('001-789012-3', '0110789012345678901234', 7, CURDATE(), 10000.00, 7),
-('001-890123-4', '0110890123456789012345', 8, CURDATE(), 10000.00, 8),
-('001-901234-5', '0110901234567890123456', 9, CURDATE(), 10000.00, 9),
-('001-012345-6', '0110012345678901234567', 10, CURDATE(), 10000.00, 10),
-('001-111111-1', '0110111111111111111111', 11, CURDATE(), 10000.00, 11),
-('001-222222-2', '0110222222222222222222', 12, CURDATE(), 10000.00, 12),
-('001-333333-3', '0110333333333333333333', 13, CURDATE(), 10000.00, 13),
-('001-444444-4', '0110444444444444444444', 14, CURDATE(), 10000.00, 14);
+('001-345678-9', '0110345678901234567890', 1, CURDATE(), 10000.00, 3),
+('001-456789-0', '0110456789012345678901', 2, CURDATE(), 10000.00, 4),
+('001-567890-1', '0110567890123456789012', 1, CURDATE(), 10000.00, 5),
+('001-678901-2', '0110678901234567890123', 2, CURDATE(), 10000.00, 6),
+('001-789012-3', '0110789012345678901234', 1, CURDATE(), 10000.00, 7),
+('001-890123-4', '0110890123456789012345', 2, CURDATE(), 10000.00, 8),
+('001-901234-5', '0110901234567890123456', 1, CURDATE(), 10000.00, 9),
+('001-012345-6', '0110012345678901234567', 2, CURDATE(), 10000.00, 10),
+('001-111111-1', '0110111111111111111111', 1, CURDATE(), 10000.00, 11),
+('001-222222-2', '0110222222222222222222', 2, CURDATE(), 10000.00, 12),
+('001-333333-3', '0110333333333333333333', 1, CURDATE(), 10000.00, 13),
+('001-444444-4', '0110444444444444444444', 1, CURDATE(), 10000.00, 14);
 
 -- Movimientos iniciales (14 total, uno por cuenta - Alta de cuenta)
 INSERT INTO Movimientos (id_cuenta, id_tipo_movimiento, importe, saldo) VALUES 
