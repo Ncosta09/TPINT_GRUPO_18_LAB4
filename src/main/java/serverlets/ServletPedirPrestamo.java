@@ -40,7 +40,7 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
 	        ClienteNegocioImpl clienteNeg = new ClienteNegocioImpl();
-	        Cliente cliente = clienteNeg.obtenerPorId(usuario.getIdUsuario());
+	        Cliente cliente = clienteNeg.obtenerPorIdUsuario(usuario.getIdUsuario());
 
 	        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
 	        List<Cuenta> cuentas = cuentaNegocio.obtenerCuentasPorCliente(cliente.getIdCliente());
