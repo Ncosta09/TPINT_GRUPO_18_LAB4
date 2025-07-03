@@ -130,7 +130,6 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	@Override
 	public Cliente obtenerPorId(int idCliente) {
-	    Cliente cliente = null;
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
