@@ -34,6 +34,13 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="CSS/common.css" type="text/css" />
 	<link rel="stylesheet" href="CSS/reportes.css" />
+	
+	<!-- DataTables -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	
+	<!-- DataTables -->
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 </head>
 <body>
 <jsp:include page="/header.jsp" />
@@ -129,7 +136,7 @@
                 </div>
                 <div class="card-content-reportes">
                     <div class="table-container-reportes">
-                        <table class="data-table-reportes">
+                        <table class="data-table-reportes" id="reportesTable">
                             <thead>
                                 <tr>
                                     <th>Fecha</th>
@@ -171,6 +178,19 @@
     </div>
         
     </div>
+    
+        <!-- DataTables -->
+    <script type="text/javascript">
+    $(document).ready(function() {
+    	  $('#reportesTable').DataTable({
+    	    paging: true,
+    	    pageLength: 10,
+    	    lengthMenu: [5, 10, 15, 20],
+    	    searching: true
+    	  });
+    	});
+
+    </script>
     
      <!-- Declaracion del script del Sidebar -->
     <script src="JS/script.js"></script>
