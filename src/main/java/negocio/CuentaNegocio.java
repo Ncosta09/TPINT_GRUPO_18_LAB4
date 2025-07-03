@@ -12,6 +12,8 @@ public interface CuentaNegocio {
 
    boolean bajaCuenta(int var1);
 
+   boolean reactivarCuenta(int idCuenta);
+   
    List<Cliente> obtenerTodos();
    
    List<Cuenta> obtenerTodasLasCuentas();

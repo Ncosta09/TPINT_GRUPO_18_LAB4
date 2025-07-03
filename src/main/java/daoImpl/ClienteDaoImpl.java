@@ -109,6 +109,26 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 	
 	@Override
+    public boolean reactivarCliente(int idUsuario) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
+            String sql = "UPDATE Usuarios SET estado = 1 WHERE id_usuario = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idUsuario);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeResources(ps, conn);
+        }
+        return false;
+    }
+	
+	@Override
 	public Cliente obtenerPorId(int idCliente) {
 	    Cliente cliente = null;
 	    Connection conn = null;

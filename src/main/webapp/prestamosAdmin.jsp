@@ -188,41 +188,40 @@
 
 <div id="modalPrestamo" class="modal" style="display:none;">
   <div class="modal-content">
-    <span class="close" onclick="cerrarModal()">&times;</span>
-    <h3>Detalle del Préstamo</h3>
-    <p><strong>ID:</strong> <span id="detalleId"></span></p>
-    <p><strong>Cliente:</strong> <span id="detalleCliente"></span></p>
-    <p><strong>Importe:</strong> $<span id="detalleImporte"></span></p>
-    <p><strong>Plazo:</strong> <span id="detallePlazo"></span> meses</p>
-    <p><strong>Estado:</strong> <span id="detalleEstado"></span></p>
-    <p><strong>Fecha Alta:</strong> <span id="detalleFecha"></span></p>
+    <div class="modal-header">
+      <h3>Detalle del Préstamo</h3>
+    </div>
+    <div class="modal-body">
+      <div class="detail-row">
+        <span class="detail-label">ID:</span>
+        <span class="detail-value highlight" id="detalleId"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Cliente:</span>
+        <span class="detail-value" id="detalleCliente"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Importe:</span>
+        <span class="detail-value highlight">$<span id="detalleImporte"></span></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Plazo:</span>
+        <span class="detail-value"><span id="detallePlazo"></span> meses</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Estado:</span>
+        <span class="detail-value" id="detalleEstado"></span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Fecha Alta:</span>
+        <span class="detail-value" id="detalleFecha"></span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close-modal" onclick="cerrarModal()">Cerrar</button>
+    </div>
   </div>
 </div>
-
-
-
-<script>
-function verPrestamo(boton, id) {
-	  const fila = boton.closest('tr');
-
-	  document.getElementById("detalleId").textContent = "PR" + String(id).padStart(3, '0');
-	  document.getElementById("detalleCliente").textContent = fila.children[1].textContent;
-	  document.getElementById("detalleImporte").textContent = fila.children[2].textContent.replace('$','');
-	  document.getElementById("detallePlazo").textContent = fila.children[3].textContent.replace(' meses','');
-	  document.getElementById("detalleEstado").textContent = fila.children[4].textContent.trim();
-	  document.getElementById("detalleFecha").textContent = fila.children[5].textContent;
-
-	  document.getElementById("modalPrestamo").style.display = 'block';
-	}
-</script>
-
-
-<script>
-function cerrarModal() {
-  document.getElementById("modalPrestamo").style.display = 'none';
-}
-</script>
-
 
 </body>
 </html>

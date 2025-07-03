@@ -198,6 +198,26 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         return false;
     }
+    
+    @Override
+    public boolean reactivarCuenta(int idCuenta) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        
+        try {
+            conn = Conexion.getConexion().getSQLConexion();
+            String sql = "UPDATE Cuentas SET estado = 1 WHERE id_cuenta = ?";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, idCuenta);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            Utils.closeResources(ps, conn);
+        }
+        return false;
+    }
 
     public List<Cliente> obtenerTodos() {
         List<Cliente> lista = new ArrayList<>();

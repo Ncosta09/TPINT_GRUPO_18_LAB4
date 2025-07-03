@@ -1,5 +1,52 @@
 // Datos de ejemplo para los préstamos
 
+function verPrestamo(boton, id) {
+    const fila = boton.closest('tr');
+    
+    // Obtener datos de la fila
+    const cliente = fila.children[1].textContent;
+    const importe = fila.children[2].textContent.replace('$','');
+    const plazo = fila.children[3].textContent.replace(' meses','');
+    const estadoElement = fila.children[4].querySelector('.badge');
+    const estado = estadoElement.textContent.trim();
+    const estadoClass = estadoElement.className;
+    const fecha = fila.children[5].textContent;
+    
+    // Llenar el modal
+    document.getElementById("detalleId").textContent = "PR" + String(id).padStart(3, '0');
+    document.getElementById("detalleCliente").textContent = cliente;
+    document.getElementById("detalleImporte").textContent = importe;
+    document.getElementById("detallePlazo").textContent = plazo;
+    
+    // Mantener el estilo del badge en el modal
+    const estadoSpan = document.getElementById("detalleEstado");
+    estadoSpan.innerHTML = `<span class="${estadoClass}">${estado}</span>`;
+    
+    document.getElementById("detalleFecha").textContent = fecha;
+    
+    // Mostrar modal con animación
+    const modal = document.getElementById("modalPrestamo");
+    modal.style.display = 'block';
+    
+    // Cerrar modal al hacer clic fuera de él
+    modal.onclick = function(event) {
+        if (event.target === modal) {
+            cerrarModal();
+        }
+    }
+}
+
+function cerrarModal() {
+    const modal = document.getElementById("modalPrestamo");
+    modal.style.display = 'none';
+}
+
+// Cerrar modal con tecla Escape
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        cerrarModal();
+    }
+});
 
 function searchLoans() {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();

@@ -16,12 +16,25 @@
     border-radius: 12px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
     width: 350px;
+    transition: all 0.3s ease; 
 }
 
 .login-form h2 {
     text-align: center;
     margin-bottom: 25px;
     font-weight: bold;
+    transition: all 0.3s ease; 
+}
+
+
+.error-container {
+    min-height: 0; 
+    margin-bottom: 20px;
+    transition: min-height 0.3s ease;
+}
+
+.error-container.has-error {
+    min-height: 48px;
 }
 
 .error-alert {
@@ -29,12 +42,17 @@
     color: white;
     padding: 12px 15px;
     border-radius: 8px;
-    margin-bottom: 20px;
     display: flex;
     align-items: center;
     font-size: 14px;
     box-shadow: 0 2px 4px rgba(220, 53, 69, 0.3);
     animation: slideDown 0.3s ease-out;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.error-alert.hiding {
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .error-icon {
@@ -114,6 +132,12 @@
     transform: translateY(1px);
 }
 
+.login-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
 .links {
     display: flex;
     justify-content: space-between;
@@ -141,5 +165,9 @@
     .error-alert {
         font-size: 13px;
         padding: 10px 12px;
+    }
+    
+    .error-container.has-error {
+        min-height: 44px; 
     }
 }

@@ -281,6 +281,17 @@
             background-color: #f44336;
         }
         
+        .btn-success {
+		    background-color: #28a745;
+		    color: white;
+		    border: 1px solid #28a745;
+		}
+		
+		.btn-success:hover {
+		    background-color: #218838;
+		    border-color: #1e7e34;
+		}
+        
         @media (max-width: 768px) {
             .burger-menu {
                 display: block;

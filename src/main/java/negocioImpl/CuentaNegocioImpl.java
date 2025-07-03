@@ -54,6 +54,11 @@ public class CuentaNegocioImpl implements CuentaNegocio {
    public boolean bajaCuenta(int idCuenta) {
       return this.dao.bajaCuenta(idCuenta);
    }
+   
+   @Override
+   public boolean reactivarCuenta(int idCuenta) {
+       return dao.reactivarCuenta(idCuenta);
+   }
 
    public boolean modificarCuenta(Cuenta cuenta) {
       return this.dao.modificarCuenta(cuenta);
