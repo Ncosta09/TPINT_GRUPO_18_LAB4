@@ -116,7 +116,10 @@
                                         <button type="submit" class="btn btn-sm btn-danger">Dar de baja</button>
                                     </form>
                                 <% } else { %>
-                                    <button class="btn btn-sm btn-disabled" disabled>Inactivo</button>
+                                    <form action="ServletReactivarCliente" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés reactivar este cliente?');">
+                                        <input type="hidden" name="idUsuario" value="<%= c.getUsuario().getIdUsuario() %>"></input>
+                                        <button type="submit" class="btn btn-sm btn-success">Dar de alta</button>
+                                    </form>
                                 <% } %>
                             </td>
                         </tr>

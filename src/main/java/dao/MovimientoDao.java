@@ -7,4 +7,5 @@ public interface MovimientoDao {
 	List<Movimiento> obtenerMovimientosPorCuenta(int idCuenta);
     List<Movimiento> obtenerMovimientosPorCuentaConFiltros(int idCuenta, String tipoMovimiento, String fechaDesde, String fechaHasta);
     boolean insertarMovimiento(Movimiento movimiento);
+    
 }

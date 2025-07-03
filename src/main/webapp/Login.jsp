@@ -11,14 +11,16 @@
         <form class="login-form" action="ServletUsuario" method="post">
             <h2>Login</h2>
             
-            <!-- mensaje de error-->
-            <% String error = (String) request.getAttribute("error"); %>
-            <% if (error != null) { %>
-                <div class="error-alert">
-                    <span class="error-icon">⚠️</span>
-                    <%= error %>
-                </div>
-            <% } %>
+            <!-- Contenedor para la alerta -->
+            <div class="error-container" id="errorContainer">
+                <% String error = (String) request.getAttribute("error"); %>
+                <% if (error != null) { %>
+                    <div class="error-alert" id="errorAlert">
+                        <span class="error-icon">⚠️</span>
+                        <%= error %>
+                    </div>
+                <% } %>
+            </div>
             
             <div class="input-group">
                 <input type="text" placeholder="Usuario" name="nombreUsuario" required />
@@ -27,12 +29,12 @@
                 <input type="password" placeholder="Contraseña" name="clave" required />
             </div>
             <div class="options">
-                <label><input type="checkbox" />Recordarme</label>
+                <!-- <label><input type="checkbox" />Recordarme</label>-->
             </div>
             <button type="submit" class="login-btn">Login</button>
             <div class="links">
                 <a href="#">Recuperar contraseña</a>
-                <a href="#">Registrarse</a>
+                <!-- <a href="#">Registrarse</a>-->
             </div>
         </form>
     </div>

@@ -1,11 +1,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.querySelector('.login-form');
     const errorAlert = document.querySelector('.error-alert');
+    const errorContainer = document.querySelector('.error-container');
     
-    // ocultar alerta a los 5 segundos
-    if (errorAlert) {
+    // Si hay una alerta de error, marcar el contenedor y programar ocultado
+    if (errorAlert && errorContainer) {
+        errorContainer.classList.add('has-error');
+        
         setTimeout(() => {
-            errorAlert.style.animation = 'slideUp 0.3s ease-out forwards';
+            hideErrorAlert(errorAlert, errorContainer);
         }, 5000);
     }
     
@@ -35,14 +38,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Función para ocultar alerta con transición suave
+    function hideErrorAlert(alert, container) {
+        alert.classList.add('hiding');
+        
+        setTimeout(() => {
+            alert.remove();
+            container.classList.remove('has-error');
+        }, 300); // Esperar a que termine la transición
+    }
+    
     // Función para mostrar errores del lado cliente
     function showClientError(message) {
+        const errorContainer = document.querySelector('.error-container');
+        
         // Remover alerta existente si hay una
         const existingAlert = document.querySelector('.error-alert');
         if (existingAlert) {
-            existingAlert.remove();
+            hideErrorAlert(existingAlert, errorContainer);
+            
+            // Esperar a que se oculte la anterior antes de mostrar la nueva
+            setTimeout(() => {
+                createAndShowAlert(message, errorContainer);
+            }, 300);
+        } else {
+            createAndShowAlert(message, errorContainer);
         }
-        
+    }
+    
+    // Función para crear y mostrar nueva alerta
+    function createAndShowAlert(message, container) {
         // Crear nueva alerta
         const alert = document.createElement('div');
         alert.className = 'error-alert';
@@ -51,30 +76,13 @@ document.addEventListener('DOMContentLoaded', function() {
             ${message}
         `;
         
-        // Insertar después del h2
-        const h2 = document.querySelector('.login-form h2');
-        h2.insertAdjacentElement('afterend', alert);
+        // Agregar al contenedor y marcar como activo
+        container.appendChild(alert);
+        container.classList.add('has-error');
         
-        // ocultar después de 3 segundos
+        // Auto-ocultar después de 3 segundos
         setTimeout(() => {
-            alert.style.animation = 'slideUp 0.3s ease-out forwards';
-            setTimeout(() => alert.remove(), 300);
+            hideErrorAlert(alert, container);
         }, 3000);
     }
 });
-
-// Agregar animación slideUp al CSS
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideUp {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-    }
-`;
-document.head.appendChild(style);

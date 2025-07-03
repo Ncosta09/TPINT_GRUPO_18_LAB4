@@ -108,7 +108,7 @@
                         </span>
                     </td>
                     <td class="actions">
-                        <button class="btn btn-sm" onclick="viewAccount('<%= c.getId() %>')">Ver</button>
+                       <!--    <button class="btn btn-sm" onclick="viewAccount('<%= c.getId() %>')">Ver</button> -->
                         <button class="btn btn-sm btn-secondary" onclick="window.location.href='${pageContext.request.contextPath}/ServletModificarCuenta?idCuenta=<%= c.getId() %>'">Editar</button>
                         
                         <% if (c.isEstado()) { %>
@@ -117,7 +117,10 @@
                                 <button type="submit" class="btn btn-sm btn-danger">Dar de baja</button>
                             </form>
                         <% } else { %>
-                            <button class="btn btn-sm btn-disabled" disabled>Inactiva</button>
+                           <form action="ServletReactivarCuenta" method="post" style="display:inline;" onsubmit="return confirm('¿Estás seguro que querés reactivar esta cuenta?');">
+                                <input type="hidden" name="idCuenta" value="<%= c.getId() %>">
+                                <button type="submit" class="btn btn-sm btn-success">Dar de alta</button>
+                            </form>
                         <% } %>
                     </td>
                 </tr>

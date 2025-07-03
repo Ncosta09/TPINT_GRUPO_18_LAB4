@@ -25,6 +25,11 @@ public class ClienteNegocioImpl implements ClienteNegocio {
     }
     
     @Override
+    public boolean reactivarCliente(int idUsuario) {
+        return clienteDao.reactivarCliente(idUsuario);
+    }
+    
+    @Override
     public Cliente obtenerPorId(int idCliente) {
         return clienteDao.obtenerPorId(idCliente);
     }
