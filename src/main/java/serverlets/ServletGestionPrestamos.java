@@ -13,9 +13,14 @@ import javax.servlet.http.HttpSession;
 import dominio.Cliente;
 import dominio.Prestamo;
 import dominio.Usuario;
+import dominio.Cuenta;
+import dominio.Movimiento;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
 import negocioImpl.CuotaNegocioImpl;
+import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
+import java.util.Date;
 
 
 
@@ -47,7 +52,7 @@ HttpSession session = request.getSession(false);
 //	        ClienteNegocioImpl clienteNeg = new ClienteNegocioImpl();
 //	        Cliente cliente = clienteNeg.obtenerPorId(usuario.getIdUsuario());
 	        PrestamoNegocioImpl prestamo=new PrestamoNegocioImpl();
-	        List<Prestamo> prestamos=prestamo.listarTodos();
+	        List<Prestamo> prestamos=prestamo.listarPrestamosPendientes();
 
 	        request.setAttribute("prestamosPendientes", prestamos);
 	    } catch (Exception e) {
@@ -71,6 +76,8 @@ HttpSession session = request.getSession(false);
 
 	    PrestamoNegocioImpl prestamoNegocio = new PrestamoNegocioImpl();
 	    CuotaNegocioImpl cuotas=new CuotaNegocioImpl();
+	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+	    MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
 	    Prestamo seleccionado=new Prestamo();
 	    
 	    
@@ -82,10 +89,52 @@ HttpSession session = request.getSession(false);
 	            int idPrestamo = Integer.parseInt(idStr);
 
 	            if (request.getParameter("btnAprobar") != null) {
-	                prestamoNegocio.actualizarEstado(idPrestamo, "aprobado");
-	                seleccionado=prestamoNegocio.obtenerPrestamoPorId(idPrestamo);
-	                cuotas.generarCuotasParaPrestamo(idPrestamo,seleccionado.getCantidadCuotas(),seleccionado.getImporteCuota());
-	                mensaje = "Préstamo aprobado correctamente ✅";
+	                seleccionado = prestamoNegocio.obtenerPrestamoPorId(idPrestamo);
+	                
+	                if (seleccionado != null) {
+	                    boolean aprobado = prestamoNegocio.actualizarEstado(idPrestamo, "aprobado");
+	                    
+	                    if (aprobado) {
+	                        boolean cuotasGeneradas = cuotas.generarCuotasParaPrestamo(idPrestamo, seleccionado.getCantidadCuotas(), seleccionado.getImporteCuota());
+	                        
+	                        if (cuotasGeneradas) {
+	                            Cuenta cuenta = cuentaNegocio.obtenerPorId(seleccionado.getIdCuenta());
+	                            
+	                            if (cuenta != null) {
+	                                double nuevoSaldo = cuenta.getSaldo() + seleccionado.getImportePedido();
+	                                
+	                                boolean saldoActualizado = cuentaNegocio.actualizarSaldo(seleccionado.getIdCuenta(), nuevoSaldo);
+	                                
+	                                if (saldoActualizado) {
+	                                    Movimiento movimiento = new Movimiento();
+	                                    movimiento.setIdCuenta(seleccionado.getIdCuenta());
+	                                    movimiento.setIdTipoMovimiento(3); // Depósito por préstamo
+	                                    movimiento.setFecha(new Date());
+	                                    movimiento.setImporte(seleccionado.getImportePedido());
+	                                    movimiento.setSaldo(nuevoSaldo);
+	                                    
+	                                    boolean movimientoGenerado = movimientoNegocio.insertarMovimiento(movimiento);
+	                                    
+	                                    if (movimientoGenerado) {
+	                                        mensaje = "Préstamo aprobado correctamente ✅ - Monto depositado: $" + String.format("%,.2f", seleccionado.getImportePedido());
+	                                    } else {
+	                                        mensaje = "Préstamo aprobado pero error al generar movimiento";
+	                                    }
+	                                } else {
+	                                    mensaje = "Préstamo aprobado pero error al actualizar saldo";
+	                                }
+	                            } else {
+	                                mensaje = "Préstamo aprobado pero no se encontró la cuenta";
+	                            }
+	                        } else {
+	                            mensaje = "Préstamo aprobado pero error al generar cuotas";
+	                        }
+	                    } else {
+	                        mensaje = "Error al aprobar el préstamo";
+	                    }
+	                } else {
+	                    mensaje = "No se encontró el préstamo";
+	                }
 	            } else if (request.getParameter("btnRechazar") != null) {
 	                prestamoNegocio.actualizarEstado(idPrestamo, "rechazado");
 	                mensaje = "Préstamo rechazado correctamente ✅";
@@ -93,7 +142,7 @@ HttpSession session = request.getSession(false);
 	        }
 
 	     // Recargamos lista.
-	        List<Prestamo> prestamos = prestamoNegocio.listarTodos();
+	        List<Prestamo> prestamos = prestamoNegocio.listarPrestamosPendientes();
 	        request.setAttribute("prestamosPendientes", prestamos);
 
 	        // Pasamos la notificacion.

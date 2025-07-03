@@ -38,11 +38,11 @@
 			    </div>
 			    <div class="card">
 			        <h3>Préstamos Activos</h3>
-			        <p>0</p>
+			        <p><%= request.getAttribute("prestamosActivos") %></p>
 			    </div>
 			    <div class="card">
 			        <h3>Préstamos Pendientes</h3>
-			        <p>0</p>
+			        <p><%= request.getAttribute("prestamosPendientes") %></p>
 			    </div>
 			    <div class="card">
 			        <h3>Nuevos Clientes (Mes)</h3>

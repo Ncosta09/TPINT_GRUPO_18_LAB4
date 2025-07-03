@@ -20,5 +20,25 @@ public class CuotaNegocioImpl implements CuotaNegocio {
 		
 		return dao.generarCuotasParaPrestamo(idPrestamo, cantidadCuotas, montoCuota);
 	}
+	
+	@Override
+	public boolean pagarCuota(int idCuota) {
+		return dao.pagarCuota(idCuota);
+	}
+
+	@Override
+	public Cuota obtenerCuotaPorId(int idCuota) {
+		return dao.obtenerCuotaPorId(idCuota);
+	}
+	
+	@Override
+	public int obtenerCuotasPagadasPorPrestamo(int idPrestamo) {
+		return dao.obtenerCuotasPagadasPorPrestamo(idPrestamo);
+	}
+	
+	@Override
+	public int obtenerCuotasPendientesPorPrestamo(int idPrestamo) {
+		return dao.obtenerCuotasPendientesPorPrestamo(idPrestamo);
+	}
 
 }

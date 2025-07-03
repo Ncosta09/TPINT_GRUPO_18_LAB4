@@ -40,7 +40,7 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
 	        ClienteNegocioImpl clienteNeg = new ClienteNegocioImpl();
-	        Cliente cliente = clienteNeg.obtenerPorIdUsuario(usuario.getIdUsuario());
+	        Cliente cliente = clienteNeg.obtenerClientePorUsuario(usuario.getIdUsuario());
 
 	        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
 	        List<Cuenta> cuentas = cuentaNegocio.obtenerCuentasPorCliente(cliente.getIdCliente());
@@ -68,7 +68,7 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
 	        ClienteNegocioImpl clienteNeg = new ClienteNegocioImpl();
-	        Cliente cliente = clienteNeg.obtenerPorId(usuario.getIdUsuario());
+	        Cliente cliente = clienteNeg.obtenerClientePorUsuario(usuario.getIdUsuario());
 
 	        
 	        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
@@ -76,16 +76,17 @@ public class ServletPedirPrestamo extends HttpServlet {
 	        request.setAttribute("cuentasCliente", cuentas);
 
 	        String cuentaDestinoStr = request.getParameter("cuentaDestino");
-	        String montoStr = request.getParameter("monto");
-	        String plazoStr = request.getParameter("plazo");
+        String montoStr = request.getParameter("monto");
+        String plazoStr = request.getParameter("plazo");
+        String destinoStr = request.getParameter("destino");
 
-	        if (cuentaDestinoStr == null || montoStr == null || plazoStr == null ||
-	            cuentaDestinoStr.isEmpty() || montoStr.isEmpty() || plazoStr.isEmpty()) {
+        if (cuentaDestinoStr == null || montoStr == null || plazoStr == null || destinoStr == null ||
+            cuentaDestinoStr.isEmpty() || montoStr.isEmpty() || plazoStr.isEmpty() || destinoStr.trim().isEmpty()) {
 
-	            request.setAttribute("mensaje", "Por favor, complete todos los campos.");
-	            request.getRequestDispatcher("/PedirPrestamo.jsp").forward(request, response);
-	            return;
-	        }
+            request.setAttribute("mensaje", "Por favor, complete todos los campos.");
+            request.getRequestDispatcher("/PedirPrestamo.jsp").forward(request, response);
+            return;
+        }
 
 	        int idCuenta = Integer.parseInt(cuentaDestinoStr);
 	        double monto = Double.parseDouble(montoStr);
