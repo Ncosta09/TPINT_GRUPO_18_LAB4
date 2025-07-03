@@ -7,7 +7,6 @@
                 <li><a href="ServletTransferencia">Transferencias</a></li>
                 <li><a href="ServletPedirPrestamo">Pedir Prestamo</a></li>
                 <li><a href="ServletPagarCuotas">Pagar Cuotas</a></li>
-                <li><a href="ServletListarPrestamos">Pagar Prestamos</a></li>
                 <li><a href="ReportesCliente.jsp">Reportes</a></li>
             </ul>
 </div> 

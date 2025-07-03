@@ -52,7 +52,7 @@ HttpSession session = request.getSession(false);
 //	        ClienteNegocioImpl clienteNeg = new ClienteNegocioImpl();
 //	        Cliente cliente = clienteNeg.obtenerPorId(usuario.getIdUsuario());
 	        PrestamoNegocioImpl prestamo=new PrestamoNegocioImpl();
-	        List<Prestamo> prestamos=prestamo.listarPrestamosPendientes();
+	        List<Prestamo> prestamos=prestamo.listarTodos();
 
 	        request.setAttribute("prestamosPendientes", prestamos);
 	    } catch (Exception e) {
@@ -142,7 +142,7 @@ HttpSession session = request.getSession(false);
 	        }
 
 	     // Recargamos lista.
-	        List<Prestamo> prestamos = prestamoNegocio.listarPrestamosPendientes();
+	        List<Prestamo> prestamos = prestamoNegocio.listarTodos();
 	        request.setAttribute("prestamosPendientes", prestamos);
 
 	        // Pasamos la notificacion.
