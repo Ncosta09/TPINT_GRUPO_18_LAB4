@@ -8,6 +8,7 @@ public class Cuota {
     private int numeroCuota;
     private double monto;
     private Date fechaPago;
+    private Date fechaVencimiento;
     private boolean pagada;
 
     
@@ -25,6 +26,9 @@ public class Cuota {
 
     public Date getFechaPago() { return fechaPago; }
     public void setFechaPago(Date fechaPago) { this.fechaPago = fechaPago; }
+
+    public Date getFechaVencimiento() { return fechaVencimiento; }
+    public void setFechaVencimiento(Date fechaVencimiento) { this.fechaVencimiento = fechaVencimiento; }
 
     public boolean isPagada() { return pagada; }
     public void setPagada(boolean pagada) { this.pagada = pagada; }

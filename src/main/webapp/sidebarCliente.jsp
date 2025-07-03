@@ -6,6 +6,6 @@
                 <li><a href="ServletCuentasCliente">Ver Cuentas</a></li>
                 <li><a href="ServletTransferencia">Transferencias</a></li>
                 <li><a href="ServletPedirPrestamo">Pedir Préstamo</a></li>
-                <li><a href="ServletPagarCuotas">Pagar Cuotas</a></li>
+                <li><a href="ServletListarPrestamos">Pagar Cuotas</a></li>
             </ul>
 </div> 

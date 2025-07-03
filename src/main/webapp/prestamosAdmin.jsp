@@ -83,7 +83,7 @@
 						%>
 						<tr>
 							<td>PR<%=String.format("%03d", p.getIdPrestamo())%></td>
-							<td><%=p.getIdCliente()%></td>
+							<td><%=p.getCliente() != null ? p.getCliente().getNombre() + " " + p.getCliente().getApellido() : "Cliente " + p.getIdCliente()%></td>
 							<td>$<%=String.format("%,.2f", p.getImportePedido())%></td>
 							<td><%=p.getPlazoMeses()%> meses</td>
 							<td>

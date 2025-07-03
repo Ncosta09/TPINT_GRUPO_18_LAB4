@@ -10,6 +10,7 @@ import java.util.List;
 
 
 import dao.PrestamoDao;
+import dominio.Cliente;
 import dominio.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {
@@ -49,7 +50,6 @@ public class PrestamoDaoImpl implements PrestamoDao {
         Connection conn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
         try {
             conn = Conexion.getConexion().getSQLConexion();
             String query = "SELECT * FROM Prestamos WHERE id_cliente = ?";
@@ -134,7 +134,9 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	    try {
 	        conn = Conexion.getConexion().getSQLConexion();
-	        String query = "SELECT * FROM Prestamos";
+	        String query = "SELECT p.*, c.nombre, c.apellido FROM Prestamos p " +
+	                      "INNER JOIN Clientes c ON p.id_cliente = c.id_cliente " +
+	                      "ORDER BY p.fecha_alta DESC";
 	        ps = conn.prepareStatement(query);
 	        rs = ps.executeQuery();
 
@@ -149,6 +151,13 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	            p.setCantidadCuotas(rs.getInt("cantidad_cuotas"));
 	            p.setImporteCuota(rs.getDouble("importe_cuota"));
 	            p.setEstado(rs.getString("estado"));
+	            
+	            Cliente cliente = new Cliente();
+	            cliente.setIdCliente(rs.getInt("id_cliente"));
+	            cliente.setNombre(rs.getString("nombre"));
+	            cliente.setApellido(rs.getString("apellido"));
+	            p.setCliente(cliente);
+	            
 	            prestamos.add(p);
 	        }
 
@@ -194,37 +203,91 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	@Override
 	public Prestamo obtenerPrestamoPorId(int idPrestamo) {
-		 Prestamo prestamo = null;
-		    Connection conn = null;
+		Prestamo prestamo = null;
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
 
-		    try {
-		        conn = Conexion.getConexion().getSQLConexion();
-		        String query = "SELECT * FROM Prestamos WHERE id_prestamo = ?";
-		        PreparedStatement ps = conn.prepareStatement(query);
-		        ps.setInt(1, idPrestamo);
+	    try {
+	        conn = Conexion.getConexion().getSQLConexion();
+	        String query = "SELECT * FROM Prestamos WHERE id_prestamo = ?";
+	        ps = conn.prepareStatement(query);
+	        ps.setInt(1, idPrestamo);
 
-		        ResultSet rs = ps.executeQuery();
+	        rs = ps.executeQuery();
 
-		        if (rs.next()) {
-		            prestamo = new Prestamo();
-		            prestamo.setIdPrestamo(rs.getInt("id_prestamo"));
-		            prestamo.setIdCliente(rs.getInt("id_cliente"));
-		            prestamo.setIdCuenta(rs.getInt("id_cuenta"));
-		            prestamo.setFechaAlta(rs.getDate("fecha_alta"));
-		            prestamo.setImportePedido(rs.getDouble("importe_pedido"));
-		            prestamo.setPlazoMeses(rs.getInt("plazo_meses"));
-		            prestamo.setCantidadCuotas(rs.getInt("cantidad_cuotas"));
-		            prestamo.setImporteCuota(rs.getDouble("importe_cuota"));
-		            prestamo.setEstado(rs.getString("estado"));
-		        }
+	        if (rs.next()) {
+	            prestamo = new Prestamo();
+	            prestamo.setIdPrestamo(rs.getInt("id_prestamo"));
+	            prestamo.setIdCliente(rs.getInt("id_cliente"));
+	            prestamo.setIdCuenta(rs.getInt("id_cuenta"));
+	            prestamo.setFechaAlta(rs.getDate("fecha_alta"));
+	            prestamo.setImportePedido(rs.getDouble("importe_pedido"));
+	            prestamo.setPlazoMeses(rs.getInt("plazo_meses"));
+	            prestamo.setCantidadCuotas(rs.getInt("cantidad_cuotas"));
+	            prestamo.setImporteCuota(rs.getDouble("importe_cuota"));
+	            prestamo.setEstado(rs.getString("estado"));
+	        }
 
-		        rs.close();
-		        ps.close();
-		    } catch (Exception e) {
-		        e.printStackTrace();
-		    }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
 
-		    return prestamo;
+	    return prestamo;
+	}
+	
+	@Override
+	public List<Prestamo> listarPrestamosPorEstado(String estado) {
+	    List<Prestamo> prestamos = new ArrayList<>();
+	    Connection conn = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conn = Conexion.getConexion().getSQLConexion();
+	        String query = "SELECT p.*, c.nombre, c.apellido FROM Prestamos p " +
+	                      "INNER JOIN Clientes c ON p.id_cliente = c.id_cliente " +
+	                      "WHERE p.estado = ? " +
+	                      "ORDER BY p.fecha_alta DESC";
+	        ps = conn.prepareStatement(query);
+	        ps.setString(1, estado);
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            Prestamo p = new Prestamo();
+	            p.setIdPrestamo(rs.getInt("id_prestamo"));
+	            p.setIdCliente(rs.getInt("id_cliente"));
+	            p.setIdCuenta(rs.getInt("id_cuenta"));
+	            p.setFechaAlta(rs.getDate("fecha_alta"));
+	            p.setImportePedido(rs.getDouble("importe_pedido"));
+	            p.setPlazoMeses(rs.getInt("plazo_meses"));
+	            p.setCantidadCuotas(rs.getInt("cantidad_cuotas"));
+	            p.setImporteCuota(rs.getDouble("importe_cuota"));
+	            p.setEstado(rs.getString("estado"));
+	            
+	            Cliente cliente = new Cliente();
+	            cliente.setIdCliente(rs.getInt("id_cliente"));
+	            cliente.setNombre(rs.getString("nombre"));
+	            cliente.setApellido(rs.getString("apellido"));
+	            p.setCliente(cliente);
+	            
+	            prestamos.add(p);
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+            Utils.closeResources(rs, ps, conn);
+        }
+
+	    return prestamos;
+	}
+	
+	@Override
+	public List<Prestamo> listarPrestamosAprobados() {
+	    return listarPrestamosPorEstado("aprobado");
 	}
 
 }

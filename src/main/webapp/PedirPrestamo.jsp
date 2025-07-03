@@ -145,6 +145,7 @@ Usuario usuarioLogueado = (Usuario) session.getAttribute("usuarioLogueado");
 	<div class="notification" id="notification"></div>
 
 	<script src="js/common.js"></script>
+	<script src="js/pedirPrestamo.js"></script>
 	
 	<script>
     setTimeout(() => {
